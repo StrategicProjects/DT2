@@ -1,0 +1,26 @@
+Package: DT2
+Type: Package
+Title: DataTables 2.x for R via htmlwidgets with Shiny and Extensions
+Version: 0.0.1
+Date: 2025-09-08
+Authors@R: c(
+            person("Andre", "Leite", email = "leite@castlab.org", role = c("aut", "cre")),
+            person("Hugo", "Vaconcelos", email = "hugo.vasconcelos@ufpe.br", role = "aut"),
+            person("Diogo", "Bezerra", email = "diogo.bezerra@ufpe.br", role = "aut"))
+Description: A modern R htmlwidget binding for <DataTables.net> v2 with a tidy options 'API', Bootstrap 5 styling, Shiny integration (proxy, events, inline inputs), and server-side helpers.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Depends: R (>= 4.1)
+Imports:
+    htmlwidgets,
+    htmltools,
+    shiny,
+    jsonlite,
+    rlang,
+    cli
+Suggests:
+    bslib,
+    testthat (>= 3.1.0)
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Config/testthat/edition: 3

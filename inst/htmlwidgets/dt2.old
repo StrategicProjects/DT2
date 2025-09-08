@@ -1,0 +1,265 @@
+(function () {
+  function waitForDeps(cb, needExts, tries, delay) {
+    tries = (typeof tries === "number" ? tries : 200);
+    delay = (typeof delay === "number" ? delay : 25);
+    (function loop(t) {
+      var jqOK = (typeof window.jQuery === "function");
+      var dtOK = (typeof window.DataTable === "function");
+      if (jqOK && dtOK) return cb();
+      if (t <= 0) {
+        console.error("[DT2] Dependencies did not load in time.",
+          "jQuery:", typeof window.jQuery, "DataTable:", typeof window.DataTable);
+        return;
+      }
+      setTimeout(function(){ loop(t - 1); }, delay);
+    })(tries);
+  }
+
+  function buildHeader(tbl, columns) {
+    if (!columns || !columns.length) return;
+    const thead = document.createElement('thead');
+    const tr = document.createElement('tr');
+    columns.forEach(function (c) {
+      const th = document.createElement('th');
+      th.textContent = c;
+      tr.appendChild(th);
+    });
+    thead.appendChild(tr);
+    tbl.appendChild(thead);
+  }
+
+  function inferNamesFromRow(row) {
+    if (!row) return null;
+    if (Array.isArray(row)) return row.map(function (_, i) { return "V" + (i + 1); });
+    if (typeof row === "object") return Object.keys(row);
+    return null;
+  }
+
+  function accessorForKey(key) {
+    return function (row) { return row ? row[key] : undefined; };
+  }
+
+  function columnsForData(jsData, providedNames) {
+    const row0 = (jsData && jsData.length) ? jsData[0] : null;
+    const rowsAreObjects = row0 && !Array.isArray(row0) && typeof row0 === "object";
+    let colNames = Array.isArray(providedNames) && providedNames.length
+      ? providedNames : (inferNamesFromRow(row0) || []);
+    if (!rowsAreObjects) {
+      return colNames.map(function (name, i) {
+        return { data: i, title: name, defaultContent: "" };
+      });
+    }
+    return colNames.map(function (name) {
+      const useAccessor = typeof name === "string" && name.indexOf(".") >= 0;
+      return { data: useAccessor ? accessorForKey(name) : name, title: name, defaultContent: "" };
+    });
+  }
+
+  // >>> NOVO: garante que columns seja array de objetos, não de strings
+  function normalizeColumns(cols) {
+    if (Array.isArray(cols) && cols.length && typeof cols[0] === "string") {
+      return cols.map(function(nm){ return { data: nm, title: nm, defaultContent: "" }; });
+    }
+    return cols;
+  }
+
+  HTMLWidgets.widget({
+    name: 'dt2',
+    type: 'output',
+    factory: function (el, width, height) {
+      let table;
+
+      function initTable(x) {
+        if (table) { try { table.destroy(); } catch (e) {} table = null; }
+        el.innerHTML = '';
+
+        const tbl = document.createElement('table');
+        let classes = ['table','display','table-striped','table-hover'];
+        if (x.options && x.options.dt2_theme) {
+          classes = ['table','display'];
+          if (x.options.dt2_theme.striped) classes.push('table-striped');
+          if (x.options.dt2_theme.hover)   classes.push('table-hover');
+          if (x.options.dt2_theme.compact) classes.push('table-sm');
+        }
+        tbl.className = classes.join(' ');
+        tbl.style.width = '100%';
+        el.appendChild(tbl);
+
+        const isServer = !!(x.server_side || x.serverSide);
+
+        // dados (client-side)
+        let jsData = null;
+        if (!isServer) {
+          jsData = HTMLWidgets.dataframeToD3(x.data || []);
+        }
+
+        // header (opcional)
+        let providedNames = Array.isArray(x.columns) && x.columns.length ? x.columns : null;
+        let headerNames = providedNames;
+        if (!headerNames && jsData && jsData.length) headerNames = inferNamesFromRow(jsData[0]);
+        if (isServer && providedNames) headerNames = providedNames;
+        if (headerNames) buildHeader(tbl, headerNames);
+
+        // opções
+        const opts = Object.assign({}, x.options || {});
+        // >>> se alguma camada R jogou aliases legados, limpamos:
+        delete opts.aoColumns; delete opts.aoColumnDefs; delete opts.oLanguage;
+
+        // fallback universal p/ conteúdo ausente
+        opts.columnDefs = (opts.columnDefs || []);
+        opts.columnDefs.push({ targets: "_all", defaultContent: "", sDefaultContent: "" });
+
+        if (!isServer) {
+          // client-side
+          // se usuário passou columns como strings, normaliza:
+          if (Array.isArray(opts.columns)) opts.columns = normalizeColumns(opts.columns);
+          // senão, inferimos do data:
+          if (!opts.columns) opts.columns = columnsForData(jsData, providedNames);
+          opts.data = jsData || [];
+        } else {
+          // server-side
+          // SEMPRE normalize columns se vieram como strings
+          if (Array.isArray(opts.columns)) {
+            opts.columns = normalizeColumns(opts.columns);
+          } else if (providedNames) {
+            // cria com base nos nomes
+            opts.columns = providedNames.map(function(n){
+              const useAccessor = typeof n === "string" && n.indexOf(".") >= 0;
+              return { data: useAccessor ? accessorForKey(n) : n, title: n, defaultContent: "" };
+            });
+          }
+          opts.serverSide = true;
+
+          // só define ajax aqui se o R não tiver definido (quando você não registrou endpoint no R)
+          if (!opts.ajax && x.server_ajax) {
+            // x.server_ajax pode vir do R (dt2_data_ajax)
+            opts.ajax = x.server_ajax;
+          }
+        }
+
+        if (typeof window.DataTable !== "function") {
+          console.error("[DT2] DataTables unavailable; check jQuery + DataTables scripts.");
+          return;
+        }
+
+        try {
+          // momento (locale) se enviado
+          if (x.options && x.options._momentLocale) {
+            if (window.moment && typeof moment.locale === 'function') {
+              moment.locale(x.options._momentLocale);
+            }
+          }
+          // createdRow direto, se veio do R via htmlwidgets::JS
+          if (x.options && x.options.createdRow) {
+            opts.createdRow = x.options.createdRow;
+          }
+
+          table = new DataTable(tbl, opts);
+        } catch (e) {
+          console.error("[DT2] Failed to instantiate DataTable:", e);
+          try {
+            console.log("[DT2] Sample record:", (jsData && jsData[0]) || "(server-side)");
+            console.log("[DT2] opts.columns:", opts.columns);
+          } catch(_) {}
+          return;
+        }
+
+        // expõe p/ debug
+        el._dt2 = table;
+
+        // estado -> input$id_state (Shiny)
+        function pushState(reason) {
+          if (!window.Shiny || !table) return;
+          var selIdx = [];
+          try { selIdx = table.rows({ selected:true }).indexes().toArray(); } catch(e){}
+          var page = table.page.info();
+          var state = table.state && table.state();
+          Shiny.setInputValue(el.id + "_state", {
+            reason: reason,
+            order: table.order(),
+            search: table.search(),
+            page: page,
+            selected: selIdx,
+            state: state
+          }, {priority:"event"});
+        }
+
+        table.off('.dt2state');
+        table.on('init.dt.dt2state draw.dt.dt2state order.dt.dt2state search.dt.dt2state page.dt.dt2state select.dt.dt2state deselect.dt.dt2state',
+          function(e){ pushState(e.type.split('.')[0]); });
+
+        // proxy (R -> JS)
+        if (window.Shiny && !el._proxyBound) {
+          el._proxyBound = true;
+          Shiny.addCustomMessageHandler(el.id + "_proxy", function(msg){
+            if(!table) return;
+            switch(msg.cmd || msg.type){
+              case "replaceData":
+                try { table.clear(); table.rows.add(msg.data || []); table.draw(false); }
+                catch(e){ console.error("[DT2] replaceData:", e); }
+                break;
+              case "draw": table.draw(false); break;
+              case "order": {
+                var spec = (msg.args && msg.args[0]) ? msg.args[0] : [];
+                var arr = spec.map(function(x){
+                  var col = x[0], dir = x[1];
+                  if (typeof col === 'string') {
+                    var idx = table.columns().indexes().toArray().find(function(i){
+                      var name = table.column(i).header().textContent.trim();
+                      return name === col;
+                    });
+                    return [ (idx!=null?idx:0), dir ];
+                  }
+                  return [ (parseInt(col,10)-1), dir ];
+                });
+                table.order(arr).draw();
+                break;
+              }
+              case "search": table.search(msg.args[0], msg.args[1], msg.args[2], msg.args[3]).draw(); break;
+              case "page":
+                if (msg.args[0] === 'number') table.page(parseInt(msg.args[1],10)).draw(false);
+                else table.page(msg.args[0]).draw(false);
+                break;
+              case "selectRows":
+                try {
+                  if (msg.args[1]) table.rows().deselect();
+                  var zero = (msg.args[0] || []).map(function(i){ return i-1; });
+                  table.rows(zero).select();
+                } catch(e){}
+                break;
+            }
+          });
+        }
+
+        // inputs delegados
+        if (window.jQuery && window.Shiny) {
+          var $tbl = window.jQuery(tbl);
+          $tbl.off('.dt2inputs');
+          $tbl.on('change.dt2inputs', 'input.dt2-row-checkbox', function(){
+            var $tr = window.jQuery(this).closest('tr');
+            var row = table.row($tr).index();
+            Shiny.setInputValue(el.id + "_row_check", { row: row+1, value: this.checked }, {priority:"event"});
+          });
+          $tbl.on('click.dt2inputs', 'button.dt2-row-button', function(){
+            var $tr = window.jQuery(this).closest('tr');
+            var row = table.row($tr).index();
+            Shiny.setInputValue(el.id + "_row_button", { row: row+1, id: this.id }, {priority:"event"});
+          });
+        }
+      }
+
+      return {
+        renderValue: function (x) {
+          // suporte a ambos nomes vindos do R
+          x.serverSide = !!(x.server_side || x.serverSide);
+          waitForDeps(function(){ initTable(x); });
+        },
+        resize: function () {
+          if (table && table.columns && table.columns.adjust) {
+            try { table.columns.adjust(); } catch (e) {}
+          }
+        }
+      };
+    }
+  });
+})();

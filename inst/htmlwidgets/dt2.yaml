@@ -1,0 +1,90 @@
+dependencies:
+  # jQuery
+  - name: jquery
+    version: 3.7.0
+    src: { file: htmlwidgets/lib/jquery/3.7.0 }
+    script:
+      - jquery.min.js
+
+  # DataTables core + Bootstrap 5
+  - name: datatables-core
+    version: 2.3.3
+    src: { file: htmlwidgets/lib/datatables/2.3.3 }
+    script:
+      - js/dataTables.min.js
+      - js/dataTables.bootstrap5.min.js
+    stylesheet:
+      - css/dataTables.bootstrap5.min.css
+
+  # Moment.js
+  - name: moment
+    version: 3.10.1
+    src: { file: htmlwidgets/lib/moment/3.10.1 }
+    script:
+      - moment-with-locales.min.js
+
+  # JSZip
+  - name: jszip
+    version: 3.10.1
+    src: { file: htmlwidgets/lib/jszip/3.10.1 }
+    script:
+      - jszip.min.js
+
+  # pdfmake (inclui vfs_fonts.js)
+  - name: pdfmake
+    version: 0.2.7
+    src: { file: htmlwidgets/lib/pdfmake/0.2.7 }
+    script:
+      - pdfmake.min.js
+      - vfs_fonts.js
+
+  # Buttons
+  - name: datatables-buttons
+    version: 3.2.4
+    src: { file: htmlwidgets/lib/buttons/3.2.4 }
+    script:
+      - js/dataTables.buttons.min.js
+      - js/buttons.bootstrap5.min.js
+      - js/buttons.colVis.min.js
+      - js/buttons.html5.min.js
+      - js/buttons.print.min.js
+    stylesheet:
+      - css/buttons.bootstrap5.min.css
+
+  # Scroller
+  - name: datatables-scroller
+    version: 2.4.3
+    src: { file: htmlwidgets/lib/scroller/2.4.3 }
+    script:
+      - js/dataTables.scroller.min.js
+    stylesheet:
+      - css/scroller.bootstrap5.min.css
+
+  # SearchPanes
+  - name: datatables-searchpanes
+    version: 2.3.5
+    src: { file: htmlwidgets/lib/searchpanes/2.3.5 }
+    script:
+      - js/dataTables.searchPanes.min.js
+      - js/searchPanes.bootstrap5.min.js
+    stylesheet:
+      - css/searchPanes.bootstrap5.min.css
+
+  # Select
+  - name: datatables-select
+    version: 3.1.0
+    src: { file: htmlwidgets/lib/select/3.1.0 }
+    script:
+      - js/dataTables.select.min.js
+    stylesheet:
+      - css/select.bootstrap5.min.css
+
+ # Responsive (3.0.6)
+  - name: datatables-responsive
+    version: 3.0.6
+    src: { file: htmlwidgets/lib/responsive/3.0.6 }
+    script:
+      - js/dataTables.responsive.min.js
+      - js/responsive.bootstrap5.js
+    stylesheet:
+      - css/responsive.bootstrap5.min.css
