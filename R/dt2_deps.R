@@ -1,8 +1,5 @@
 # R/deps.R
 
-# Safe fallback
-`%||%` <- function(a, b) if (is.null(a)) b else a
-
 # Default extension versions (only those NOT fixed in dt2.yaml)
 .dt2_ext_versions <- list(
   autofill      = "2.7.0",
@@ -10,7 +7,7 @@
   fixedcolumns  = "5.0.4",
   fixedheader   = "4.0.3",
   keytable      = "2.12.1",
-  responsive    = "3.0.6",   # opcional
+  #responsive    = "3.0.6",   # opcional
   rowgroup      = "1.5.2",
   rowreorder    = "1.5.0",
   searchbuilder = "1.8.3",
@@ -38,10 +35,6 @@
   keytable = list(
     js  = c("js/dataTables.keyTable.min.js", "js/keyTable.bootstrap5.min.js"),
     css = "css/keyTable.bootstrap5.min.css"
-  ),
-  responsive = list(
-    js  = c("js/dataTables.responsive.min.js", "js/responsive.bootstrap5.min.js"),
-    css = "css/responsive.bootstrap5.min.css"
   ),
   rowgroup = list(
     js  = c("js/dataTables.rowGroup.min.js", "js/rowGroup.bootstrap5.min.js"),
@@ -86,7 +79,8 @@ dt2_dependency_extensions <- function(extensions = NULL) {
 
   # Already included in dt2.yaml, skip them here
   skip <- c("jquery", "datatables-core", "buttons", "scroller",
-            "searchpanes", "select", "moment", "jszip", "pdfmake")
+            "searchpanes", "select", "moment", "jszip", "pdfmake",
+            "responsive", "columncontrol")
 
   exts <- setdiff(exts, skip)
 

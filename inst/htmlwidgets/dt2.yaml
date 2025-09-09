@@ -88,3 +88,13 @@ dependencies:
       - js/responsive.bootstrap5.js
     stylesheet:
       - css/responsive.bootstrap5.min.css
+
+  # ColumnControl
+  - name: datatables-columncontrol
+    version: 1.0.7
+    src: { file: htmlwidgets/lib/columncontrol/1.0.7 }
+    script:
+      - js/dataTables.columnControl.min.js
+      - js/columnControl.bootstrap5.min.js
+    stylesheet:
+      - css/columnControl.bootstrap5.min.css

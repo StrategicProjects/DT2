@@ -72,6 +72,23 @@ server <- function(input, output, session) {
         numbers = FALSE
         ))
     ),
+    columnControl = list("order", "searchDropdown",
+                         list(
+                           list(extend = 'orderAsc', text = 'Ordem crescente'),
+                           list(extend = 'orderDesc', text = 'Ordem decrescente'),
+                           'spacer',
+                           list(extend = 'colVisDropdown', text = 'Selecionar colunas')
+                         )
+
+                         #"searchDropdown"
+      #list(target = 0, content = list("order")),         # 1ª linha do thead
+      #list(target = 1, content = list("searchDropdown"))         # 2ª linha do thead (criada se não existir)
+    ),
+    # columnDefs = list(
+    #   targets = list(3),
+    #   columnControl = list('order', list('searchDropdown'))
+    # ),
+    ordering = list(indicators = FALSE, handler = FALSE), # recomendado pela doc quando usar 'order'
     language = list(
       lengthMenu    = "Mostrar&nbsp; _MENU_",
       lengthLabels = list(
@@ -104,6 +121,61 @@ server <- function(input, output, session) {
           `_` = "%d linhas copiadas",
           `1` = "1 linha copiada"
         )
+      ),
+      columnControl = list(
+        buttons = list(
+          searchClear = "Limpar pesquisa"
+        ),
+        colVis = "Visibilidade da coluna",
+        colVisDropdown = "Visibilidade da coluna",
+        dropdown = "Mostrar mais...",
+        list = list(
+          all = "Todos",
+          empty = "Vazio",
+          none = "Nenhum",
+          search = "Pesquisar..."
+        ),
+        orderAddAsc = "Adicionar à ordem crescente",
+        orderAddDesc = "Adicionar à ordem decrescente",
+        orderAsc = "Ordem crescente",
+        orderClear = "Remover ordenação",
+        orderDesc = "Ordem decrescente",
+        orderRemove = "Remover ordenação",
+        reorder = "Reordenar",
+        reorderLeft = "Mover para a esquerda",
+        reorderRight = "Mover para a direita",
+        search = list(
+          datetime = list(
+            empty = "Vazio",
+            equal = "Igual a",
+            greater = "Posterior a",
+            less = "Anterior a",
+            notEmpty = "Não está vazio",
+            notEqual = "Diferente de"
+          ),
+          number = list(
+            empty = "Vazio",
+            equal = "Igual a",
+            greater = "Maior que",
+            greaterOrEqual = "Maior ou igual a",
+            less = "Menor que",
+            lessOrEqual = "Menor ou igual a",
+            notEmpty = "Não está vazio",
+            notEqual = "Diferente de"
+          ),
+          text = list(
+            contains = "Contém",
+            empty = "Vazio",
+            ends = "Termina em",
+            equal = "Igual a",
+            notContains = "Não contém",
+            notEmpty = "Não está vazio",
+            notEqual = "Diferente de",
+            starts = "Começa por"
+          )
+        ),
+        searchClear = "Limpar pesquisa",
+        searchDropdown = "Pesquisar"
       ),
       url = 'https://cdn.datatables.net/plug-ins/2.3.3/i18n/pt-BR.json'
     ),

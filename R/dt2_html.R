@@ -8,7 +8,6 @@
 #' @return Updated `options`.
 #' @export
 dt2_cols_html <- function(options = list(), cols, js_render) {
-  `%||%` <- function(a,b) if (is.null(a)) b else a
   if (is.character(cols)) cols <- match(cols, options$columns)
   cds <- lapply(cols, function(i) list(
     targets = i - 1L,
