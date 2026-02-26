@@ -4,7 +4,7 @@ The main function for creating interactive DataTables. Works standalone
 (R Markdown, Quarto, Viewer) and inside Shiny.
 
 **Styling** is controlled directly via `theme`, `striped`, `hover`,
-`compact`, `font_scale` — or a CSS `class` string for full control.
+`compact`, `font_scale` – or a CSS `class` string for full control.
 
 **DataTables configuration** goes in `options` (1:1 mapping to the
 JavaScript API). The two concerns are cleanly separated.
@@ -70,9 +70,8 @@ dt2(
 
 - responsive:
 
-  Logical; enable the Responsive extension so the table fills 100% width
-  and adapts to narrow screens by collapsing columns. Default: `TRUE`.
-  Set `FALSE` to disable.
+  Logical; enable the Responsive extension so the table fills 100\\
+  Default: `TRUE`. Set `FALSE` to disable.
 
 - options:
 
@@ -95,14 +94,6 @@ dt2(
 ## Value
 
 An `htmlwidget` object.
-
-## Styling
-
-## Behavior
-
-## DataTables config
-
-## Widget
 
 ## Examples
 

@@ -151,7 +151,7 @@ dt2_register_renderer("pct_bar", htmlwidgets::JS("
   function(data, type) {
     if (type !== 'display') return data;
     var pct = Math.min(100, Math.max(0, parseFloat(data)));
-    return '<div style=\"background:#e9ecef;border-radius:3px\">' +
+    return '<div style=\"background:#e9ecef;border-radius:3px;margin:6px\">' +
            '<div style=\"width:' + pct + '%;background:#0d6efd;height:10px;' +
            'border-radius:3px\"></div></div>';
   }

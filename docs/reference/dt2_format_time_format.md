@@ -16,14 +16,26 @@ dt2_format_time_format(
 
 ## Arguments
 
+- options:
+
+  Options list (returned modified).
+
+- col_specs:
+
+  Column names or indices to format.
+
 - from:
 
-  input format (e.g. 'YYYY-MM-DDTHH:mm:ssZ' or null for ISO)
+  Input format (e.g. `'YYYY-MM-DDTHH:mm:ssZ'` or `NULL` for ISO).
 
 - to:
 
-  output format (e.g. 'L LTS') - ver moment.js
+  Output format (e.g. `'L LTS'`). See moment.js docs.
 
 - locale:
 
-  e.g. 'pt-br'
+  Locale string, e.g. `'pt-br'`.
+
+## Value
+
+Modified `options`.

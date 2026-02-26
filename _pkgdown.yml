@@ -7,7 +7,6 @@ template:
   bootstrap: 5
   bslib:
     bootswatch: spacelab
-    font_scale: 1
     base_font: {google: "Jost"}
     heading_font: {google: "Jost"}
     code_font: {google: "JetBrains Mono"}

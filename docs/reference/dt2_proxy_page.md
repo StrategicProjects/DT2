@@ -11,3 +11,24 @@ dt2_proxy_page(
   number = NULL
 )
 ```
+
+## Arguments
+
+- proxy:
+
+  A
+  [`dt2_proxy()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dt2_proxy.md)
+  object.
+
+- page:
+
+  Navigation action: `"first"`, `"previous"`, `"next"`, `"last"`, or
+  `"number"` (go to a specific page).
+
+- number:
+
+  Page number (1-based). Only used when `page = "number"`.
+
+## Value
+
+The proxy, invisibly.
