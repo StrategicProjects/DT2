@@ -12,6 +12,20 @@ dt2_proxy_search(
   caseInsensitive = TRUE
 )
 }
+\arguments{
+\item{proxy}{A \code{\link[=dt2_proxy]{dt2_proxy()}} object.}
+
+\item{value}{Search string.}
+
+\item{regex}{Logical; treat \code{value} as a regular expression? Default: \code{FALSE}.}
+
+\item{smart}{Logical; use DataTables smart search? Default: \code{TRUE}.}
+
+\item{caseInsensitive}{Logical; case-insensitive search? Default: \code{TRUE}.}
+}
+\value{
+The proxy, invisibly.
+}
 \description{
 Global search (proxy)
 }

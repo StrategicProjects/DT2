@@ -1,0 +1,13 @@
+pandoc: 3.8.3
+pkgdown: 2.2.0
+pkgdown_sha: ~
+articles:
+  extensions-guide: extensions-guide.html
+  formatting: formatting.html
+  getting-started: getting-started.html
+  js-config: js-config.html
+  shiny-integration: shiny-integration.html
+last_built: 2026-02-26T03:09Z
+urls:
+  reference: https://monitoramento.sepe.pe.gov.br/DT2/reference
+  article: https://monitoramento.sepe.pe.gov.br/DT2/articles

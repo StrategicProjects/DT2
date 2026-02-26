@@ -4,16 +4,29 @@
 \alias{dt2_use_buttons}
 \title{Enable Buttons (extension) and define buttons}
 \usage{
-dt2_use_buttons(options = list(), buttons = c("copy", "csv", "excel", "print"))
+dt2_use_buttons(
+  options = list(),
+  buttons = c("copy", "csv", "excel", "print"),
+  position = "topEnd",
+  button_class = NULL
+)
 }
 \arguments{
 \item{options}{Options list.}
 
 \item{buttons}{Vector of button ids (e.g., c("copy","csv","excel","print","colvis")).}
+
+\item{position}{Where to place buttons in the layout.
+One of \code{"topEnd"} (default), \code{"topStart"}, \code{"bottomEnd"},
+\code{"bottomStart"}.}
+
+\item{button_class}{CSS class for buttons (e.g., \code{"btn btn-sm btn-primary"}).
+If \code{NULL}, uses the theme default (\code{"btn btn-sm btn-outline-secondary"}).
+Applied per-button via \code{className}.}
 }
 \value{
 Updated \code{options}.
 }
 \description{
-Enable Buttons (extension) and define buttons
+Uses the modern DataTables 2.x \code{layout} API (not the deprecated \code{dom}).
 }

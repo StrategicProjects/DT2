@@ -1,0 +1,841 @@
+# Getting Started with DT2
+
+## Overview
+
+**DT2** is a modern R binding for [DataTables
+v2](https://datatables.net/) built on `htmlwidgets`. It works **with or
+without Shiny** — render interactive tables in R Markdown, Quarto, and
+the RStudio Viewer.
+
+With zero configuration, DT2 produces a Bootstrap 5 styled table with
+search, sorting, pagination, and the Jost font — all from a single
+function call:
+
+``` r
+
+# Just works — Bootstrap 5, Jost font, striped, compact
+dt2(iris)
+```
+
+## Responsive Tables
+
+DT2 enables the Responsive extension by default. Tables fill 100% of the
+available width and gracefully adapt to narrow screens by collapsing
+columns that don’t fit. This is essential for dashboards and reports
+viewed on mobile devices or embedded in narrow layout containers:
+
+``` r
+
+# Responsive is ON by default — table fills the container
+dt2(mtcars[1:10, ])
+```
+
+On wide screens all columns are visible. On narrow screens, columns that
+overflow are hidden and accessible via a toggle (`+`) on each row — the
+user can expand any row to reveal the hidden columns in a child row.
+
+To disable responsive behaviour (for example, when using custom
+renderers that inject complex HTML, or when you prefer horizontal
+scrolling with `scrollX = TRUE`):
+
+``` r
+
+dt2(iris, responsive = FALSE)
+```
+
+## Styling
+
+DT2 provides multiple levels of control over table appearance, from
+quick inline parameters to reusable theme objects. All styling options
+cascade: direct arguments override theme values, which override the
+built-in defaults.
+
+### Inline overrides
+
+Style parameters are first-class arguments of
+[`dt2()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dt2.md).
+Override any individual setting without creating a theme object — useful
+for quick one-off adjustments:
+
+``` r
+
+dt2(iris, striped = FALSE, hover = FALSE, font_scale = 1.0)
+```
+
+### Theme presets
+
+DT2 ships with four built-in presets that cover common use cases. Each
+preset adjusts striping, compactness, and font scaling to match a
+particular aesthetic:
+
+| Preset      | Striped | Compact | Font scale |
+|-------------|---------|---------|------------|
+| `"default"` | ✓       | ✓       | 0.80       |
+| `"clean"`   | ✓       | —       | 0.85       |
+| `"minimal"` | —       | —       | 0.90       |
+| `"compact"` | ✓       | ✓       | 0.75       |
+
+``` r
+
+dt2(iris, theme = "minimal", options = list(pageLength = 5))
+```
+
+### Reusable themes
+
+Create a theme once, apply it to many tables:
+
+``` r
+
+my_theme <- dt2_theme("clean", compact = TRUE, font_scale = 0.80)
+my_theme
+#> DT2 theme:
+#>   striped      = TRUE 
+#>   hover        = TRUE 
+#>   compact      = TRUE 
+#>   font_scale   = 0.8 
+#>   style        = bootstrap5 
+#>   button_class = btn btn-sm btn-outline-secondary
+```
+
+``` r
+
+dt2(iris[1:10, ], theme = my_theme)
+```
+
+### CSS class override
+
+For full control, pass a raw CSS class string:
+
+``` r
+
+dt2(iris, class = "table table-bordered table-dark table-sm")
+```
+
+## Table Layout
+
+DataTables 2 uses `layout` to control where elements (search box, page
+length selector, buttons, pagination, info text) appear around the
+table. This replaces the old `dom` string from DataTables v1 with a
+clean, named-position system that is much easier to read and maintain.
+
+Each position is a slot in a grid above and below the table. You can
+place any element in any slot, combine multiple elements in the same
+slot, or set a slot to `NULL` to remove it entirely.
+
+### Layout positions
+
+    +------------------+------------------+
+    | topStart         | topEnd           |
+    +------------------+------------------+
+    | top2Start        | top2End          |
+    +------------------+------------------+
+    |               TABLE                 |
+    +------------------+------------------+
+    | bottomStart      | bottomEnd        |
+    +------------------+------------------+
+    | bottom2Start     | bottom2End       |
+    +------------------+------------------+
+
+### Default layout
+
+By default, DataTables places:
+
+- **topStart**: page length selector
+- **topEnd**: search box
+- **bottomStart**: info (“Showing 1 to 10 of 150 entries”)
+- **bottomEnd**: pagination
+
+### Rearranging elements
+
+Move the search box to the left and info to the right:
+
+``` r
+
+dt2(iris, options = list(
+  pageLength = 5,
+  layout = list(
+    topStart    = "search",
+    topEnd      = "pageLength",
+    bottomStart = "paging",
+    bottomEnd   = "info"
+  )
+))
+```
+
+### Removing elements
+
+Set a position to `NULL` to remove it:
+
+``` r
+
+dt2(iris, options = list(
+  pageLength = 5,
+  layout = list(
+    topStart  = NULL,         # remove page length selector
+    bottomEnd = "paging"      # keep only pagination
+  )
+))
+```
+
+### Multiple elements in one position
+
+Wrap multiple elements in a list:
+
+``` r
+
+dt2(iris, options = list(
+  pageLength = 5,
+  layout = list(
+    topStart = list("pageLength", "info"),
+    topEnd   = "search",
+    bottomEnd = "paging"
+  )
+))
+```
+
+### Search box placeholder
+
+``` r
+
+dt2(iris, options = list(
+  pageLength = 5,
+  layout = list(
+    topEnd = list(search = list(placeholder = "Type to filter..."))
+  )
+))
+```
+
+## Buttons (Export / Copy / Print)
+
+The Buttons extension adds one-click export functionality to your
+tables. Users can copy data to the clipboard, download as CSV/Excel/PDF,
+or send the table directly to the printer. DT2 auto-detects when buttons
+are configured and loads the required JavaScript and CSS automatically —
+no need to specify `extensions = "Buttons"` manually.
+
+### Quick setup
+
+The simplest way to add export buttons — just list the button types you
+want and place them in the layout:
+
+``` r
+
+dt2(mtcars[1:15, ], options = list(
+  pageLength = 8,
+  buttons = list("copy", "csv", "excel"),
+  layout  = list(topEnd = "buttons")
+))
+```
+
+DT2 auto-detects that buttons are needed and loads the Buttons
+extension.
+
+### Using the helper
+
+[`dt2_use_buttons()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dt2_use_buttons.md)
+builds the options for you:
+
+``` r
+
+opts <- dt2_use_buttons(
+  buttons  = c("copy", "csv", "excel", "pdf", "print"),
+  position = "topEnd"
+)
+dt2(iris[1:20, ], options = opts)
+```
+
+### Buttons + search together
+
+Place buttons and search in the same row:
+
+``` r
+
+dt2(iris[1:20, ], options = list(
+  pageLength = 10,
+  buttons = list("copy", "csv", "excel"),
+  layout = list(
+    topStart = "buttons",
+    topEnd   = list(search = list(placeholder = "Filter...")),
+    bottomEnd = "paging"
+  )
+))
+```
+
+### Grouped buttons with dropdown
+
+For tables with many export options, group related buttons inside a
+dropdown menu using `extend = "collection"`. This keeps the toolbar
+compact while still offering all export formats. The `colvis` button
+lets users toggle column visibility on the fly:
+
+``` r
+
+dt2(iris[1:20, ], options = list(
+  pageLength = 10,
+  layout = list(
+    topEnd = list(
+      buttons = list(
+        list(extend = "collection", text = "Export",
+             buttons = list("copyHtml5", "csvHtml5", "excelHtml5", "pdfHtml5")),
+        list(extend = "spacer", style = "bar"),
+        "print",
+        list(extend = "spacer", style = "bar"),
+        list(extend = "colvis", text = "Columns")
+      )
+    )
+  )
+))
+```
+
+### Separated button groups with spacer
+
+Use `extend = "spacer"` to visually separate groups of buttons. The
+`style = "bar"` variant adds a vertical divider:
+
+``` r
+
+dt2(iris[1:20, ], options = list(
+  pageLength = 10,
+  layout = list(
+    topEnd = list(
+      buttons = list(
+        "copy", "csv", "excel",
+        list(extend = "spacer", style = "bar"),
+        list(extend = "colvis", text = "Columns")
+      )
+    )
+  )
+))
+```
+
+### Bottom buttons
+
+``` r
+
+dt2(mtcars[1:10, ], options = list(
+  buttons = list("copy", "csv"),
+  layout  = list(
+    topEnd      = "search",
+    bottomStart = "buttons",
+    bottomEnd   = "paging"
+  )
+))
+```
+
+### Button styling
+
+DT2 defaults to compact, outlined buttons
+(`btn btn-sm btn-outline-secondary`). Override globally via
+`button_class`:
+
+``` r
+
+# Primary blue buttons
+dt2(iris[1:10, ],
+    button_class = "btn btn-sm btn-primary",
+    options = list(
+      buttons = list("copy", "csv", "excel"),
+      layout = list(topEnd = "buttons")
+    ))
+```
+
+Or per-table with the helper:
+
+``` r
+
+opts <- dt2_use_buttons(
+  buttons = c("copy", "csv", "excel"),
+  button_class = "btn btn-sm btn-outline-dark"
+)
+dt2(iris[1:10, ], options = opts)
+```
+
+You can also set it once in a reusable theme:
+
+``` r
+
+my_theme <- dt2_theme("default", button_class = "btn btn-sm btn-primary")
+dt2(iris, theme = my_theme, options = dt2_use_buttons())
+dt2(mtcars, theme = my_theme, options = dt2_use_buttons())
+```
+
+Common Bootstrap 5 button classes:
+
+| Class                              | Look                    |
+|------------------------------------|-------------------------|
+| `btn btn-sm btn-outline-secondary` | Light outline (default) |
+| `btn btn-sm btn-outline-dark`      | Dark outline            |
+| `btn btn-sm btn-primary`           | Solid blue              |
+| `btn btn-sm btn-secondary`         | Solid grey              |
+| `btn btn-sm btn-light`             | Light background        |
+
+### Pagination styling
+
+DataTables v2 configures pagination through the `layout` option, using
+`paging` as a named list. This replaces the deprecated `pagingType`
+parameter and gives you fine-grained control over which navigation
+elements appear: page number buttons, previous/next arrows, first/last
+buttons, and how many page-number buttons to show at once.
+
+The default pagination includes previous/next arrows and page numbers.
+DT2 uses Bootstrap 5 `.page-link` classes, so pagination automatically
+inherits your Bootswatch theme colours.
+
+``` r
+
+# Default pagination — compact, themed by Bootstrap
+dt2(iris)
+```
+
+To remove pagination entirely (show all rows at once), set
+`paging = FALSE` at the root level of `options`. This is useful for
+small datasets where the user should see everything without navigating:
+
+``` r
+
+dt2(iris[1:10, ], options = list(
+  paging = FALSE
+))
+```
+
+**Simple — previous / next only (no page numbers).** Useful for
+mobile-friendly interfaces or when exact page numbers are not
+meaningful:
+
+``` r
+
+dt2(iris, options = list(
+  layout = list(
+    bottomEnd = list(paging = list(
+      type = "simple"
+    ))
+  )
+))
+```
+
+**Hide page numbers but keep first / last buttons.** Lets users jump to
+the beginning or end of large datasets without cluttering the interface
+with numbered buttons:
+
+``` r
+
+dt2(iris, options = list(
+  layout = list(
+    bottomEnd = list(paging = list(
+      numbers   = FALSE,
+      firstLast = TRUE
+    ))
+  )
+))
+```
+
+**Limit how many page number buttons are shown.** For datasets with many
+pages this prevents the pagination bar from becoming too wide —
+DataTables inserts ellipsis (`…`) to indicate hidden pages:
+
+``` r
+
+dt2(iris, options = list(
+  layout = list(
+    bottomEnd = list(paging = list(
+      buttons = 3
+    ))
+  )
+))
+```
+
+**Hide boundary numbers (first/last page) but keep arrows.** The first
+and last page numbers are removed, leaving only the surrounding page
+numbers and navigation arrows:
+
+``` r
+
+dt2(iris, options = list(
+  layout = list(
+    bottomEnd = list(paging = list(
+      boundaryNumbers = FALSE
+    ))
+  )
+))
+```
+
+**Full — first / prev / numbers / next / last.** Shows every navigation
+element for maximum control. This is equivalent to the deprecated
+`pagingType = "full_numbers"`:
+
+``` r
+
+dt2(iris, options = list(
+  layout = list(
+    bottomEnd = list(paging = list(
+      firstLast    = TRUE,
+      previousNext = TRUE,
+      numbers      = TRUE
+    ))
+  )
+))
+```
+
+#### Quick reference
+
+| Behaviour | `layout` paging option |
+|----|----|
+| Simple (← →) | `list(type = "simple")` |
+| No numbers (« ‹ › ») | `list(numbers = FALSE, firstLast = TRUE)` |
+| Limit buttons | `list(buttons = 3)` |
+| No boundary numbers | `list(boundaryNumbers = FALSE)` |
+| No first/last | `list(firstLast = FALSE)` |
+| Full with all elements | `list(firstLast = TRUE, previousNext = TRUE, numbers = TRUE)` |
+| No pagination | Set `paging = FALSE` at root level |
+
+> **Note:** `pagingType` (e.g. `"simple"`, `"full_numbers"`) still works
+> but is deprecated in DataTables v2. Prefer the `layout` approach
+> above.
+
+**Move pagination to the left.** Sometimes it makes sense to swap info
+and pagination — for example, when the pagination controls should align
+with left-side content:
+
+``` r
+
+dt2(iris, options = list(
+  layout = list(
+    bottomStart = "paging",
+    bottomEnd   = "info"
+  )
+))
+```
+
+## Infinite Scrolling (Scroller)
+
+Instead of pagination, you can use virtual scrolling for large datasets.
+The Scroller extension renders only the visible rows and loads more as
+the user scrolls — ideal for datasets with thousands of rows where
+pagination would create an overwhelming number of pages.
+
+The table container gets a fixed height (set via `scrollY` in pixels)
+and rows are rendered on demand as the user scrolls, keeping memory
+usage low even for very large datasets:
+
+``` r
+
+dt2(iris, options = list(
+  scroller  = TRUE,
+  scrollY   = 300,         # viewport height in pixels
+  paging    = TRUE         # required for Scroller
+))
+```
+
+DT2 auto-detects the Scroller extension when `scroller = TRUE` is set.
+
+With a larger dataset:
+
+``` r
+
+big <- data.frame(
+  id    = 1:5000,
+  value = round(rnorm(5000), 3),
+  group = sample(LETTERS[1:5], 5000, replace = TRUE)
+)
+dt2(big, options = list(
+  scroller    = TRUE,
+  scrollY     = 400,
+  deferRender = TRUE     # improves performance: renders rows on demand
+))
+```
+
+Combine with buttons:
+
+``` r
+
+dt2(big, options = list(
+  scroller    = TRUE,
+  scrollY     = 350,
+  deferRender = TRUE,
+  buttons     = list("copy", "csv", "excel"),
+  layout      = list(
+    topEnd    = "buttons",
+    topStart  = list(search = list(placeholder = "Search..."))
+  )
+))
+```
+
+For datasets over ~50k rows, consider server-side processing instead.
+See
+[`vignette("shiny-integration")`](https://monitoramento.sepe.pe.gov.br/DT2/articles/shiny-integration.md)
+for details.
+
+## Column Formatting
+
+DT2 provides helper functions that build DataTables `columnDefs` for
+common formatting tasks — number separators, decimal places, prefixes,
+and suffixes. These modify your options list in-place and generate the
+correct JavaScript `render` functions behind the scenes, so you don’t
+need to write any JS:
+
+``` r
+
+opts <- list(columns = names(mtcars))
+opts <- dt2_format_number(opts, "hp", thousands = ",", digits = 0)
+opts <- dt2_format_number(opts, "wt", digits = 2, prefix_right = " tons")
+dt2(mtcars[1:10, ], options = opts)
+```
+
+### Abbreviated numbers (k/M/B)
+
+For large numbers (population, budgets, revenues), use abbreviated
+formatting that automatically converts values to human-readable
+suffixes. The `locale` parameter controls the decimal separator and
+number grouping:
+
+``` r
+
+df <- data.frame(
+  city   = c("São Paulo", "Recife", "NYC", "Tokyo"),
+  pop    = c(12.33e6, 1.65e6, 8.34e6, 13.96e6),
+  budget = c(6.5e10, 4.2e9, 1.07e11, 7.36e10)
+)
+opts <- list(columns = names(df))
+opts <- dt2_format_number_abbrev(opts, c("pop", "budget"),
+                                  digits = 1, locale = "pt-BR")
+dt2(df, options = opts)
+```
+
+## DataTables Options
+
+Every option from the [DataTables JS
+API](https://datatables.net/reference/option/) maps 1:1 to an R named
+list. If you find an example on the DataTables website, you can
+translate it directly to R without any wrapper functions. This means the
+full power of DataTables is available — including options not covered by
+DT2’s helper functions:
+
+``` r
+
+dt2(iris, options = list(
+  pageLength = 5,
+  searching  = TRUE,
+  ordering   = TRUE,
+  language   = list(search = "Filter:", info = "_TOTAL_ rows")
+))
+```
+
+See
+[`vignette("js-config")`](https://monitoramento.sepe.pe.gov.br/DT2/articles/js-config.md)
+for the complete translation guide.
+
+## Saving as HTML
+
+Any DT2 table can be saved as a standalone HTML file using
+[`htmlwidgets::saveWidget()`](https://rdrr.io/pkg/htmlwidgets/man/saveWidget.html).
+The resulting file includes all CSS and JavaScript — it works offline
+and can be emailed, hosted, or embedded in other pages:
+
+``` r
+
+w <- dt2(iris)
+htmlwidgets::saveWidget(w, "my_table.html", selfcontained = TRUE)
+```
+
+## Keeping Libraries Up to Date
+
+DT2 bundles DataTables core, extensions, jQuery, and other JS/CSS
+dependencies inside the package. You can check whether newer versions
+are available on npm and CDN without leaving R:
+
+``` r
+
+dt2_check_updates()
+```
+
+If you are developing DT2 itself, apply updates automatically:
+
+``` r
+
+dt2_update_libs()            # patch + download
+dt2_update_libs(dry_run = TRUE)  # preview only
+```
+
+Version constraints prevent breaking upgrades (jQuery stays on 3.x,
+pdfmake on 0.2.x). See
+[`?.dt2_version_constraints`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dot-dt2_version_constraints.md)
+for details.
+
+## Complete Example: Custom Renderers, Flags, and ColumnControl
+
+This example brings together most DT2 features in a single, realistic
+table: ColumnControl dropdown menus in the header for sorting and
+filtering, export buttons separated by a visual spacer, custom
+JavaScript renderers (country flags via CSS sprites, coloured salary
+values, progress bars), and a complete Portuguese (Brazil) translation.
+
+Copy and run it directly — the full 57-row version is also available at
+`system.file("examples/app_complete.R", package = "DT2")`.
+
+``` r
+
+library(jsonlite)
+library(dplyr)
+library(tibble)
+library(lubridate)
+library(DT2)
+library(htmlwidgets)
+
+# ── Flag sprite CSS (carregado via dependency para garantir que entra no HTML) ──
+flag_dep <- htmltools::htmlDependency(
+  name = "world-flags-sprite",
+  version = "0.0.1",
+  head = '<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lafeber/world-flags-sprite/stylesheets/flags32-both.css">',
+  src = c(href = ".")
+)
+
+# ── Dados ─────────────────────────────────────────────────────────────────────
+json_txt <- '{
+  "data": [
+    {"name":"Tiger Nixon","position":"System Architect","salary":"320800","start_date":"2011-04-25","office":"Edinburgh","extn":"5421"},
+    {"name":"Garrett Winters","position":"Accountant","salary":"170750","start_date":"2011-07-25","office":"Tokyo","extn":"8422"},
+    {"name":"Ashton Cox","position":"Junior Technical Author","salary":"86000","start_date":"2009-01-12","office":"San Francisco","extn":"1562"},
+    {"name":"Cedric Kelly","position":"Senior JavaScript Developer","salary":"433060","start_date":"2012-03-29","office":"Edinburgh","extn":"6224"},
+    {"name":"Airi Satou","position":"Accountant","salary":"162700","start_date":"2008-11-28","office":"Tokyo","extn":"5407"},
+    {"name":"Brielle Williamson","position":"Integration Specialist","salary":"372000","start_date":"2012-12-02","office":"New York","extn":"4804"},
+    {"name":"Herrod Chandler","position":"Sales Assistant","salary":"137500","start_date":"2012-08-06","office":"San Francisco","extn":"9608"},
+    {"name":"Rhona Davidson","position":"Integration Specialist","salary":"327900","start_date":"2010-10-14","office":"Tokyo","extn":"6200"},
+    {"name":"Colleen Hurst","position":"JavaScript Developer","salary":"205500","start_date":"2009-09-15","office":"San Francisco","extn":"2360"},
+    {"name":"Sonya Frost","position":"Software Engineer","salary":"103600","start_date":"2008-12-13","office":"Edinburgh","extn":"1667"}
+  ]
+}'
+
+df <- fromJSON(json_txt, flatten = TRUE)$data %>%
+  as_tibble() %>%
+  mutate(
+    salary     = as.numeric(salary),
+    extn       = as.integer(extn),
+    start_date = ymd(start_date)
+  )
+
+# ── JS Renderers ──────────────────────────────────────────────────────────────
+office_js <- JS("
+  function(data, type) {
+    if (type !== 'display') return data;
+    var cc = {Argentina:'ar', Edinburgh:'_Scotland', London:'_England',
+              'New York':'us', 'San Francisco':'us', Sydney:'au', Tokyo:'jp'};
+    return '<span class=\"flag ' + (cc[data]||'') + '\"></span> ' + data;
+  }
+")
+
+salary_js <- JS("
+  (function() {
+    var nfmt = DataTable.render.number('.', ',', 2, 'R$ ');
+    return function(data, type) {
+      var txt = nfmt.display(data);
+      if (type !== 'display') return txt;
+      var c = data < 250000 ? 'red' : data < 500000 ? 'orange' : 'green';
+      return '<span style=\"color:' + c + '\">' + txt + '</span>';
+    };
+  })()
+")
+
+extn_js <- JS("
+  function(data, type) {
+    return type === 'display'
+      ? '<progress value=\"' + data + '\" max=\"9999\"></progress>'
+      : data;
+  }
+")
+
+# ── Tabela ────────────────────────────────────────────────────────────────────
+w <- dt2(df,
+  compact    = TRUE,
+  striped    = TRUE,
+  hover      = TRUE,
+  font_scale = 0.85,
+  responsive = FALSE,
+  options    = list(
+    pageLength = 10,
+    lengthMenu = c(5, 10, 25, -1),
+    columns    = names(df),
+    scrollX = TRUE,  
+    layout = list(
+      topStart = "pageLength",
+      topEnd   = list(
+        buttons = list(
+          list(extend = "copyHtml5", text = "Copiar"),
+          list(extend = "csvHtml5"),
+          list(extend = "excelHtml5"),
+          list(extend = "spacer", style = "bar"),
+          list(extend = "colvis", text = "Colunas")
+        ),
+        search = list(placeholder = "")
+      ),
+      bottomEnd = list(paging = list(numbers = FALSE))
+    ),
+
+    columnControl = list(
+      target  = 0,
+      content = list("order", "searchDropdown", list(
+        list(extend = "orderAsc",       text = "Ordem crescente"),
+        list(extend = "orderDesc",      text = "Ordem decrescente"),
+        "spacer",
+        list(extend = "colVisDropdown", text = "Selecionar colunas")
+      ))
+    ),
+    ordering = list(indicators = FALSE, handler = FALSE),
+
+    columnDefs = list(
+      list(targets = which(names(df) == "office") - 1L,
+           className = "f32", render = office_js),
+      list(targets = which(names(df) == "salary") - 1L,
+           className = "dt-body-right", render = salary_js),
+      list(targets = which(names(df) == "extn") - 1L,
+           render = extn_js)
+    ),
+
+    language = list(
+      lengthMenu   = "Mostrar _MENU_",
+      search       = "Buscar",
+      info         = "Mostrando _START_ a _END_ de _TOTAL_ registros",
+      infoEmpty    = "Nenhum registro",
+      zeroRecords  = "Nenhum registro encontrado",
+      emptyTable   = "Nenhum dado disponível",
+      decimal      = ",", thousands = ".", infoThousands = ".",
+      lengthLabels = list(`10` = "10", `25` = "25", `-1` = "Todas"),
+      paginate     = list(first = "«", previous = "‹", `next` = "›", last = "»"),
+      buttons = list(
+        copyTitle   = "Copiado!",
+        copySuccess = list(`_` = "%d linhas copiadas", `1` = "1 linha copiada")
+      ),
+      columnControl = list(
+        orderAsc = "Crescente", orderDesc = "Decrescente",
+        searchDropdown = "Pesquisar", colVisDropdown = "Colunas",
+        searchClear = "Limpar",
+        search = list(
+          text   = list(contains = "Contém", starts = "Começa por",
+                        ends = "Termina em", equal = "Igual a"),
+          number = list(greater = "Maior que", less = "Menor que",
+                        equal = "Igual a")
+        )
+      )
+    )
+  )
+)
+
+# Anexa a dependency do flag sprite ao widget
+w$dependencies <- c(w$dependencies, list(flag_dep))
+w
+```
+
+## Next Steps
+
+- **Extensions**:
+  [`vignette("extensions-guide")`](https://monitoramento.sepe.pe.gov.br/DT2/articles/extensions-guide.md)
+  — Select, Responsive, ColumnControl, SearchBuilder, and more.
+- **Shiny**:
+  [`vignette("shiny-integration")`](https://monitoramento.sepe.pe.gov.br/DT2/articles/shiny-integration.md)
+  — proxy, events, SSP.
+- **JS Config**:
+  [`vignette("js-config")`](https://monitoramento.sepe.pe.gov.br/DT2/articles/js-config.md)
+  — translating datatables.net examples to R, advanced layout,
+  callbacks.
+- **Formatting**:
+  [`vignette("formatting")`](https://monitoramento.sepe.pe.gov.br/DT2/articles/formatting.md)
+  — all column formatting helpers.

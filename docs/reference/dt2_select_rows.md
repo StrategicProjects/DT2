@@ -1,0 +1,23 @@
+# Select rows (proxy; Select extension)
+
+Select rows (proxy; Select extension)
+
+## Usage
+
+``` r
+dt2_select_rows(proxy, indexes, reset = TRUE)
+```
+
+## Arguments
+
+- proxy:
+
+  [`dt2_proxy()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dt2_proxy.md).
+
+- indexes:
+
+  1-based row indices.
+
+- reset:
+
+  If TRUE, clear selection before selecting.

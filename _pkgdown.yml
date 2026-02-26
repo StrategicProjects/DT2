@@ -1,0 +1,84 @@
+url: https://monitoramento.sepe.pe.gov.br/DT2/
+template:
+  light-switch: false
+  dark-mode: false
+  trailing_slash_redirect: true
+  package: tidytemplate
+  bootstrap: 5
+  bslib:
+    bootswatch: spacelab
+    font_scale: 1
+    base_font: {google: "Jost"}
+    heading_font: {google: "Jost"}
+    code_font: {google: "JetBrains Mono"}
+
+  # custom footer for rmarkdown ecosystem
+
+# includes:
+#   in_header: |
+#     <!-- Google tag (gtag.js) -->
+#     <script async src="https://www.googletagmanager.com/gtag/js?id=G-5KJ9FHBXDD"></script>
+#     <script>
+#       window.dataLayer = window.dataLayer || [];
+#       function gtag(){dataLayer.push(arguments);}
+#       gtag('js', new Date());
+#       gtag('config', 'G-5KJ9FHBXDD');
+#     </script>
+
+navbar:
+  structure:
+    left:  [intro, reference, articles]
+    right: [search, github]
+  components:
+    github:
+      icon: fa-github
+      href: https://github.com/StrategicProjects/DT2
+      aria-label: Github
+    articles:
+      text: Articles
+      menu:
+      - text: Getting Started
+        href: articles/getting-started.html
+      - text: Shiny Integration
+        href: articles/shiny-integration.html
+      - text: Extensions Guide
+        href: articles/extensions-guide.html
+      - text: Column Formatting
+        href: articles/formatting.html
+      - text: "-------"
+      - text: "Advanced"
+      - text: JS Config Translation
+        href: articles/js-config.html
+
+articles:
+- title: Getting Started
+  navbar: ~
+  contents:
+  - getting-started
+- title: Shiny
+  contents:
+  - shiny-integration
+- title: Extensions & Formatting
+  contents:
+  - extensions-guide
+  - formatting
+- title: Advanced
+  contents:
+  - js-config
+
+footer:
+  structure:
+    left: [rmd]
+    right: [developed_by]
+  components:
+      #p: "\n\n"
+      rmd: |
+        **DT2** is part of an ecosystem of R packages for data analysis and
+        computational document processing<br>developed at the [Secretaria Executiva
+        de Monitoramento Estratégico](https://monitoramento.sepe.pe.gov.br).
+      developed_by: |
+        Developed by André Leite, Diogo Bezerra and Hugo Medeiros
+
+development:
+  mode: auto
+

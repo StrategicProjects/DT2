@@ -1,3 +1,4 @@
+# Null-coalescing operator (available in base R >= 4.4; provided here for R >= 4.1)
 #' @keywords internal
 `%||%` <- function(a, b) if (is.null(a)) b else a
 
@@ -6,19 +7,13 @@
 .dt2_warn  <- function(..., .envir = parent.frame()) cli::cli_warn(c("!" = ...), .envir = .envir)
 .dt2_abort <- function(..., .envir = parent.frame()) cli::cli_abort(c("x" = ...), .envir = .envir)
 
-# resolve columns by names/indices (and optionally tidyselect if you pass data)
+# resolve columns by names/indices
 #' @keywords internal
 .dt2_resolve_cols <- function(data, options, cols) {
   if (is.null(cols)) return(integer())
   if (is.numeric(cols)) return(as.integer(cols))
   if (is.character(cols)) return(match(cols, options$columns))
-  # optional tidyselect path (only if data is provided)
-  if (!is.null(data) && requireNamespace("tidyselect", quietly = TRUE)) {
-    nm <- names(data)
-    idx <- tidyselect::eval_select(rlang::enquo(cols), setNames(seq_along(nm), nm))
-    return(as.integer(idx))
-  }
-  .dt2_abort("Invalid columns specification. Use names, indices, or provide data for tidyselect.")
+  .dt2_abort("Invalid columns specification. Use column names (character) or indices (numeric).")
 }
 
 # internal env to hold named renderers

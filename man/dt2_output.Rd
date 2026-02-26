@@ -7,10 +7,10 @@
 dt2_output(outputId, width = "100\%", height = "auto")
 }
 \arguments{
-\item{outputId}{Output id.}
+\item{outputId}{Output ID (must match the \code{render_dt2()} call in server).}
 
-\item{width, height}{Size.}
+\item{width, height}{CSS dimensions.}
 }
 \description{
-Shiny output for DT2
+Place a DT2 table in a Shiny UI.
 }

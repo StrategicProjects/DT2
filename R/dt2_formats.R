@@ -129,7 +129,8 @@ dt2_cols_render_orthogonal <- function(options = list(), col_specs,
   #`%||%` <- function(a, b) if (is.null(a)) b else a
   if (is.character(col_specs)) col_specs <- match(col_specs, options$columns)
 
-  # Monta um objeto {display, sort, filter, type} só com o que foi passado
+
+  # Build an {display, sort, filter, type} object with the supplied parts
   parts <- c(
     if (!is.null(display)) sprintf("display:%s", as.character(display)) else NULL,
     if (!is.null(sort))    sprintf("sort:%s",    as.character(sort))    else NULL,
@@ -201,9 +202,12 @@ dt2_format_number_abbrev <- function(options = list(), col_specs, digits = 1, lo
 }
 
 #' Format a date/time using DataTables' datetime renderer, with locale
-#' @param from input format (e.g. 'YYYY-MM-DDTHH:mm:ssZ' or null for ISO)
-#' @param to   output format (e.g. 'L LTS') - ver moment.js
-#' @param locale e.g. 'pt-br'
+#' @param options Options list (returned modified).
+#' @param col_specs Column names or indices to format.
+#' @param from Input format (e.g. `'YYYY-MM-DDTHH:mm:ssZ'` or `NULL` for ISO).
+#' @param to   Output format (e.g. `'L LTS'`). See moment.js docs.
+#' @param locale Locale string, e.g. `'pt-br'`.
+#' @return Modified `options`.
 #' @export
 dt2_format_time_format <- function(options = list(), col_specs,
                                    from = NULL, to = "L", locale = "pt-br") {
@@ -245,7 +249,7 @@ function(d, t, row, meta){
   try {
     if (window.moment){
       var m = moment(d);
-      if (m.isValid()) return m.fromNow(); // usa locale já ativo
+      if (m.isValid()) return m.fromNow(); // uses active locale
     }
   } catch(e){}
   return d;

@@ -2,44 +2,120 @@
 % Please edit documentation in R/dt2.R
 \name{dt2}
 \alias{dt2}
-\title{Create a DT2 widget (DataTables v2 + Bootstrap 5)}
+\title{Create a DT2 DataTable widget}
 \usage{
 dt2(
-  data = NULL,
+  data,
+  theme = "default",
+  striped = NULL,
+  hover = NULL,
+  compact = NULL,
+  font_scale = NULL,
+  style = NULL,
+  class = NULL,
+  button_class = NULL,
+  responsive = TRUE,
   options = list(),
-  server_side = FALSE,
-  width = NULL,
+  extensions = NULL,
+  width = "100\%",
   height = NULL,
-  elementId = NULL,
-  extensions = character()
+  elementId = NULL
 )
 }
 \arguments{
-\item{data}{A \code{data.frame}. Ignored when \code{server_side = TRUE} \strong{and}
-you provide your own \code{options$ajax}.}
+\item{data}{A \code{data.frame}, \code{tibble}, or \code{matrix}.}
 
-\item{options}{Named list of DataTables options (\code{pageLength}, \code{layout},
-\code{language}, etc.). If \code{data} is provided and \code{options$columns}
-missing, column names are inferred.}
+\item{theme}{A theme preset name (\code{"default"}, \code{"clean"}, \code{"minimal"},
+\code{"compact"}) or a \code{\link[=dt2_theme]{dt2_theme()}} object. Default: \code{"default"}.}
 
-\item{server_side}{Logical; enable server-side mode (DataTables \code{serverSide}).}
+\item{striped, hover, compact}{Logical; override the theme.
+\code{NULL} (default) = use theme value.}
 
-\item{width, height}{Widget size.}
+\item{font_scale}{Numeric; override the theme font-scale.
+\code{NULL} (default) = use theme value.}
 
-\item{elementId}{Optional id.}
+\item{style}{Styling framework: \code{"bootstrap5"} (default) or \code{"core"}.}
 
-\item{extensions}{Character vector of extensions to inject on-demand.}
+\item{class}{Optional CSS class string (e.g., \code{"table table-dark"}).
+If provided, overrides all theme-generated classes.}
+
+\item{button_class}{CSS class for Buttons extension buttons.
+Default: \code{"btn btn-sm btn-outline-secondary"}.
+Examples: \code{"btn btn-sm btn-primary"}, \code{"btn btn-sm btn-outline-dark"}.}
+
+\item{responsive}{Logical; enable the Responsive extension so the table
+fills 100\\% width and adapts to narrow screens by collapsing columns.
+Default: \code{TRUE}. Set \code{FALSE} to disable.}
+
+\item{options}{List of DataTables options. See
+\url{https://datatables.net/reference/option/}.}
+
+\item{extensions}{Character vector of extensions to load
+(e.g., \code{c("Buttons", "Select")}). Auto-detected from \code{options}
+when \code{NULL}.}
+
+\item{width, height}{CSS dimensions.}
+
+\item{elementId}{Optional HTML element ID.}
 }
 \value{
-An htmlwidget.
+An \code{htmlwidget} object.
 }
 \description{
-Core assets (jQuery, DataTables v2 + Bootstrap 5) are declared in the
-widget YAML. Extensions you packaged there will auto-load. Extra extensions
-can still be injected with \code{dt2_dependency_extensions()}.
+The main function for creating interactive DataTables.
+Works standalone (R Markdown, Quarto, Viewer) and inside Shiny.
 
-If \code{server_side = TRUE}, use \code{\link{dt2_bind_server}} in your
-Shiny server to attach the transparent server-side pipeline for a given
-\code{outputId}. This avoids use of non-exported Shiny internals and follows
-the official DataTables server-side protocol. See examples.
+\strong{Styling} is controlled directly via \code{theme}, \code{striped}, \code{hover},
+\code{compact}, \code{font_scale} -- or a CSS \code{class} string for full control.
+
+\strong{DataTables configuration} goes in \code{options} (1:1 mapping to the
+JavaScript API). The two concerns are cleanly separated.
+}
+\examples{
+# Just works — beautiful defaults
+dt2(iris)
+
+# Override style inline
+dt2(iris, striped = FALSE)
+dt2(iris, font_scale = 0.85, compact = FALSE)
+
+# Theme presets
+dt2(iris, theme = "minimal")
+dt2(iris, theme = "compact")
+
+# Reusable theme
+my_theme <- dt2_theme("clean", compact = TRUE)
+dt2(iris, theme = my_theme)
+
+# Override a preset
+dt2(iris, theme = "minimal", striped = TRUE)
+
+# CSS class override (power users)
+dt2(iris, class = "table table-bordered table-dark")
+
+# DataTables options (separate from styling)
+dt2(iris, options = list(pageLength = 5, searching = FALSE))
+
+# Disable responsive (fixed-width columns)
+dt2(iris, responsive = FALSE)
+
+# Everything composes
+dt2(mtcars,
+    theme = "clean",
+    compact = TRUE,
+    options = list(pageLength = 25))
+
+# Buttons
+dt2(mtcars, options = list(
+  buttons = list("copy", "csv", "excel"),
+  layout = list(topEnd = "buttons")
+))
+
+# Custom button style
+dt2(mtcars,
+    button_class = "btn btn-sm btn-primary",
+    options = list(
+      buttons = list("copy", "csv", "excel"),
+      layout = list(topEnd = "buttons")
+    ))
 }

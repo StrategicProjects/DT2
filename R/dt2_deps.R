@@ -1,98 +1,163 @@
-# R/deps.R
-
-# Default extension versions (only those NOT fixed in dt2.yaml)
-.dt2_ext_versions <- list(
-  autofill      = "2.7.0",
-  colreorder    = "2.1.1",
-  fixedcolumns  = "5.0.4",
-  fixedheader   = "4.0.3",
-  keytable      = "2.12.1",
-  #responsive    = "3.0.6",   # opcional
-  rowgroup      = "1.5.2",
-  rowreorder    = "1.5.0",
-  searchbuilder = "1.8.3",
-  staterestore  = "1.4.1"
-)
-
-# Local file map for these extensions
-.dt2_ext_files <- list(
-  autofill = list(
-    js  = c("js/dataTables.autoFill.min.js", "js/autoFill.bootstrap5.min.js"),
-    css = "css/autoFill.bootstrap5.min.css"
-  ),
-  colreorder = list(
-    js  = c("js/dataTables.colReorder.min.js", "js/colReorder.bootstrap5.min.js"),
-    css = "css/colReorder.bootstrap5.min.css"
-  ),
-  fixedcolumns = list(
-    js  = c("js/dataTables.fixedColumns.min.js", "js/fixedColumns.bootstrap5.min.js"),
-    css = "css/fixedColumns.bootstrap5.min.css"
-  ),
-  fixedheader = list(
-    js  = c("js/dataTables.fixedHeader.min.js", "js/fixedHeader.bootstrap5.min.js"),
-    css = "css/fixedHeader.bootstrap5.min.css"
-  ),
-  keytable = list(
-    js  = c("js/dataTables.keyTable.min.js", "js/keyTable.bootstrap5.min.js"),
-    css = "css/keyTable.bootstrap5.min.css"
-  ),
-  rowgroup = list(
-    js  = c("js/dataTables.rowGroup.min.js", "js/rowGroup.bootstrap5.min.js"),
-    css = "css/rowGroup.bootstrap5.min.css"
-  ),
-  rowreorder = list(
-    js  = c("js/dataTables.rowReorder.min.js", "js/rowReorder.bootstrap5.min.js"),
-    css = "css/rowReorder.bootstrap5.min.css"
-  ),
-  searchbuilder = list(
-    js  = c("js/dataTables.searchBuilder.min.js", "js/searchBuilder.bootstrap5.min.js"),
-    css = "css/searchBuilder.bootstrap5.min.css"
-  ),
-  staterestore = list(
-    js  = c("js/dataTables.stateRestore.min.js", "js/stateRestore.bootstrap5.min.js"),
-    css = "css/stateRestore.bootstrap5.min.css"
-  )
-)
-
-# Utility to create an htmlDependency
-.dt2_dep_ext <- function(ext, ver, base_dir) {
-  files <- .dt2_ext_files[[ext]]
-  if (is.null(files)) return(NULL)
-
-  htmltools::htmlDependency(
-    name       = sprintf("datatables-%s-bs5-%s", ext, ver),
-    version    = ver,
-    src        = c(file = file.path(base_dir, ext, ver)),
-    script     = files$js,
-    stylesheet = files$css
-  )
-}
-
-#' Build extension dependencies not already included in dt2.yaml
+#' Build htmlwidgets dependencies for DT2
 #'
-#' @param extensions Character vector of extension names.
-#' @return List of htmlDependency objects.
+#' Constructs the dependency list dynamically based on the requested extensions.
+#' Only loads CSS/JS for selected extensions, keeping the page lightweight.
+#'
+#' All version numbers are read from [.dt2_lib_versions()] (defined in
+#' `dt2_check_updates.R`) so there is a single source of truth for versions.
+#'
+#' @param bs `"bootstrap5"` (default) or `"core"` styling mode.
+#' @param include_bs Logical; if TRUE and `bs="bootstrap5"`, include Bootstrap assets.
+#'   Default TRUE. Set FALSE only if your host page already provides Bootstrap.
+#' @param extensions Character vector of extension names (e.g., `c("Buttons", "Select")`).
+#'   Use `dt2_extensions()` to see all available extensions.
+#' @return List of `htmlDependency()` objects in correct load order.
 #' @keywords internal
-dt2_dependency_extensions <- function(extensions = NULL) {
-  if (is.null(extensions) || !length(extensions)) return(list())
-  exts <- tolower(unique(extensions))
+#' @importFrom htmltools htmlDependency
+dt2_deps <- function(bs = c("bootstrap5", "core"),
+                     include_bs = TRUE,
+                     extensions = character()) {
+  bs <- match.arg(bs)
+  bs <- .dt2_lock_mode(bs)
 
-  # Already included in dt2.yaml, skip them here
-  skip <- c("jquery", "datatables-core", "buttons", "scroller",
-            "searchpanes", "select", "moment", "jszip", "pdfmake",
-            "responsive", "columncontrol")
+  # Single source of truth for versions
+  vers <- .dt2_lib_versions()
 
-  exts <- setdiff(exts, skip)
+  pkg_path <- function(...) {
+    p <- system.file(..., package = "DT2")
+    if (!nzchar(p)) stop("DT2: resource not found: ", file.path(...), call. = FALSE)
+    p
+  }
 
-  base_dir <- system.file("htmlwidgets/lib", package = "DT2")
-  vers     <- .dt2_ext_versions
+  dep <- function(name, version, src_dir, script = NULL, stylesheet = NULL) {
+    htmltools::htmlDependency(
+      name = name, version = version, src = c(file = src_dir),
+      script = script, stylesheet = stylesheet
+    )
+  }
 
   deps <- list()
-  for (ext in exts) {
-    ver <- vers[[ext]]
-    if (is.null(ver)) next
-    dep <- .dt2_dep_ext(ext, ver, base_dir)
-    if (!is.null(dep)) deps[[length(deps) + 1]] <- dep
+
+  # ------------------------------------------------------------------
+  # 0) Bootstrap (if bs5 mode and include_bs)
+  # ------------------------------------------------------------------
+  if (bs == "bootstrap5" && isTRUE(include_bs)) {
+    bs_ver <- vers[["Bootstrap"]]
+    deps <- append(deps, list(
+      dep("bootstrap", bs_ver,
+          pkg_path("htmlwidgets", "lib", "bootstrap", bs_ver),
+          script = "js/bootstrap.bundle.min.js",
+          stylesheet = "css/bootstrap.min.css")
+    ))
   }
+
+  # ------------------------------------------------------------------
+  # 1) DataTables core CSS
+  # ------------------------------------------------------------------
+  dt_ver <- vers[["DataTables"]]
+  if (bs == "core") {
+    deps <- append(deps, list(
+      dep("datatables-core-css", dt_ver,
+          pkg_path("htmlwidgets", "lib", "datatables", dt_ver),
+          stylesheet = "css/dataTables.dataTables.min.css")
+    ))
+  } else {
+    deps <- append(deps, list(
+      dep("datatables-bs5-css", dt_ver,
+          pkg_path("htmlwidgets", "lib", "datatables", dt_ver),
+          stylesheet = "css/dataTables.bootstrap5.min.css")
+    ))
+  }
+
+  # ------------------------------------------------------------------
+  # 2) Extension CSS (only for requested extensions)
+  # ------------------------------------------------------------------
+  reg <- .dt2_extension_registry()
+  ext_names <- .dt2_resolve_extensions(extensions)
+
+  for (ext_name in ext_names) {
+    ext <- reg[[ext_name]]
+    css_files <- if (bs == "core") ext$css_core else ext$css_bs5
+    if (length(css_files) > 0) {
+      css_files <- if (is.character(css_files)) css_files else unlist(css_files)
+      deps <- append(deps, list(
+        dep(paste0("dt-", tolower(ext_name), "-css"), ext$version,
+            pkg_path("htmlwidgets", "lib", ext$dir, ext$version),
+            stylesheet = css_files)
+      ))
+    }
+  }
+
+  # ------------------------------------------------------------------
+  # 3) Common JS libraries (jQuery, moment)
+  # ------------------------------------------------------------------
+  jq_ver <- vers[["jQuery"]]
+  mo_ver <- vers[["Moment"]]
+
+  deps <- append(deps, list(
+    dep("jquery", jq_ver,
+        pkg_path("htmlwidgets", "lib", "jquery", jq_ver),
+        script = "jquery.min.js"),
+    dep("moment", mo_ver,
+        pkg_path("htmlwidgets", "lib", "moment", mo_ver),
+        script = "moment.min.js")
+  ))
+
+  # jszip and pdfmake only if Buttons is loaded
+  if ("Buttons" %in% ext_names) {
+    jz_ver <- vers[["JSZip"]]
+    pm_ver <- vers[["PDFMake"]]
+    deps <- append(deps, list(
+      dep("jszip", jz_ver,
+          pkg_path("htmlwidgets", "lib", "jszip", jz_ver),
+          script = "jszip.min.js"),
+      dep("pdfmake", pm_ver,
+          pkg_path("htmlwidgets", "lib", "pdfmake", pm_ver),
+          script = c("pdfmake.min.js", "vfs_fonts.js"))
+    ))
+  }
+
+  # ------------------------------------------------------------------
+  # 4) DataTables core JS
+  # ------------------------------------------------------------------
+  if (bs == "core") {
+    deps <- append(deps, list(
+      dep("datatables-core-js", dt_ver,
+          pkg_path("htmlwidgets", "lib", "datatables", dt_ver),
+          script = "js/dataTables.min.js")
+    ))
+  } else {
+    deps <- append(deps, list(
+      dep("datatables-core-js", dt_ver,
+          pkg_path("htmlwidgets", "lib", "datatables", dt_ver),
+          script = c("js/dataTables.min.js", "js/dataTables.bootstrap5.min.js"))
+    ))
+  }
+
+  # ------------------------------------------------------------------
+  # 5) Extension JS (in dependency order)
+  # ------------------------------------------------------------------
+  for (ext_name in ext_names) {
+    ext <- reg[[ext_name]]
+    js_files <- if (bs == "core") ext$js_core else ext$js_bs5
+    if (length(js_files) > 0) {
+      js_files <- if (is.character(js_files)) js_files else unlist(js_files)
+      deps <- append(deps, list(
+        dep(paste0("dt-", tolower(ext_name), "-js"), ext$version,
+            pkg_path("htmlwidgets", "lib", ext$dir, ext$version),
+            script = js_files)
+      ))
+    }
+  }
+
+  # ------------------------------------------------------------------
+  # 6) DT2 CSS fixes (always last)
+  # ------------------------------------------------------------------
+  deps <- append(deps, list(
+    dep("dt2-fixes", "1.0.0",
+        pkg_path("htmlwidgets"),
+        stylesheet = "dt2-fixes.css")
+  ))
+
   deps
 }

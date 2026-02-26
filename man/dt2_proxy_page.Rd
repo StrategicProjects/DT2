@@ -10,6 +10,17 @@ dt2_proxy_page(
   number = NULL
 )
 }
+\arguments{
+\item{proxy}{A \code{\link[=dt2_proxy]{dt2_proxy()}} object.}
+
+\item{page}{Navigation action: \code{"first"}, \code{"previous"}, \code{"next"}, \code{"last"},
+or \code{"number"} (go to a specific page).}
+
+\item{number}{Page number (1-based). Only used when \code{page = "number"}.}
+}
+\value{
+The proxy, invisibly.
+}
 \description{
 Page navigation (proxy)
 }

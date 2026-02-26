@@ -7,13 +7,14 @@
 dt2_state(input, id)
 }
 \arguments{
-\item{input}{Shiny input.}
+\item{input}{Shiny input object.}
 
-\item{id}{Widget id.}
+\item{id}{Widget ID.}
 }
 \value{
-A list with \code{reason}, \code{order}, \code{search}, \code{page}, \code{selected}, \code{state}.
+A list with the current table state.
 }
 \description{
-Access the current state snapshot of a DT2 table
+Returns a list with \code{reason}, \code{order}, \code{search}, \code{page}, \code{selected}, \code{state}
+reflecting the current client-side table state.
 }

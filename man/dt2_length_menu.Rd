@@ -4,22 +4,28 @@
 \alias{dt2_length_menu}
 \title{Length menu helper}
 \usage{
-dt2_length_menu(
-  options = list(),
-  values = c(10, 25, 50, -1),
-  labels = c("10", "25", "50", "All")
-)
+dt2_length_menu(options = list(), values = c(10, 25, 50, -1), labels = NULL)
 }
 \arguments{
 \item{options}{Options list.}
 
-\item{values}{Numeric vector of page lengths (e.g., c(10,25,50,-1)).}
+\item{values}{Numeric vector of page lengths (e.g., \code{c(10, 25, 50, -1)}).
+Use \code{-1} for "show all".}
 
-\item{labels}{Character vector of labels.}
+\item{labels}{Optional character vector of labels. If \code{NULL}, numeric
+values are used as-is and \code{-1} becomes \code{"All"} automatically via
+\code{language.lengthLabels}.}
 }
 \value{
 Updated \code{options}.
 }
 \description{
-Length menu helper
+Configures the entries-per-page dropdown.
+}
+\examples{
+opts <- dt2_length_menu(values = c(5, 10, 25, -1))
+dt2(iris, options = opts)
+
+opts <- dt2_length_menu(values = c(10, 50, 100), labels = c("10", "50", "100"))
+dt2(iris, options = opts)
 }

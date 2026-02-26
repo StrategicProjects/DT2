@@ -7,12 +7,12 @@
 observe_dt2_events(input, id, handler)
 }
 \arguments{
-\item{input}{Shiny input.}
+\item{input}{Shiny input object.}
 
-\item{id}{Widget id.}
+\item{id}{Widget ID.}
 
-\item{handler}{Function \verb{(event, type, indexes, rowData)}.}
+\item{handler}{Function with signature \verb{(event, type, indexes, rowData)}.}
 }
 \description{
-Observe DataTables events published by dt2.js
+Listen for table events (init, draw, order, search, page, select, deselect).
 }

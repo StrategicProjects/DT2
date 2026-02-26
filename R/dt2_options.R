@@ -24,13 +24,33 @@ dt2_search_global <- function(options = list(), value, regex = FALSE, smart = TR
 }
 
 #' Enable Buttons (extension) and define buttons
+#'
+#' Uses the modern DataTables 2.x `layout` API (not the deprecated `dom`).
+#'
 #' @param options Options list.
 #' @param buttons Vector of button ids (e.g., c("copy","csv","excel","print","colvis")).
+#' @param position Where to place buttons in the layout.
+#'   One of \code{"topEnd"} (default), \code{"topStart"}, \code{"bottomEnd"},
+#'   \code{"bottomStart"}.
+#' @param button_class CSS class for buttons (e.g., `"btn btn-sm btn-primary"`).
+#'   If `NULL`, uses the theme default (`"btn btn-sm btn-outline-secondary"`).
+#'   Applied per-button via `className`.
 #' @return Updated `options`.
 #' @export
-dt2_use_buttons <- function(options = list(), buttons = c("copy","csv","excel","print")) {
-  options$dom     <- options$dom %||% "Bfrtip"
-  options$buttons <- buttons
+dt2_use_buttons <- function(options = list(),
+                            buttons = c("copy","csv","excel","print"),
+                            position = "topEnd",
+                            button_class = NULL) {
+  if (!is.null(button_class)) {
+    # Apply className to each button
+    options$buttons <- lapply(buttons, function(b) {
+      list(extend = b, className = button_class)
+    })
+  } else {
+    options$buttons <- as.list(buttons)
+  }
+  if (is.null(options$layout)) options$layout <- list()
+  options$layout[[position]] <- "buttons"
   options
 }
 
@@ -107,24 +127,46 @@ dt2_cols_escape <- function(options = list(), cols, escape = TRUE) {
   options
 }
 
-#' Bootstrap 5 table theme toggles
-#' @param options Options list.
-#' @param compact,striped,hover Toggles for table classes.
-#' @return Updated `options`.
-#' @export
-dt2_theme <- function(options = list(), compact = TRUE, striped = TRUE, hover = TRUE) {
-  options$dt2_theme <- list(compact = compact, striped = striped, hover = hover)
-  options
-}
-
 #' Length menu helper
+#'
+#' Configures the entries-per-page dropdown.
+#'
 #' @param options Options list.
-#' @param values Numeric vector of page lengths (e.g., c(10,25,50,-1)).
-#' @param labels Character vector of labels.
+#' @param values Numeric vector of page lengths (e.g., `c(10, 25, 50, -1)`).
+#'   Use `-1` for "show all".
+#' @param labels Optional character vector of labels. If `NULL`, numeric
+#'   values are used as-is and `-1` becomes `"All"` automatically via
+#'   `language.lengthLabels`.
 #' @return Updated `options`.
 #' @export
+#'
+#' @examples
+#' opts <- dt2_length_menu(values = c(5, 10, 25, -1))
+#' dt2(iris, options = opts)
+#'
+#' opts <- dt2_length_menu(values = c(10, 50, 100), labels = c("10", "50", "100"))
+#' dt2(iris, options = opts)
 dt2_length_menu <- function(options = list(), values = c(10, 25, 50, -1),
-                            labels = c("10", "25", "50", "All")) {
-  options$lengthMenu <- list(values, labels)
+                            labels = NULL) {
+  if (!is.null(labels) && length(labels) == length(values)) {
+    # DT 2.x format: array of integers or {label, value} objects
+    menu <- mapply(function(v, l) {
+      if (as.character(v) == l) {
+        v  # plain integer when label matches value
+      } else {
+        list(label = l, value = v)
+      }
+    }, values, labels, SIMPLIFY = FALSE, USE.NAMES = FALSE)
+    options$lengthMenu <- menu
+  } else {
+    # Simple integer array — DT 2.x handles labels automatically.
+    # For -1, set language.lengthLabels so it shows "All".
+    options$lengthMenu <- as.list(as.integer(values))
+    if (-1L %in% values) {
+      if (is.null(options$language)) options$language <- list()
+      if (is.null(options$language$lengthLabels)) options$language$lengthLabels <- list()
+      options$language$lengthLabels[["-1"]] <- "All"
+    }
+  }
   options
 }

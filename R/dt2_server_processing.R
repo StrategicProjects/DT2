@@ -81,7 +81,7 @@ dt2_ssp_handler <- function(names) {
     if (!is.null(pars$search$value) && nzchar(pars$search$value)) {
       pat <- tolower(pars$search$value)
       keep <- Reduce(`|`, lapply(df[idx_cols], function(col) {
-        tolower(as.character(col)) |> grepl(pat, ., fixed = TRUE)
+        grepl(pat, tolower(as.character(col)), fixed = TRUE)
       }))
       df <- df[keep, , drop = FALSE]
     }

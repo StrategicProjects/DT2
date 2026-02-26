@@ -2,15 +2,15 @@
 % Please edit documentation in R/dt2_shiny.R
 \name{render_dt2}
 \alias{render_dt2}
-\title{Shiny render for DT2}
+\title{Shiny render function for DT2}
 \usage{
 render_dt2(expr, env = parent.frame(), quoted = FALSE)
 }
 \arguments{
-\item{expr}{Expression returning \code{\link[=dt2]{dt2()}}.}
+\item{expr}{Expression returning a \code{\link[=dt2]{dt2()}} widget.}
 
-\item{env, quoted}{Standard shinyRenderWidget args.}
+\item{env, quoted}{Standard \code{shinyRenderWidget} arguments.}
 }
 \description{
-Shiny render for DT2
+Render a DT2 table in a Shiny server function.
 }

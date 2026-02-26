@@ -13,11 +13,18 @@ dt2_format_time_format(
 )
 }
 \arguments{
-\item{from}{input format (e.g. 'YYYY-MM-DDTHH:mm:ssZ' or null for ISO)}
+\item{options}{Options list (returned modified).}
 
-\item{to}{output format (e.g. 'L LTS') - ver moment.js}
+\item{col_specs}{Column names or indices to format.}
 
-\item{locale}{e.g. 'pt-br'}
+\item{from}{Input format (e.g. \code{'YYYY-MM-DDTHH:mm:ssZ'} or \code{NULL} for ISO).}
+
+\item{to}{Output format (e.g. \code{'L LTS'}). See moment.js docs.}
+
+\item{locale}{Locale string, e.g. \code{'pt-br'}.}
+}
+\value{
+Modified \code{options}.
 }
 \description{
 Format a date/time using DataTables' datetime renderer, with locale
