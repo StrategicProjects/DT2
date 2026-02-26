@@ -30,7 +30,7 @@ dt2_deps(
 
   Character vector of extension names (e.g., `c("Buttons", "Select")`).
   Use
-  [`dt2_extensions()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dt2_extensions.md)
+  [`dt2_extensions()`](https://strategicprojects.github.io/DT2/reference/dt2_extensions.md)
   to see all available extensions.
 
 ## Value
@@ -40,6 +40,6 @@ List of `htmlDependency()` objects in correct load order.
 ## Details
 
 All version numbers are read from
-[`.dt2_lib_versions()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dot-dt2_lib_versions.md)
+[`.dt2_lib_versions()`](https://strategicprojects.github.io/DT2/reference/dot-dt2_lib_versions.md)
 (defined in `dt2_check_updates.R`) so there is a single source of truth
 for versions.

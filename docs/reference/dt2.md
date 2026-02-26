@@ -41,7 +41,7 @@ dt2(
 
   A theme preset name (`"default"`, `"clean"`, `"minimal"`, `"compact"`)
   or a
-  [`dt2_theme()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dt2_theme.md)
+  [`dt2_theme()`](https://strategicprojects.github.io/DT2/reference/dt2_theme.md)
   object. Default: `"default"`.
 
 - striped, hover, compact:

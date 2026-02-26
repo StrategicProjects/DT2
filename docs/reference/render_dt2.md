@@ -13,7 +13,7 @@ render_dt2(expr, env = parent.frame(), quoted = FALSE)
 - expr:
 
   Expression returning a
-  [`dt2()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dt2.md)
+  [`dt2()`](https://strategicprojects.github.io/DT2/reference/dt2.md)
   widget.
 
 - env, quoted:

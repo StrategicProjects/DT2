@@ -6,9 +6,9 @@ Bootstrap 5. Copy, paste, and run.
 ## Basic Usage
 
 The minimal DT2 Shiny app uses
-[`dt2_output()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dt2_output.md)
+[`dt2_output()`](https://strategicprojects.github.io/DT2/reference/dt2_output.md)
 in the UI and
-[`render_dt2()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/render_dt2.md)
+[`render_dt2()`](https://strategicprojects.github.io/DT2/reference/render_dt2.md)
 in the server. DT2 tables integrate naturally with `bslib` cards and
 Bootstrap 5 themes — the table inherits the page theme automatically:
 
@@ -81,7 +81,7 @@ shinyApp(ui, server)
 ## Proxy: Server-Side Manipulation
 
 Use
-[`dt2_proxy()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dt2_proxy.md)
+[`dt2_proxy()`](https://strategicprojects.github.io/DT2/reference/dt2_proxy.md)
 to update a table without re-rendering it. This is essential for
 responsive dashboards: you can replace the data, change the page, adjust
 sorting, or update the search filter — all without the flicker of a full
@@ -142,7 +142,7 @@ shinyApp(ui, server)
 
 Override the default button appearance with any Bootstrap 5 button
 class. The
-[`dt2_use_buttons()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dt2_use_buttons.md)
+[`dt2_use_buttons()`](https://strategicprojects.github.io/DT2/reference/dt2_use_buttons.md)
 helper accepts a `button_class` parameter that applies to all buttons in
 the group. Here, solid primary blue buttons replace the default outlined
 style:
@@ -479,7 +479,7 @@ shinyApp(ui, server)
 ## Shared Theme Across Tables
 
 Define a theme once with
-[`dt2_theme()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dt2_theme.md)
+[`dt2_theme()`](https://strategicprojects.github.io/DT2/reference/dt2_theme.md)
 and reuse it across all tables in your app. This ensures consistent font
 scaling, button styling, and compactness without repeating
 configuration. Changes propagate instantly to every table that uses the

@@ -145,7 +145,7 @@ translates directly to R lists:
 | `function(d) { ... }` | `htmlwidgets::JS("function(d) { ... }")` |
 
 See
-[`vignette("js-config")`](https://monitoramento.sepe.pe.gov.br/DT2/articles/js-config.md)
+[`vignette("js-config")`](https://strategicprojects.github.io/DT2/articles/js-config.md)
 for a complete translation guide.
 
 ## Internationalization (i18n)
@@ -289,19 +289,19 @@ bash tools/get-dt2-libs.sh
 
 | Vignette | Description |
 |----|----|
-| [`vignette("getting-started")`](https://monitoramento.sepe.pe.gov.br/DT2/articles/getting-started.md) | Standalone usage, themes, layout, pagination, buttons, scroller |
-| [`vignette("shiny-integration")`](https://monitoramento.sepe.pe.gov.br/DT2/articles/shiny-integration.md) | Proxy, events, server-side processing (11 complete apps) |
-| [`vignette("extensions-guide")`](https://monitoramento.sepe.pe.gov.br/DT2/articles/extensions-guide.md) | Buttons, Select, Responsive, ColumnControl, etc. |
-| [`vignette("formatting")`](https://monitoramento.sepe.pe.gov.br/DT2/articles/formatting.md) | Number/date formatting, custom JS renderers |
-| [`vignette("js-config")`](https://monitoramento.sepe.pe.gov.br/DT2/articles/js-config.md) | Translating DataTables.net JS examples to R |
+| [`vignette("getting-started")`](https://strategicprojects.github.io/DT2/articles/getting-started.md) | Standalone usage, themes, layout, pagination, buttons, scroller |
+| [`vignette("shiny-integration")`](https://strategicprojects.github.io/DT2/articles/shiny-integration.md) | Proxy, events, server-side processing (11 complete apps) |
+| [`vignette("extensions-guide")`](https://strategicprojects.github.io/DT2/articles/extensions-guide.md) | Buttons, Select, Responsive, ColumnControl, etc. |
+| [`vignette("formatting")`](https://strategicprojects.github.io/DT2/articles/formatting.md) | Number/date formatting, custom JS renderers |
+| [`vignette("js-config")`](https://strategicprojects.github.io/DT2/articles/js-config.md) | Translating DataTables.net JS examples to R |
 
 A complete example app with ColumnControl, flags, custom renderers, and
 full pt-BR translation is included at
-[`inst/examples/app_complete.R`](https://monitoramento.sepe.pe.gov.br/DT2/inst/examples/app_complete.R).
+[`inst/examples/app_complete.R`](https://strategicprojects.github.io/DT2/inst/examples/app_complete.R).
 
 ## License
 
-MIT — see [LICENSE](https://monitoramento.sepe.pe.gov.br/DT2/LICENSE)
+MIT — see [LICENSE](https://strategicprojects.github.io/DT2/LICENSE)
 file.
 
 DT2 bundles DataTables and extensions which are also MIT-licensed. See

@@ -1,4 +1,4 @@
-url: https://monitoramento.sepe.pe.gov.br/DT2/
+url: https://strategicprojects.github.io/DT2/
 template:
   light-switch: false
   dark-mode: false
@@ -7,6 +7,7 @@ template:
   bootstrap: 5
   bslib:
     bootswatch: spacelab
+    font_scale: .9
     base_font: {google: "Jost"}
     heading_font: {google: "Jost"}
     code_font: {google: "JetBrains Mono"}

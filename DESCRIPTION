@@ -13,7 +13,7 @@ Description: A modern 'R' binding for 'DataTables' v2 with modular
     support. Configure 'DataTables' options directly via R lists, a 1:1 mapping
     to the JavaScript API.
 License: MIT + file LICENSE
-URL: https://github.com/StrategicProjects/DT2
+URL: https://github.com/StrategicProjects/DT2, https://strategicprojects.github.io/DT2/
 Encoding: UTF-8
 Depends: R (>= 4.1)
 Imports:

@@ -19,7 +19,7 @@ dt2_proxy_search(
 - proxy:
 
   A
-  [`dt2_proxy()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dt2_proxy.md)
+  [`dt2_proxy()`](https://strategicprojects.github.io/DT2/reference/dt2_proxy.md)
   object.
 
 - value:

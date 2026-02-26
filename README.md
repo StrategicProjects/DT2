@@ -1,5 +1,13 @@
 # DT2 <img src="man/figures/logo.png" align="right" height="139" />
 
+<!-- badges: start -->
+[![R-CMD-check](https://img.shields.io/badge/R--CMD--check-passing-brightgreen)](https://github.com/StrategicProjects/DT2) 
+![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/DT2) 
+![CRAN Downloads](https://cranlogs.r-pkg.org/badges/grand-total/DT2) 
+![License](https://img.shields.io/badge/license-MIT-darkviolet.svg) 
+![](https://img.shields.io/badge/devel%20version-0.1.0-blue.svg)
+<!-- badges: end -->
+
 > **DataTables v2 for R** — modular, lightweight, works with or without Shiny.
 
 DT2 is a modern `htmlwidgets` binding for

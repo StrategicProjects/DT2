@@ -16,7 +16,7 @@ The `col_specs` argument accepts column names (matching
 
 ## Number Formatting
 
-[`dt2_format_number()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dt2_format_number.md)
+[`dt2_format_number()`](https://strategicprojects.github.io/DT2/reference/dt2_format_number.md)
 uses DataTables’ built-in `DataTable.render.number()`:
 
 ``` r
@@ -36,7 +36,7 @@ dt2(df, options = opts)
 
 ## Abbreviated Numbers
 
-[`dt2_format_number_abbrev()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dt2_format_number_abbrev.md)
+[`dt2_format_number_abbrev()`](https://strategicprojects.github.io/DT2/reference/dt2_format_number_abbrev.md)
 displays numbers as 1.2k, 3.4M, 5.6B:
 
 ``` r
@@ -52,7 +52,7 @@ dt2(df, options = opts)
 
 ## Date/Time Formatting
 
-[`dt2_format_datetime()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dt2_format_datetime.md)
+[`dt2_format_datetime()`](https://strategicprojects.github.io/DT2/reference/dt2_format_datetime.md)
 uses `DataTable.render.datetime()` for locale-aware date display:
 
 ``` r
@@ -68,7 +68,7 @@ dt2(df, options = opts)
 
 ## Relative Time
 
-[`dt2_format_time_relative()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dt2_format_time_relative.md)
+[`dt2_format_time_relative()`](https://strategicprojects.github.io/DT2/reference/dt2_format_time_relative.md)
 uses Moment.js to show “2 hours ago”, etc.:
 
 ``` r
@@ -85,7 +85,7 @@ dt2(df, options = opts)
 ## Custom JS Renderers
 
 For anything beyond the built-in helpers, use
-[`dt2_cols_render_js()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dt2_cols_render_js.md):
+[`dt2_cols_render_js()`](https://strategicprojects.github.io/DT2/reference/dt2_cols_render_js.md):
 
 ``` r
 
@@ -112,7 +112,7 @@ dt2(df, options = opts)
 
 ## HTML Templates
 
-[`dt2_col_template()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dt2_col_template.md)
+[`dt2_col_template()`](https://strategicprojects.github.io/DT2/reference/dt2_col_template.md)
 provides a simple way to wrap cell values in HTML:
 
 ``` r
@@ -130,7 +130,7 @@ dt2(df, options = opts)
 
 ## Orthogonal Rendering
 
-[`dt2_cols_render_orthogonal()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dt2_cols_render_orthogonal.md)
+[`dt2_cols_render_orthogonal()`](https://strategicprojects.github.io/DT2/reference/dt2_cols_render_orthogonal.md)
 lets you return different values for display vs. sorting vs. filtering:
 
 ``` r

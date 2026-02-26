@@ -13,7 +13,7 @@ dt2_output(outputId, width = "100%", height = "auto")
 - outputId:
 
   Output ID (must match the
-  [`render_dt2()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/render_dt2.md)
+  [`render_dt2()`](https://strategicprojects.github.io/DT2/reference/render_dt2.md)
   call in server).
 
 - width, height:

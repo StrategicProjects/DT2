@@ -1,12 +1,12 @@
 # Create a reusable DT2 theme
 
 Creates a theme object that can be passed to
-[`dt2()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dt2.md) via
+[`dt2()`](https://strategicprojects.github.io/DT2/reference/dt2.md) via
 the `theme` parameter. Useful when you want the same look across many
 tables.
 
 For quick one-off styling, you can also pass arguments directly to
-[`dt2()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dt2.md)
+[`dt2()`](https://strategicprojects.github.io/DT2/reference/dt2.md)
 (e.g., `dt2(iris, striped = FALSE)`).
 
 ## Usage

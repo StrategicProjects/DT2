@@ -13,7 +13,7 @@ dt2_proxy(id, session = shiny::getDefaultReactiveDomain())
 - id:
 
   Widget id used in
-  [`dt2_output()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dt2_output.md).
+  [`dt2_output()`](https://strategicprojects.github.io/DT2/reference/dt2_output.md).
 
 - session:
 

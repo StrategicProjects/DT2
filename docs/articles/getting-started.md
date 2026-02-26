@@ -53,7 +53,7 @@ built-in defaults.
 ### Inline overrides
 
 Style parameters are first-class arguments of
-[`dt2()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dt2.md).
+[`dt2()`](https://strategicprojects.github.io/DT2/reference/dt2.md).
 Override any individual setting without creating a theme object — useful
 for quick one-off adjustments:
 
@@ -232,7 +232,7 @@ extension.
 
 ### Using the helper
 
-[`dt2_use_buttons()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dt2_use_buttons.md)
+[`dt2_use_buttons()`](https://strategicprojects.github.io/DT2/reference/dt2_use_buttons.md)
 builds the options for you:
 
 ``` r
@@ -562,7 +562,7 @@ dt2(big, options = list(
 
 For datasets over ~50k rows, consider server-side processing instead.
 See
-[`vignette("shiny-integration")`](https://monitoramento.sepe.pe.gov.br/DT2/articles/shiny-integration.md)
+[`vignette("shiny-integration")`](https://strategicprojects.github.io/DT2/articles/shiny-integration.md)
 for details.
 
 ## Column Formatting
@@ -621,7 +621,7 @@ dt2(iris, options = list(
 ```
 
 See
-[`vignette("js-config")`](https://monitoramento.sepe.pe.gov.br/DT2/articles/js-config.md)
+[`vignette("js-config")`](https://strategicprojects.github.io/DT2/articles/js-config.md)
 for the complete translation guide.
 
 ## Saving as HTML
@@ -658,7 +658,7 @@ dt2_update_libs(dry_run = TRUE)  # preview only
 
 Version constraints prevent breaking upgrades (jQuery stays on 3.x,
 pdfmake on 0.2.x). See
-[`?.dt2_version_constraints`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dot-dt2_version_constraints.md)
+[`?.dt2_version_constraints`](https://strategicprojects.github.io/DT2/reference/dot-dt2_version_constraints.md)
 for details.
 
 ## Complete Example: Custom Renderers, Flags, and ColumnControl
@@ -827,15 +827,15 @@ w
 ## Next Steps
 
 - **Extensions**:
-  [`vignette("extensions-guide")`](https://monitoramento.sepe.pe.gov.br/DT2/articles/extensions-guide.md)
+  [`vignette("extensions-guide")`](https://strategicprojects.github.io/DT2/articles/extensions-guide.md)
   — Select, Responsive, ColumnControl, SearchBuilder, and more.
 - **Shiny**:
-  [`vignette("shiny-integration")`](https://monitoramento.sepe.pe.gov.br/DT2/articles/shiny-integration.md)
+  [`vignette("shiny-integration")`](https://strategicprojects.github.io/DT2/articles/shiny-integration.md)
   — proxy, events, SSP.
 - **JS Config**:
-  [`vignette("js-config")`](https://monitoramento.sepe.pe.gov.br/DT2/articles/js-config.md)
+  [`vignette("js-config")`](https://strategicprojects.github.io/DT2/articles/js-config.md)
   — translating datatables.net examples to R, advanced layout,
   callbacks.
 - **Formatting**:
-  [`vignette("formatting")`](https://monitoramento.sepe.pe.gov.br/DT2/articles/formatting.md)
+  [`vignette("formatting")`](https://strategicprojects.github.io/DT2/articles/formatting.md)
   — all column formatting helpers.

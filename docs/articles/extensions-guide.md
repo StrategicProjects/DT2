@@ -9,7 +9,7 @@ use are included.
 There are two ways to specify extensions:
 
 1.  **Explicit** — pass `extensions = c("Buttons", "Select")` to
-    [`dt2()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dt2.md)
+    [`dt2()`](https://strategicprojects.github.io/DT2/reference/dt2.md)
 2.  **Auto-detection** — DT2 scans your `options` list and infers which
     extensions are needed (this is the default when `extensions = NULL`)
 
@@ -179,11 +179,11 @@ To add a DataTables plugin not yet in the registry:
 1.  Add version variable and download commands in
     `tools/get-dt2-libs.sh`
 2.  Register it in `R/dt2_extensions.R`
-    ([`.dt2_extension_registry()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dt2-extensions.md))
+    ([`.dt2_extension_registry()`](https://strategicprojects.github.io/DT2/reference/dt2-extensions.md))
 3.  Add auto-detection rules in
-    [`.dt2_detect_extensions()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dot-dt2_detect_extensions.md)
+    [`.dt2_detect_extensions()`](https://strategicprojects.github.io/DT2/reference/dot-dt2_detect_extensions.md)
 4.  Add npm mapping in `R/dt2_check_updates.R`
-    ([`.dt2_npm_map()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dot-dt2_npm_map.md))
+    ([`.dt2_npm_map()`](https://strategicprojects.github.io/DT2/reference/dot-dt2_npm_map.md))
 5.  Run `bash tools/get-dt2-libs.sh` to download the files
 6.  Test with `dt2(data, extensions = "YourPlugin")`
 
@@ -225,5 +225,5 @@ Version constraints prevent incompatible upgrades:
 
 Libraries marked as `PINNED` are up to date within their allowed range.
 Edit
-[`.dt2_version_constraints()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dot-dt2_version_constraints.md)
+[`.dt2_version_constraints()`](https://strategicprojects.github.io/DT2/reference/dot-dt2_version_constraints.md)
 to change the allowed ranges.

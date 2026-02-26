@@ -21,7 +21,7 @@ dt2_use_renderer(options = list(), col_specs, name)
 - name:
 
   Name used in
-  [`dt2_register_renderer()`](https://monitoramento.sepe.pe.gov.br/DT2/reference/dt2_register_renderer.md).
+  [`dt2_register_renderer()`](https://strategicprojects.github.io/DT2/reference/dt2_register_renderer.md).
 
 ## Value
 
