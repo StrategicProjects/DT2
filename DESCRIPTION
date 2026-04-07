@@ -1,13 +1,15 @@
 Package: DT2
 Type: Package
-Title: 'DataTables' 2.x for R 
+Title: 'DataTables' 2.x for 'R' 
 Version: 0.1.0
 Date: 2025-09-08
 Authors@R: c(
     person("Andre", "Leite", email = "leite@castlab.org", role = c("aut", "cre")),
+    person("Marcos", "Wasilew", email = "marcos.wasilew@gmail.com", role = "aut"),
     person("Hugo", "Vasconcelos", email = "hugo.vasconcelos@ufpe.br", role = "aut"),
+    person("Carlos", "Amorin", email = "carlos.agaf@ufpe.br", role = "aut"),
     person("Diogo", "Bezerra", email = "diogo.bezerra@ufpe.br", role = "aut"))
-Description: A modern 'R' binding for 'DataTables' v2 with modular
+Description: A modern 'R' binding for 'DataTables' V2, designed and created by SpryMedia Ltd., with modular 
     extension loading, 'Bootstrap 5' styling, 'Shiny' integration (proxy, events,
     inline inputs), server-side processing helpers, and standalone (non-Shiny)
     support. Configure 'DataTables' options directly via R lists, a 1:1 mapping

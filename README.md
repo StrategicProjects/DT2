@@ -5,7 +5,7 @@
 ![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/DT2) 
 ![CRAN Downloads](https://cranlogs.r-pkg.org/badges/grand-total/DT2) 
 ![License](https://img.shields.io/badge/license-MIT-darkviolet.svg) 
-![](https://img.shields.io/badge/devel%20version-0.1.0-blue.svg)
+![Devel Badge](https://img.shields.io/badge/devel%20version-0.1.0-blue.svg)
 <!-- badges: end -->
 
 > **DataTables v2 for R** — modular, lightweight, works with or without Shiny.
