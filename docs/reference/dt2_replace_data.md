@@ -17,3 +17,7 @@ dt2_replace_data(proxy, data)
 - data:
 
   New data.frame (will be serialized).
+
+## Value
+
+The `proxy` object, returned invisibly.

@@ -22,3 +22,8 @@ observe_dt2_events(input, id, handler)
 - handler:
 
   Function with signature `(event, type, indexes, rowData)`.
+
+## Value
+
+No return value, called for side effects. Sets up a Shiny observer that
+calls `handler` whenever the table emits an event.

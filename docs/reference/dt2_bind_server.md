@@ -30,3 +30,9 @@ dt2_bind_server(
 - handler:
 
   Optional custom handler function(data, req) -\> list(...).
+
+## Value
+
+No return value, called for side effects. Registers a Shiny observer on
+`session` that responds to client-side server-processing requests for
+the given widget `id`.

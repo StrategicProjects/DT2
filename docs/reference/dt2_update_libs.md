@@ -66,6 +66,11 @@ applied.
 
 ``` r
 if (FALSE) { # \dontrun{
+# Developer-only tool: requires the DT2 package source tree
+# (DESCRIPTION, tools/get-dt2-libs.sh, R/dt2_extensions.R, ...).
+# It cannot run from an installed package, so it is not executable
+# in CRAN check or from a regular user session.
+
 # from the DT2 source root:
 dt2_update_libs()
 

@@ -11,7 +11,7 @@ incompatible major version upgrades (e.g. jQuery 3.x will not jump to 4.x)."><me
 
     <a class="navbar-brand me-2" href="../index.html">DT2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,13 +89,56 @@ allowed range.</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="fu">dt2_check_updates</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Checking 21 libraries against npm registry...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Library            Installed   Latest      Compat.     Status</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> -----------------------------------------------------------------</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> DataTables         2.3.4       2.3.8       2.3.8       ⚠️  UPDATE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> jQuery             3.7.0       4.0.0       3.7.1       ⚠️  UPDATE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Moment             2.29.4      2.30.1      2.30.1      ⚠️  UPDATE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> JSZip              3.10.1      3.10.1      3.10.1      ✅ ok</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> PDFMake            0.2.7       0.3.7       0.2.23      ⚠️  UPDATE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Bootstrap          5.3.8       5.3.8       5.3.8       ✅ ok</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Buttons            3.2.5       3.2.6       3.2.6       ⚠️  UPDATE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ColReorder         2.1.1       2.1.2       2.1.2       ⚠️  UPDATE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ColumnControl      1.1.0       1.2.1       1.2.1       ⚠️  UPDATE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> DateTime           1.6.0       1.6.3       1.6.3       ⚠️  UPDATE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> FixedColumns       5.0.5       5.0.5       5.0.5       ✅ ok</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> FixedHeader        4.0.3       4.0.6       4.0.6       ⚠️  UPDATE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> KeyTable           2.12.1      2.12.2      2.12.2      ⚠️  UPDATE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Responsive         3.0.6       3.0.8       3.0.8       ⚠️  UPDATE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> RowGroup           1.6.0       1.6.0       1.6.0       ✅ ok</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> RowReorder         1.5.0       1.5.1       1.5.1       ⚠️  UPDATE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Scroller           2.4.3       2.4.3       2.4.3       ✅ ok</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> SearchBuilder      1.8.4       1.8.4       1.8.4       ✅ ok</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> SearchPanes        2.3.5       2.3.5       2.3.5       ✅ ok</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Select             3.1.0       3.1.3       3.1.3       ⚠️  UPDATE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> StateRestore       1.4.2       1.4.3       1.4.3       ⚠️  UPDATE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> -----------------------------------------------------------------</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 14 compatible update(s) available. Use dt2_update_libs() to apply.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># programmatic use</span></span></span>
 <span class="r-in"><span><span class="va">updates</span> <span class="op">&lt;-</span> <span class="fu">dt2_check_updates</span><span class="op">(</span>quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">updates</span><span class="op">[</span><span class="va">updates</span><span class="op">$</span><span class="va">status</span> <span class="op">==</span> <span class="st">"UPDATE"</span>, <span class="op">]</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          library installed latest latest_ok constraint status</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     DataTables     2.3.4  2.3.8     2.3.8            UPDATE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2         jQuery     3.7.0  4.0.0     3.7.1         3. UPDATE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3         Moment    2.29.4 2.30.1    2.30.1         2. UPDATE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        PDFMake     0.2.7  0.3.7    0.2.23       0.2. UPDATE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7        Buttons     3.2.5  3.2.6     3.2.6            UPDATE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8     ColReorder     2.1.1  2.1.2     2.1.2            UPDATE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  ColumnControl     1.1.0  1.2.1     1.2.1            UPDATE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10      DateTime     1.6.0  1.6.3     1.6.3            UPDATE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12   FixedHeader     4.0.3  4.0.6     4.0.6            UPDATE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13      KeyTable    2.12.1 2.12.2    2.12.2            UPDATE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14    Responsive     3.0.6  3.0.8     3.0.8            UPDATE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16    RowReorder     1.5.0  1.5.1     1.5.1            UPDATE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20        Select     3.1.0  3.1.3     3.1.3            UPDATE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21  StateRestore     1.4.2  1.4.3     1.4.3            UPDATE</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

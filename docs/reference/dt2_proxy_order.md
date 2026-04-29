@@ -22,3 +22,7 @@ dt2_proxy_order(proxy, ..., columns = NULL)
 - columns:
 
   Optional character vector of column names to resolve names to indices.
+
+## Value
+
+The `proxy` object, returned invisibly.

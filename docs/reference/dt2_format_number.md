@@ -50,9 +50,7 @@ Modified `options`.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
 opts <- list(columns = names(iris))
 opts <- dt2_format_number(opts, "Sepal.Length", thousands = ".", decimal = ",",
                           digits = 2, prefix = "", prefix_right = "")
-} # }
 ```

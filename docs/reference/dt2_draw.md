@@ -13,3 +13,7 @@ dt2_draw(proxy)
 - proxy:
 
   [`dt2_proxy()`](https://strategicprojects.github.io/DT2/reference/dt2_proxy.md).
+
+## Value
+
+The `proxy` object, returned invisibly.

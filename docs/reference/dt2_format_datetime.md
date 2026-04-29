@@ -49,8 +49,7 @@ Modified `options`.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
 opts <- list(columns = c("when", "val"))
-opts <- dt2_format_datetime(opts, "when", from = "YYYY-MM-DD", to = "DD/MM/YYYY", locale = "pt-BR")
-} # }
+opts <- dt2_format_datetime(opts, "when", from = "YYYY-MM-DD",
+                            to = "DD/MM/YYYY", locale = "pt-BR")
 ```

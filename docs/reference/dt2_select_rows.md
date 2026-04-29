@@ -21,3 +21,7 @@ dt2_select_rows(proxy, indexes, reset = TRUE)
 - reset:
 
   If TRUE, clear selection before selecting.
+
+## Value
+
+The `proxy` object, returned invisibly.

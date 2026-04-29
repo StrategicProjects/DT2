@@ -19,3 +19,9 @@ render_dt2(expr, env = parent.frame(), quoted = FALSE)
 - env, quoted:
 
   Standard `shinyRenderWidget` arguments.
+
+## Value
+
+A Shiny render function (closure produced by
+[`htmlwidgets::shinyRenderWidget()`](https://rdrr.io/pkg/htmlwidgets/man/htmlwidgets-shiny.html))
+that emits a DT2 widget.

@@ -19,3 +19,8 @@ dt2_output(outputId, width = "100%", height = "auto")
 - width, height:
 
   CSS dimensions.
+
+## Value
+
+An `htmlwidgets` Shiny output (HTML container) suitable for inclusion in
+a Shiny UI definition.

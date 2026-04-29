@@ -21,3 +21,7 @@ dt2_format_time_relative(options = list(), col_specs, locale = "pt-br")
 - locale:
 
   e.g. "pt-br" (requires moment-with-locales)
+
+## Value
+
+The modified `options` list with an updated `columnDefs` entry.

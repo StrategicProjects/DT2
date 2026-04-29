@@ -50,12 +50,10 @@ Modified `options`.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
 opts <- list(columns = names(iris))
 opts <- dt2_cols_render_orthogonal(
   opts, "Sepal.Length",
-  display = DT2::JS("function(d,t,row,meta){ return d + ' cm'; }"),
-  sort    = DT2::JS("function(d,t,row,meta){ return parseFloat(d); }")
+  display = htmlwidgets::JS("function(d,t,row,meta){ return d + ' cm'; }"),
+  sort    = htmlwidgets::JS("function(d,t,row,meta){ return parseFloat(d); }")
 )
-} # }
 ```
