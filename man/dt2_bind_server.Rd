@@ -20,6 +20,11 @@ dt2_bind_server(
 
 \item{handler}{Optional custom handler function(data, req) -> list(...).}
 }
+\value{
+No return value, called for side effects. Registers a Shiny
+observer on \code{session} that responds to client-side server-processing
+requests for the given widget \code{id}.
+}
 \description{
 Bind a DataTables v2 server-side endpoint to a widget id
 }

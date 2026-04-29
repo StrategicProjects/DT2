@@ -11,6 +11,9 @@ dt2_replace_data(proxy, data)
 
 \item{data}{New data.frame (will be serialized).}
 }
+\value{
+The \code{proxy} object, returned invisibly.
+}
 \description{
 Replace all data in the table (proxy)
 }

@@ -13,6 +13,7 @@ dt2_proxy <- function(id, session = shiny::getDefaultReactiveDomain()) {
 #' Replace all data in the table (proxy)
 #' @param proxy [dt2_proxy()].
 #' @param data New data.frame (will be serialized).
+#' @return The `proxy` object, returned invisibly.
 #' @export
 dt2_replace_data <- function(proxy, data) {
   stopifnot(inherits(proxy, "DT2Proxy"))
@@ -23,6 +24,7 @@ dt2_replace_data <- function(proxy, data) {
 
 #' Redraw the table (proxy)
 #' @param proxy [dt2_proxy()].
+#' @return The `proxy` object, returned invisibly.
 #' @export
 dt2_draw <- function(proxy) {
   stopifnot(inherits(proxy, "DT2Proxy"))
@@ -35,6 +37,7 @@ dt2_draw <- function(proxy) {
 #' @param proxy [dt2_proxy()].
 #' @param ... Vectors `c(col, "asc"/"desc")`. If you pass `columns`, names will be resolved to indices.
 #' @param columns Optional character vector of column names to resolve names to indices.
+#' @return The `proxy` object, returned invisibly.
 #' @export
 dt2_proxy_order <- function(proxy, ..., columns = NULL) {
   stopifnot(inherits(proxy, "DT2Proxy"))
@@ -81,6 +84,7 @@ dt2_proxy_page <- function(proxy, page = c("first","previous","next","last","num
 #' @param proxy [dt2_proxy()].
 #' @param indexes 1-based row indices.
 #' @param reset If TRUE, clear selection before selecting.
+#' @return The `proxy` object, returned invisibly.
 #' @export
 dt2_select_rows <- function(proxy, indexes, reset = TRUE) {
   stopifnot(inherits(proxy, "DT2Proxy"))

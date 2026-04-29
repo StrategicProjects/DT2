@@ -13,6 +13,9 @@ dt2_format_time_relative(options = list(), col_specs, locale = "pt-br")
 
 \item{locale}{e.g. "pt-br" (requires moment-with-locales)}
 }
+\value{
+The modified \code{options} list with an updated \code{columnDefs} entry.
+}
 \description{
 Relative time using moment.fromNow(), with locale
 }

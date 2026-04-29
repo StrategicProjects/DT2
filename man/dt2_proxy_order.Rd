@@ -13,6 +13,9 @@ dt2_proxy_order(proxy, ..., columns = NULL)
 
 \item{columns}{Optional character vector of column names to resolve names to indices.}
 }
+\value{
+The \code{proxy} object, returned invisibly.
+}
 \description{
 Order the table (proxy)
 }

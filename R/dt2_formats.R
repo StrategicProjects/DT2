@@ -12,11 +12,9 @@
 #'
 #' @return Modified \code{options}.
 #' @examples
-#' \dontrun{
 #' opts <- list(columns = names(iris))
 #' opts <- dt2_format_number(opts, "Sepal.Length", thousands = ".", decimal = ",",
 #'                           digits = 2, prefix = "", prefix_right = "")
-#' }
 #' @export
 dt2_format_number <- function(options = list(), col_specs,
                               thousands = NULL, decimal = NULL,
@@ -52,10 +50,9 @@ dt2_format_number <- function(options = list(), col_specs,
 #'
 #' @return Modified \code{options}.
 #' @examples
-#' \dontrun{
 #' opts <- list(columns = c("when", "val"))
-#' opts <- dt2_format_datetime(opts, "when", from = "YYYY-MM-DD", to = "DD/MM/YYYY", locale = "pt-BR")
-#' }
+#' opts <- dt2_format_datetime(opts, "when", from = "YYYY-MM-DD",
+#'                             to = "DD/MM/YYYY", locale = "pt-BR")
 #' @export
 dt2_format_datetime <- function(options = list(), col_specs,
                                 from = NULL, to = "DD/MM/YYYY",
@@ -114,14 +111,12 @@ dt2_cols_render_js <- function(options = list(), col_specs, js_render) {
 #'
 #' @return Modified \code{options}.
 #' @examples
-#' \dontrun{
 #' opts <- list(columns = names(iris))
 #' opts <- dt2_cols_render_orthogonal(
 #'   opts, "Sepal.Length",
-#'   display = DT2::JS("function(d,t,row,meta){ return d + ' cm'; }"),
-#'   sort    = DT2::JS("function(d,t,row,meta){ return parseFloat(d); }")
+#'   display = htmlwidgets::JS("function(d,t,row,meta){ return d + ' cm'; }"),
+#'   sort    = htmlwidgets::JS("function(d,t,row,meta){ return parseFloat(d); }")
 #' )
-#' }
 #' @export
 dt2_cols_render_orthogonal <- function(options = list(), col_specs,
                                        display = NULL, sort = NULL,
@@ -234,6 +229,7 @@ dt2_format_time_format <- function(options = list(), col_specs,
 #' @param options list of options (returned updated)
 #' @param col_specs names or indices to format
 #' @param locale e.g. "pt-br" (requires moment-with-locales)
+#' @return The modified `options` list with an updated `columnDefs` entry.
 #' @export
 dt2_format_time_relative <- function(options = list(), col_specs, locale = "pt-br") {
   `%||%` <- function(a, b) if (is.null(a)) b else a

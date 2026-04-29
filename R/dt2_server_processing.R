@@ -124,6 +124,9 @@ dt2_ssp_handler <- function(names) {
 #' @param data A data.frame with the source data.
 #' @param session Shiny session (default: current).
 #' @param handler Optional custom handler function(data, req) -> list(...).
+#' @return No return value, called for side effects. Registers a Shiny
+#'   observer on `session` that responds to client-side server-processing
+#'   requests for the given widget `id`.
 #' @export
 dt2_bind_server <- function(id, data, session = shiny::getDefaultReactiveDomain(), handler = NULL) {
   stopifnot(!is.null(session), is.character(id), length(id) == 1)

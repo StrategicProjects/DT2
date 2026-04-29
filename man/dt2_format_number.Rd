@@ -35,9 +35,7 @@ Add a number renderer to one or more columns using
 DataTables' built-in \code{DataTable.render.number}.
 }
 \examples{
-\dontrun{
 opts <- list(columns = names(iris))
 opts <- dt2_format_number(opts, "Sepal.Length", thousands = ".", decimal = ",",
                           digits = 2, prefix = "", prefix_right = "")
-}
 }

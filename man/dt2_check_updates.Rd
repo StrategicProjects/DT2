@@ -31,7 +31,7 @@ the latest available versions. Version constraints are enforced to prevent
 incompatible major version upgrades (e.g. jQuery 3.x will not jump to 4.x).
 }
 \examples{
-\dontrun{
+\donttest{
 dt2_check_updates()
 
 # programmatic use

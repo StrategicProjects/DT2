@@ -34,8 +34,7 @@ Use DataTables' built-in \code{DataTable.render.datetime} to transform
 date/time strings for display (and preserve sortability).
 }
 \examples{
-\dontrun{
 opts <- list(columns = c("when", "val"))
-opts <- dt2_format_datetime(opts, "when", from = "YYYY-MM-DD", to = "DD/MM/YYYY", locale = "pt-BR")
-}
+opts <- dt2_format_datetime(opts, "when", from = "YYYY-MM-DD",
+                            to = "DD/MM/YYYY", locale = "pt-BR")
 }

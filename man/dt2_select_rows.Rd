@@ -13,6 +13,9 @@ dt2_select_rows(proxy, indexes, reset = TRUE)
 
 \item{reset}{If TRUE, clear selection before selecting.}
 }
+\value{
+The \code{proxy} object, returned invisibly.
+}
 \description{
 Select rows (proxy; Select extension)
 }

@@ -4,6 +4,8 @@
 #'
 #' @param outputId Output ID (must match the `render_dt2()` call in server).
 #' @param width,height CSS dimensions.
+#' @return An `htmlwidgets` Shiny output (HTML container) suitable for
+#'   inclusion in a Shiny UI definition.
 #' @export
 dt2_output <- function(outputId, width = "100%", height = "auto") {
   if (!requireNamespace("shiny", quietly = TRUE)) {
@@ -18,6 +20,8 @@ dt2_output <- function(outputId, width = "100%", height = "auto") {
 #'
 #' @param expr Expression returning a [dt2()] widget.
 #' @param env,quoted Standard `shinyRenderWidget` arguments.
+#' @return A Shiny render function (closure produced by
+#'   [htmlwidgets::shinyRenderWidget()]) that emits a DT2 widget.
 #' @export
 render_dt2 <- function(expr, env = parent.frame(), quoted = FALSE) {
   if (!requireNamespace("shiny", quietly = TRUE)) {
@@ -34,6 +38,8 @@ render_dt2 <- function(expr, env = parent.frame(), quoted = FALSE) {
 #' @param input Shiny input object.
 #' @param id Widget ID.
 #' @param handler Function with signature `(event, type, indexes, rowData)`.
+#' @return No return value, called for side effects. Sets up a Shiny
+#'   observer that calls `handler` whenever the table emits an event.
 #' @export
 observe_dt2_events <- function(input, id, handler) {
   if (!requireNamespace("shiny", quietly = TRUE)) {

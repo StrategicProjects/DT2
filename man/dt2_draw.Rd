@@ -9,6 +9,9 @@ dt2_draw(proxy)
 \arguments{
 \item{proxy}{\code{\link[=dt2_proxy]{dt2_proxy()}}.}
 }
+\value{
+The \code{proxy} object, returned invisibly.
+}
 \description{
 Redraw the table (proxy)
 }

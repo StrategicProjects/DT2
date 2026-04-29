@@ -35,12 +35,10 @@ object with keys \code{display}, \code{sort}, \code{filter}, \code{type}
 (all optional). Each value must be a JS function.
 }
 \examples{
-\dontrun{
 opts <- list(columns = names(iris))
 opts <- dt2_cols_render_orthogonal(
   opts, "Sepal.Length",
-  display = DT2::JS("function(d,t,row,meta){ return d + ' cm'; }"),
-  sort    = DT2::JS("function(d,t,row,meta){ return parseFloat(d); }")
+  display = htmlwidgets::JS("function(d,t,row,meta){ return d + ' cm'; }"),
+  sort    = htmlwidgets::JS("function(d,t,row,meta){ return parseFloat(d); }")
 )
-}
 }

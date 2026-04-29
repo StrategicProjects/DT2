@@ -11,6 +11,10 @@ dt2_output(outputId, width = "100\%", height = "auto")
 
 \item{width, height}{CSS dimensions.}
 }
+\value{
+An \code{htmlwidgets} Shiny output (HTML container) suitable for
+inclusion in a Shiny UI definition.
+}
 \description{
 Place a DT2 table in a Shiny UI.
 }

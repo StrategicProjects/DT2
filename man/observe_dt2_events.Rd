@@ -13,6 +13,10 @@ observe_dt2_events(input, id, handler)
 
 \item{handler}{Function with signature \verb{(event, type, indexes, rowData)}.}
 }
+\value{
+No return value, called for side effects. Sets up a Shiny
+observer that calls \code{handler} whenever the table emits an event.
+}
 \description{
 Listen for table events (init, draw, order, search, page, select, deselect).
 }
