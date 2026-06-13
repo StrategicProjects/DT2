@@ -25,3 +25,7 @@ Updated \code{options}.
 \description{
 Set global search (option \code{search})
 }
+\examples{
+opts <- dt2_search_global(list(), value = "Toyota")
+dt2(mtcars, options = opts)
+}

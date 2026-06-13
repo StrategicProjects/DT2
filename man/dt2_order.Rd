@@ -17,3 +17,8 @@ Updated \code{options}.
 \description{
 Define initial ordering (option \code{order})
 }
+\examples{
+opts <- list(columns = names(mtcars))
+opts <- dt2_order(opts, c("mpg", "desc"))
+dt2(mtcars, options = opts)
+}

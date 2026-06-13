@@ -3,9 +3,13 @@
 #' @param ... Vectors like `c(col, "asc"/"desc")`. `col` may be name or 1-based index.
 #' @return Updated `options`.
 #' @export
+#' @examples
+#' opts <- list(columns = names(mtcars))
+#' opts <- dt2_order(opts, c("mpg", "desc"))
+#' dt2(mtcars, options = opts)
 dt2_order <- function(options = list(), ...) {
   ord <- lapply(list(...), function(x) {
-    idx <- if (is.character(x[[1]])) match(x[[1]], options$columns) else as.integer(x[[1]])
+    idx <- .dt2_name_to_idx(x[[1]], options)
     list(idx - 1L, x[[2]])
   })
   options$order <- ord
@@ -18,6 +22,9 @@ dt2_order <- function(options = list(), ...) {
 #' @param regex,smart,caseInsensitive Search flags.
 #' @return Updated `options`.
 #' @export
+#' @examples
+#' opts <- dt2_search_global(list(), value = "Toyota")
+#' dt2(mtcars, options = opts)
 dt2_search_global <- function(options = list(), value, regex = FALSE, smart = TRUE, caseInsensitive = TRUE) {
   options$search <- list(value = value, regex = regex, smart = smart, caseInsensitive = caseInsensitive)
   options
@@ -36,7 +43,12 @@ dt2_search_global <- function(options = list(), value, regex = FALSE, smart = TR
 #'   If `NULL`, uses the theme default (`"btn btn-sm btn-outline-secondary"`).
 #'   Applied per-button via `className`.
 #' @return Updated `options`.
+#' @seealso [dt2_buttons()] for a lower-level variant that takes full button
+#'   objects and can relocate the buttons container to a custom CSS selector.
 #' @export
+#' @examples
+#' opts <- dt2_use_buttons(list(), buttons = c("copy", "csv", "excel"))
+#' dt2(mtcars, options = opts)
 dt2_use_buttons <- function(options = list(),
                             buttons = c("copy","csv","excel","print"),
                             position = "topEnd",
@@ -60,6 +72,14 @@ dt2_use_buttons <- function(options = list(),
 #' @param lang_url URL to a JSON translation file.
 #' @return Updated `options`.
 #' @export
+#' @examples
+#' # Inline translation
+#' opts <- dt2_language(list(), lang_list = list(search = "Buscar:"))
+#' dt2(iris, options = opts)
+#'
+#' # Or load a ready-made translation file from the DataTables CDN
+#' opts <- dt2_language(list(),
+#'   lang_url = "https://cdn.datatables.net/plug-ins/2.3.3/i18n/pt-BR.json")
 dt2_language <- function(options = list(), lang_list = NULL, lang_url = NULL) {
   if (!is.null(lang_url)) {
     options$language <- list(url = lang_url)
@@ -77,7 +97,7 @@ dt2_language <- function(options = list(), lang_list = NULL, lang_url = NULL) {
 dt2_cols_width <- function(options = list(), map_named) {
   options$columnDefs <- c(options$columnDefs %||% list(),
                           lapply(names(map_named), function(nm) {
-                            i <- match(nm, options$columns)
+                            i <- .dt2_name_to_idx(nm, options)
                             list(targets = i-1L, width = unname(map_named[[nm]]))
                           })
   )
@@ -92,7 +112,7 @@ dt2_cols_width <- function(options = list(), map_named) {
 #' @export
 dt2_cols_align <- function(options = list(), cols, align = c("left","center","right")) {
   align <- match.arg(align)
-  idx <- if (is.character(cols)) match(cols, options$columns) else as.integer(cols)
+  idx <- .dt2_name_to_idx(cols, options)
   cls <- switch(align, left="text-start", center="text-center", right="text-end")
   options$columnDefs <- c(options$columnDefs %||% list(),
                           lapply(idx, function(i) list(targets = i-1L, className = cls))
@@ -106,7 +126,7 @@ dt2_cols_align <- function(options = list(), cols, align = c("left","center","ri
 #' @return Updated `options`.
 #' @export
 dt2_cols_hide <- function(options = list(), cols) {
-  idx <- if (is.character(cols)) match(cols, options$columns) else as.integer(cols)
+  idx <- .dt2_name_to_idx(cols, options)
   options$columnDefs <- c(options$columnDefs %||% list(),
                           lapply(idx, function(i) list(targets = i-1L, visible = FALSE))
   )
@@ -114,15 +134,29 @@ dt2_cols_hide <- function(options = list(), cols) {
 }
 
 #' Escape/unescape columns content
+#'
+#' Controls whether cell content is HTML-escaped before display.
 #' @param options Options list.
 #' @param cols Names or indices.
-#' @param escape If FALSE, tells DT to trust HTML (use with care).
+#' @param escape If `TRUE` (default), HTML special characters are escaped so the
+#'   raw text is shown. If `FALSE`, the content is rendered as raw HTML
+#'   (use with care; only for trusted content).
 #' @return Updated `options`.
 #' @export
 dt2_cols_escape <- function(options = list(), cols, escape = TRUE) {
-  idx <- if (is.character(cols)) match(cols, options$columns) else as.integer(cols)
+  idx <- .dt2_name_to_idx(cols, options)
+  render <- if (escape) {
+    htmlwidgets::JS(
+      "function(d,t){ if(t!=='display'||d==null) return d;",
+      "  return String(d)",
+      "    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')",
+      "    .replace(/\"/g,'&quot;').replace(/'/g,'&#39;'); }"
+    )
+  } else {
+    htmlwidgets::JS("function(d,t){return d;}")
+  }
   options$columnDefs <- c(options$columnDefs %||% list(),
-                          lapply(idx, function(i) list(targets = i-1L, render = if (escape) htmlwidgets::JS("function(d,t){return d;}") else htmlwidgets::JS("function(d,t){return d;}")))
+                          lapply(idx, function(i) list(targets = i - 1L, render = render))
   )
   options
 }

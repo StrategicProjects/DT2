@@ -13,7 +13,7 @@ render_dt2(expr, env = parent.frame(), quoted = FALSE)
 }
 \value{
 A Shiny render function (closure produced by
-\code{\link[htmlwidgets:htmlwidgets-shiny]{htmlwidgets::shinyRenderWidget()}}) that emits a DT2 widget.
+\code{\link[htmlwidgets:shinyRenderWidget]{htmlwidgets::shinyRenderWidget()}}) that emits a DT2 widget.
 }
 \description{
 Render a DT2 table in a Shiny server function.

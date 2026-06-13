@@ -1,11 +1,11 @@
-# DT2 <img src="man/figures/logo.png" align="right" height="139" />
+# DT2 <img src="man/figures/logo.svg" align="right" height="139" />
 
 <!-- badges: start -->
-[![R-CMD-check](https://img.shields.io/badge/R--CMD--check-passing-brightgreen)](https://github.com/StrategicProjects/DT2) 
+[![R-CMD-check](https://github.com/StrategicProjects/DT2/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/StrategicProjects/DT2/actions/workflows/R-CMD-check.yaml) 
 ![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/DT2) 
 ![CRAN Downloads](https://cranlogs.r-pkg.org/badges/grand-total/DT2) 
 ![License](https://img.shields.io/badge/license-MIT-darkviolet.svg) 
-![Devel Badge](https://img.shields.io/badge/devel%20version-0.1.0-blue.svg)
+![Devel Badge](https://img.shields.io/badge/devel%20version-0.1.1-blue.svg)
 <!-- badges: end -->
 
 > **DataTables v2 for R** — modular, lightweight, works with or without Shiny.
@@ -33,7 +33,7 @@ bridge between R / htmlwidgets and the JavaScript API.
 |---|---|---|
 | [DataTables](https://datatables.net/) core + extensions | SpryMedia Ltd | MIT |
 | [Bootstrap 5](https://getbootstrap.com/) integration | DataTables / Bootstrap | MIT |
-| DT2 R package | André Leite, Hugo Medeiros, Diogo Bezerra | MIT |
+| DT2 R package | André Leite, Marcos Wasilew, Hugo Vasconcelos, Carlos Amorin, Diogo Bezerra | MIT |
 
 This package takes inspiration from the original
 [DT](https://rstudio.github.io/DT/) package by Yihui Xie (RStudio / Posit),
@@ -44,7 +44,11 @@ ColumnControl.
 ## Installation
 
 ```r
-# From GitHub
+# From CRAN
+install.packages("DT2")
+
+# Development version from GitHub
+# install.packages("remotes")
 remotes::install_github("StrategicProjects/DT2")
 ```
 

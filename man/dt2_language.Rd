@@ -19,3 +19,12 @@ Updated \code{options}.
 \description{
 Language helper (either list or JSON url)
 }
+\examples{
+# Inline translation
+opts <- dt2_language(list(), lang_list = list(search = "Buscar:"))
+dt2(iris, options = opts)
+
+# Or load a ready-made translation file from the DataTables CDN
+opts <- dt2_language(list(),
+  lang_url = "https://cdn.datatables.net/plug-ins/2.3.3/i18n/pt-BR.json")
+}

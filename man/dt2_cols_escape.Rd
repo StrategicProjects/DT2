@@ -11,11 +11,13 @@ dt2_cols_escape(options = list(), cols, escape = TRUE)
 
 \item{cols}{Names or indices.}
 
-\item{escape}{If FALSE, tells DT to trust HTML (use with care).}
+\item{escape}{If \code{TRUE} (default), HTML special characters are escaped so the
+raw text is shown. If \code{FALSE}, the content is rendered as raw HTML
+(use with care; only for trusted content).}
 }
 \value{
 Updated \code{options}.
 }
 \description{
-Escape/unescape columns content
+Controls whether cell content is HTML-escaped before display.
 }

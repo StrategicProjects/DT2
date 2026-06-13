@@ -7,6 +7,12 @@
 #'   buttons container. If provided, DT2 will move the rendered buttons to that container after init.
 #' @return The modified `options` list.
 #' @details Requires the **Buttons** extension. For CSV/Excel/PDF you also need **JSZip** and **pdfMake** (incl. `vfs_fonts`).
+#'
+#'   Prefer [dt2_use_buttons()] for the common case: it takes simple button ids,
+#'   styles them with a CSS class, and places them in the layout. Use
+#'   `dt2_buttons()` when you need full button objects or want to move the
+#'   rendered buttons into a custom container via `target`.
+#' @seealso [dt2_use_buttons()]
 #' @export
 dt2_buttons <- function(options = list(),
                         buttons = c("copyHtml5", "csvHtml5", "excelHtml5", "pdfHtml5", "print"),

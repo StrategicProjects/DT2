@@ -7,7 +7,7 @@
 #' @return Updated `options`.
 #' @export
 dt2_col_checkbox <- function(options = list(), col, input_id_prefix = "row_chk_", value_col = NULL) {
-  if (is.character(col)) col <- match(col, options$columns)
+  col <- .dt2_name_to_idx(col, options)
 
   # HÍBRIDO: lê por índice (array) OU por nome (objeto)
   if (is.null(value_col)) {
@@ -45,7 +45,7 @@ dt2_col_checkbox <- function(options = list(), col, input_id_prefix = "row_chk_"
 #' @return Updated `options`.
 #' @export
 dt2_col_button <- function(options = list(), col, label = "Action", input_id_prefix = "row_btn_") {
-  if (is.character(col)) col <- match(col, options$columns)
+  col <- .dt2_name_to_idx(col, options)
   js <- htmlwidgets::JS(sprintf(
     "function(d,t,row,meta){ if(t!=='display') return d;
        var rid = '%s' + (meta.row+1);
