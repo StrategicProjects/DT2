@@ -1,34 +1,26 @@
-## Resubmission
+## Update
 
-This is a resubmission addressing the comments from Benjamin Altmann
-(2026-04-08):
+This is a minor update (0.1.2) of a package already on CRAN. It fixes two
+bugs and improves robustness; see NEWS.md for the full list. The most
+user-visible changes are:
 
-* Title and Description now use single quotes only around package /
-  software / API names ('DataTables', 'Bootstrap 5', 'Shiny',
-  'JavaScript'). The reference to R itself is no longer quoted.
+* `dt2_cols_escape()` now escapes HTML when `escape = TRUE` (previously the
+  argument had no effect).
+* The default server-side processing handler now applies global search and
+  column ordering (query-string keys were not being URL-decoded).
 
-* Added \value tags to all exported functions that were missing them:
-  dt2_bind_server, dt2_draw, dt2_format_time_relative, dt2_output,
-  dt2_proxy_order, dt2_replace_data, dt2_select_rows,
-  observe_dt2_events, render_dt2.
+There are no reverse dependencies on CRAN.
 
-* Replaced \dontrun{} examples:
-  - dt2_format_number, dt2_format_datetime, dt2_cols_render_orthogonal:
-    examples unwrapped (they only build option lists and run in < 1s).
-  - dt2_check_updates: changed to \donttest{}, since it reaches the
-    npm registry over the network.
-  - dt2_update_libs: kept as \dontrun{} (with an explanatory comment),
-    because this is a developer-only tool that requires the DT2 package
-    source tree (DESCRIPTION, tools/get-dt2-libs.sh, R/dt2_extensions.R)
-    and therefore truly cannot be executed by the user from an installed
-    package or from a CRAN check environment.
+## Test environments
+
+* local macOS, R 4.6.0
+* GitHub Actions: ubuntu-latest (r-devel, r-release, r-oldrel-1),
+  macOS-latest (r-release), windows-latest (r-release)
 
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
+0 errors | 0 warnings | 0 notes
 
-* checking CRAN incoming feasibility ... NOTE
-  Maintainer: 'Andre Leite <leite@castlab.org>'
-  New submission
-
-  This NOTE is expected for a first-time submission.
+The package bundles the 'DataTables' JavaScript library and its extensions,
+so the installed size may be reported as a NOTE on some CRAN check machines
+(unchanged from 0.1.1).

@@ -1,8 +1,8 @@
 Package: DT2
 Type: Package
 Title: 'DataTables' 2.x for R
-Version: 0.1.1
-Date: 2026-04-29
+Version: 0.1.2
+Date: 2026-06-13
 Authors@R: c(
     person("Andre", "Leite", email = "leite@castlab.org", role = c("aut", "cre")),
     person("Marcos", "Wasilew", email = "marcos.wasilew@gmail.com", role = "aut"),
