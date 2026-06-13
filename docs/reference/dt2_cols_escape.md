@@ -1,6 +1,6 @@
 # Escape/unescape columns content
 
-Escape/unescape columns content
+Controls whether cell content is HTML-escaped before display.
 
 ## Usage
 
@@ -20,7 +20,9 @@ dt2_cols_escape(options = list(), cols, escape = TRUE)
 
 - escape:
 
-  If FALSE, tells DT to trust HTML (use with care).
+  If `TRUE` (default), HTML special characters are escaped so the raw
+  text is shown. If `FALSE`, the content is rendered as raw HTML (use
+  with care; only for trusted content).
 
 ## Value
 

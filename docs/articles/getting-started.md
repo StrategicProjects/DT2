@@ -94,7 +94,8 @@ my_theme
 #>   compact      = TRUE 
 #>   font_scale   = 0.8 
 #>   style        = bootstrap5 
-#>   button_class = btn btn-sm btn-outline-secondary
+#>   button_class = btn btn-sm btn-outline-secondary 
+#>   class        = <none>
 ```
 
 ``` r
@@ -572,6 +573,11 @@ common formatting tasks — number separators, decimal places, prefixes,
 and suffixes. These modify your options list in-place and generate the
 correct JavaScript `render` functions behind the scenes, so you don’t
 need to write any JS:
+
+Note the `opts <- list(columns = names(mtcars))` line: name-based
+helpers resolve column names against `options$columns`, so set it once
+before calling them (or pass 1-based indices). DT2 warns if it is
+missing.
 
 ``` r
 
