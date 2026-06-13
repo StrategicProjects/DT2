@@ -8,7 +8,7 @@
 #' @return Updated `options`.
 #' @export
 dt2_cols_html <- function(options = list(), cols, js_render) {
-  if (is.character(cols)) cols <- match(cols, options$columns)
+  cols <- .dt2_name_to_idx(cols, options)
   cds <- lapply(cols, function(i) list(
     targets = i - 1L,
     render  = js_render
@@ -25,7 +25,7 @@ dt2_cols_html <- function(options = list(), cols, js_render) {
 #' @return Updated `options`.
 #' @export
 dt2_col_template <- function(options = list(), col, template) {
-  if (is.character(col)) col <- match(col, options$columns)
+  col <- .dt2_name_to_idx(col, options)
   js <- htmlwidgets::JS(
     sprintf(
       "function(d,t,row,meta){ if(t!=='display') return d; var html=%s; return html.replace(/\\{\\{VAL\\}\\}/g, d); }",

@@ -9,7 +9,12 @@
   parts <- strsplit(kv, "=", fixed = TRUE)
   parts <- lapply(parts, function(x) utils::URLdecode(if (length(x) == 2) x[2] else ""))
 
-  keys <- vapply(strsplit(kv, "=", fixed = TRUE), `[[`, character(1), 1)
+  # Keys must be URL-decoded too: dt2.js encodes them with encodeURIComponent,
+  # so e.g. "search[value]" arrives as "search%5Bvalue%5D" and bracketed
+  # order keys as "order%5B0%5D%5Bcolumn%5D". Decoding here lets the lookups
+  # below (q[["search[value]"]], "order[i][column]") match.
+  keys <- vapply(strsplit(kv, "=", fixed = TRUE),
+                 function(x) utils::URLdecode(x[[1]]), character(1))
   q <- stats::setNames(parts, keys)
 
   num <- function(x, default = NA_integer_) {

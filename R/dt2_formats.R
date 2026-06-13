@@ -19,17 +19,14 @@
 dt2_format_number <- function(options = list(), col_specs,
                               thousands = NULL, decimal = NULL,
                               digits = 0, prefix = "", prefix_right = "") {
-  #`%||%` <- function(a, b) if (is.null(a)) b else a
-  if (is.character(col_specs)) col_specs <- match(col_specs, options$columns)
+  col_specs <- .dt2_name_to_idx(col_specs, options)
   # DataTables v2 sugere DataTable.render.number(...)
   # https://datatables.net/manual/data/renderers
   js <- htmlwidgets::JS(
     sprintf("DataTable.render.number(%s,%s,%d,%s,%s)",
-            if (is.null(thousands)) "null" else sprintf("'%s'", thousands),
-            if (is.null(decimal))   "null" else sprintf("'%s'", decimal),
+            .dt2_js_str(thousands), .dt2_js_str(decimal),
             as.integer(digits),
-            sprintf("'%s'", prefix),
-            sprintf("'%s'", prefix_right))
+            .dt2_js_str(prefix), .dt2_js_str(prefix_right))
   )
   cds <- lapply(col_specs, function(i) list(targets = i - 1L, render = js))
   options$columnDefs <- c(options$columnDefs %||% list(), cds)
@@ -57,14 +54,13 @@ dt2_format_number <- function(options = list(), col_specs,
 dt2_format_datetime <- function(options = list(), col_specs,
                                 from = NULL, to = "DD/MM/YYYY",
                                 locale = NULL, def = NULL) {
-  #`%||%` <- function(a, b) if (is.null(a)) b else a
-  if (is.character(col_specs)) col_specs <- match(col_specs, options$columns)
+  col_specs <- .dt2_name_to_idx(col_specs, options)
 
   args <- c(
-    if (is.null(from)) "undefined" else sprintf("'%s'", from),
-    if (is.null(to))   "undefined" else sprintf("'%s'", to),
-    if (is.null(locale)) "undefined" else sprintf("'%s'", locale),
-    if (is.null(def))    "undefined" else sprintf("'%s'", def)
+    .dt2_js_str(from,   "undefined"),
+    .dt2_js_str(to,     "undefined"),
+    .dt2_js_str(locale, "undefined"),
+    .dt2_js_str(def,    "undefined")
   )
   # ver docs: https://datatables.net/plug-ins/dataRender/datetime  + manual de renderers
   js <- htmlwidgets::JS(sprintf("DataTable.render.datetime(%s)", paste(args, collapse = ", ")))
@@ -88,8 +84,7 @@ dt2_format_datetime <- function(options = list(), col_specs,
 #' @seealso \url{https://datatables.net/reference/option/columns.render}
 #' @export
 dt2_cols_render_js <- function(options = list(), col_specs, js_render) {
-  #`%||%` <- function(a, b) if (is.null(a)) b else a
-  if (is.character(col_specs)) col_specs <- match(col_specs, options$columns)
+  col_specs <- .dt2_name_to_idx(col_specs, options)
   stopifnot(inherits(js_render, "JS_EVAL"))
   cds <- lapply(col_specs, function(i) list(targets = i - 1L, render = js_render))
   options$columnDefs <- c(options$columnDefs %||% list(), cds)
@@ -121,8 +116,7 @@ dt2_cols_render_js <- function(options = list(), col_specs, js_render) {
 dt2_cols_render_orthogonal <- function(options = list(), col_specs,
                                        display = NULL, sort = NULL,
                                        filter = NULL, type = NULL) {
-  #`%||%` <- function(a, b) if (is.null(a)) b else a
-  if (is.character(col_specs)) col_specs <- match(col_specs, options$columns)
+  col_specs <- .dt2_name_to_idx(col_specs, options)
 
 
   # Build an {display, sort, filter, type} object with the supplied parts
@@ -159,8 +153,7 @@ dt2_cols_render_orthogonal <- function(options = list(), col_specs,
 #' opts <- list(columns = names(mtcars))
 #' opts <- dt2_format_number_abbrev(opts, c("hp","qsec"), digits = 1, locale = "pt-BR")
 dt2_format_number_abbrev <- function(options = list(), col_specs, digits = 1, locale = NULL) {
-  `%||%` <- function(a, b) if (is.null(a)) b else a
-  if (is.character(col_specs)) col_specs <- match(col_specs, options$columns)
+  col_specs <- .dt2_name_to_idx(col_specs, options)
 
   # JS renderer: abrevia com k/M/B e aplica toLocaleString(locale) na parte inteira se locale fornecido
   js <- if (is.null(locale) || !nzchar(locale)) {
@@ -206,17 +199,17 @@ dt2_format_number_abbrev <- function(options = list(), col_specs, digits = 1, lo
 #' @export
 dt2_format_time_format <- function(options = list(), col_specs,
                                    from = NULL, to = "L", locale = "pt-br") {
-  `%||%` <- function(a, b) if (is.null(a)) b else a
-  if (is.character(col_specs)) col_specs <- match(col_specs, options$columns)
+  col_specs <- .dt2_name_to_idx(col_specs, options)
 
   # ativa locale no cliente (fallback para renders que usem moment direto)
   options$`_momentLocale` <- locale
 
   # DataTables v2: DataTable.render.datetime(from, to, locale)
   renderer_call <- if (is.null(from)) {
-    sprintf("DataTable.render.datetime('%s','%s')", to, locale)
+    sprintf("DataTable.render.datetime(%s,%s)", .dt2_js_str(to), .dt2_js_str(locale))
   } else {
-    sprintf("DataTable.render.datetime('%s','%s','%s')", from, to, locale)
+    sprintf("DataTable.render.datetime(%s,%s,%s)",
+            .dt2_js_str(from), .dt2_js_str(to), .dt2_js_str(locale))
   }
   render <- htmlwidgets::JS(renderer_call)
 
@@ -232,8 +225,7 @@ dt2_format_time_format <- function(options = list(), col_specs,
 #' @return The modified `options` list with an updated `columnDefs` entry.
 #' @export
 dt2_format_time_relative <- function(options = list(), col_specs, locale = "pt-br") {
-  `%||%` <- function(a, b) if (is.null(a)) b else a
-  if (is.character(col_specs)) col_specs <- match(col_specs, options$columns)
+  col_specs <- .dt2_name_to_idx(col_specs, options)
 
   # ativa locale no cliente (usado por dt2.js)
   options$`_momentLocale` <- locale

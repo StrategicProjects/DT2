@@ -30,3 +30,11 @@ Updated \code{options}.
 \description{
 Uses the modern DataTables 2.x \code{layout} API (not the deprecated \code{dom}).
 }
+\examples{
+opts <- dt2_use_buttons(list(), buttons = c("copy", "csv", "excel"))
+dt2(mtcars, options = opts)
+}
+\seealso{
+\code{\link[=dt2_buttons]{dt2_buttons()}} for a lower-level variant that takes full button
+objects and can relocate the buttons container to a custom CSS selector.
+}

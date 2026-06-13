@@ -27,4 +27,12 @@ Configure DataTables Buttons and (optionally) move them to a custom container
 }
 \details{
 Requires the \strong{Buttons} extension. For CSV/Excel/PDF you also need \strong{JSZip} and \strong{pdfMake} (incl. \code{vfs_fonts}).
+
+Prefer \code{\link[=dt2_use_buttons]{dt2_use_buttons()}} for the common case: it takes simple button ids,
+styles them with a CSS class, and places them in the layout. Use
+\code{dt2_buttons()} when you need full button objects or want to move the
+rendered buttons into a custom container via \code{target}.
+}
+\seealso{
+\code{\link[=dt2_use_buttons]{dt2_use_buttons()}}
 }
