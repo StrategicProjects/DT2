@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="favicon.ico">
 <link rel="manifest" href="site.webmanifest">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/Jost-0.4.10/font.css" rel="stylesheet">
+<link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/Jost-0.4.10/font.css" rel="stylesheet">
 <link href="deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -21,7 +21,7 @@
 <meta property="og:title" content="DataTables 2.x for R">
 <meta name="description" content="A modern R binding for DataTables V2 with modular extension loading, Bootstrap 5 styling, Shiny integration (proxy, events, inline inputs), server-side processing helpers, and standalone (non-Shiny) support. Configure DataTables options directly via R lists, a 1:1 mapping to the JavaScript API.">
 <meta property="og:description" content="A modern R binding for DataTables V2 with modular extension loading, Bootstrap 5 styling, Shiny integration (proxy, events, inline inputs), server-side processing helpers, and standalone (non-Shiny) support. Configure DataTables options directly via R lists, a 1:1 mapping to the JavaScript API.">
-<meta property="og:image" content="https://strategicprojects.github.io/DT2/logo.png">
+<meta property="og:image" content="https://strategicprojects.github.io/DT2/logo.svg">
 <!-- See https://stackoverflow.com/questions/1865837/whats-the-difference-between-window-location-and-window-location-replace — we use .replace() because we don't want the old url to appear in the browser history. --><script>
   if (!/(\/|html?)$/.test(window.location.href)){
     window.location.replace(window.location.href + '/');
@@ -73,7 +73,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header">
-<img src="logo.png" class="logo" alt=""><h1 id="dt2-">DT2 <a class="anchor" aria-label="anchor" href="#dt2-"></a>
+<img src="logo.svg" class="logo" alt=""><h1 id="dt2-">DT2 <a class="anchor" aria-label="anchor" href="#dt2-"></a>
 </h1>
 </div>
 <!-- badges: start -->
@@ -126,7 +126,7 @@
 </tr>
 <tr>
 <td>DT2 R package</td>
-<td>André Leite, Hugo Medeiros, Diogo Bezerra</td>
+<td>André Leite, Marcos Wasilew, Hugo Vasconcelos, Carlos Amorin, Diogo Bezerra</td>
 <td>MIT</td>
 </tr>
 </tbody>
@@ -137,7 +137,11 @@
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># From GitHub</span></span>
+<code class="sourceCode R"><span><span class="co"># From CRAN</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"DT2"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Development version from GitHub</span></span>
+<span><span class="co"># install.packages("remotes")</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"StrategicProjects/DT2"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -424,6 +428,7 @@
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
+<li><a href="https://cloud.r-project.org/package=DT2" class="external-link">View on CRAN</a></li>
 <li><a href="https://github.com/StrategicProjects/DT2/" class="external-link">Browse source code</a></li>
 </ul>
 </div>
@@ -469,7 +474,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Developed by André Leite, Diogo Bezerra and Hugo Medeiros</p>
+  <p>Developed by André Leite, Marcos Wasilew, Hugo Vasconcelos, Carlos Amorin and Diogo Bezerra</p>
 </div>
 
   </div></footer>

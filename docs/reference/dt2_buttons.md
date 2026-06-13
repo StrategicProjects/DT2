@@ -39,3 +39,14 @@ The modified `options` list.
 
 Requires the **Buttons** extension. For CSV/Excel/PDF you also need
 **JSZip** and **pdfMake** (incl. `vfs_fonts`).
+
+Prefer
+[`dt2_use_buttons()`](https://strategicprojects.github.io/DT2/reference/dt2_use_buttons.md)
+for the common case: it takes simple button ids, styles them with a CSS
+class, and places them in the layout. Use `dt2_buttons()` when you need
+full button objects or want to move the rendered buttons into a custom
+container via `target`.
+
+## See also
+
+[`dt2_use_buttons()`](https://strategicprojects.github.io/DT2/reference/dt2_use_buttons.md)

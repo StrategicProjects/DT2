@@ -14,6 +14,18 @@ dt2(df, options = opts)
 The `col_specs` argument accepts column names (matching
 `options$columns`) or 1-based integer indices.
 
+> **Why `columns = names(df)`?** When you refer to columns *by name*,
+> DT2 needs to know the column order to translate names into positions.
+> That list lives in `options$columns`, so set it once
+> (`opts <- list(columns = names(df))`) before calling any name-based
+> helper. If you skip it, DT2 emits a warning and the target cannot be
+> resolved — pass 1-based indices instead if you prefer not to set it.
+> ([`dt2()`](https://strategicprojects.github.io/DT2/reference/dt2.md)
+> itself fills `options$columns` from the data for rendering, but the
+> helpers run *before*
+> [`dt2()`](https://strategicprojects.github.io/DT2/reference/dt2.md),
+> so they need it set explicitly.)
+
 ## Number Formatting
 
 [`dt2_format_number()`](https://strategicprojects.github.io/DT2/reference/dt2_format_number.md)

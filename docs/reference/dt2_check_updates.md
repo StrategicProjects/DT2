@@ -55,7 +55,7 @@ dt2_check_updates()
 #> jQuery             3.7.0       4.0.0       3.7.1       ⚠️  UPDATE
 #> Moment             2.29.4      2.30.1      2.30.1      ⚠️  UPDATE
 #> JSZip              3.10.1      3.10.1      3.10.1      ✅ ok
-#> PDFMake            0.2.7       0.3.7       0.2.23      ⚠️  UPDATE
+#> PDFMake            0.2.7       0.3.11      0.2.23      ⚠️  UPDATE
 #> Bootstrap          5.3.8       5.3.8       5.3.8       ✅ ok
 #> Buttons            3.2.5       3.2.6       3.2.6       ⚠️  UPDATE
 #> ColReorder         2.1.1       2.1.2       2.1.2       ⚠️  UPDATE
@@ -83,7 +83,7 @@ updates[updates$status == "UPDATE", ]
 #> 1     DataTables     2.3.4  2.3.8     2.3.8            UPDATE
 #> 2         jQuery     3.7.0  4.0.0     3.7.1         3. UPDATE
 #> 3         Moment    2.29.4 2.30.1    2.30.1         2. UPDATE
-#> 5        PDFMake     0.2.7  0.3.7    0.2.23       0.2. UPDATE
+#> 5        PDFMake     0.2.7 0.3.11    0.2.23       0.2. UPDATE
 #> 7        Buttons     3.2.5  3.2.6     3.2.6            UPDATE
 #> 8     ColReorder     2.1.1  2.1.2     2.1.2            UPDATE
 #> 9  ColumnControl     1.1.0  1.2.1     1.2.1            UPDATE
