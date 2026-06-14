@@ -56,8 +56,10 @@
 #' @examples
 #' # Create and reuse
 #' my_theme <- dt2_theme("clean", compact = TRUE)
+#' \donttest{
 #' dt2(iris, theme = my_theme)
 #' dt2(mtcars, theme = my_theme)
+#' }
 #'
 #' # Custom button style
 #' dt2_theme("default", button_class = "btn btn-sm btn-primary")
@@ -161,6 +163,7 @@ print.dt2_theme <- function(x, ...) {
 #' # Just works — beautiful defaults
 #' dt2(iris)
 #'
+#' \donttest{
 #' # Override style inline
 #' dt2(iris, striped = FALSE)
 #' dt2(iris, font_scale = 0.85, compact = FALSE)
@@ -204,6 +207,7 @@ print.dt2_theme <- function(x, ...) {
 #'       buttons = list("copy", "csv", "excel"),
 #'       layout = list(topEnd = "buttons")
 #'     ))
+#' }
 dt2 <- function(data,
                 # ---- styling ----
                 theme        = "default",

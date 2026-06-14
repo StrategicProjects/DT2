@@ -46,8 +46,10 @@ For quick one-off styling, you can also pass arguments directly to
 \examples{
 # Create and reuse
 my_theme <- dt2_theme("clean", compact = TRUE)
+\donttest{
 dt2(iris, theme = my_theme)
 dt2(mtcars, theme = my_theme)
+}
 
 # Custom button style
 dt2_theme("default", button_class = "btn btn-sm btn-primary")

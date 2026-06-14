@@ -1,3 +1,11 @@
+## Resubmission
+
+This is a resubmission of 0.1.2. The previous submission was flagged by the
+incoming pre-test with one NOTE on r-devel-windows: the `dt2()` examples ran
+in > 10s elapsed. I have wrapped all but one minimal `dt2()` example in
+`\donttest{}` (in `dt2()` and `dt2_theme()`), so the timed example run is now
+well under the threshold. No code was changed.
+
 ## Update
 
 This is a minor update (0.1.2) of a package already on CRAN. It fixes two
