@@ -75,6 +75,7 @@ JavaScript API). The two concerns are cleanly separated.
 # Just works — beautiful defaults
 dt2(iris)
 
+\donttest{
 # Override style inline
 dt2(iris, striped = FALSE)
 dt2(iris, font_scale = 0.85, compact = FALSE)
@@ -118,4 +119,5 @@ dt2(mtcars,
       buttons = list("copy", "csv", "excel"),
       layout = list(topEnd = "buttons")
     ))
+}
 }
