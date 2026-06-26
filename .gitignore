@@ -51,5 +51,6 @@ po/*~
 rsconnect/
 .positai
 
-# Local agent instructions (not versioned)
+# Local agent instructions / config (not versioned)
 CLAUDE.md
+.claude/
