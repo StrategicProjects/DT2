@@ -10,6 +10,12 @@
 
 > **DataTables v2 for R** — modular, lightweight, works with or without Shiny.
 
+> [!NOTE]
+> **Using Python?** A companion port, [**dt2**](https://github.com/StrategicProjects/dt2py),
+> brings the same DataTables v2 API to [Shiny for Python](https://shiny.posit.co/py/)
+> via [anywidget](https://anywidget.dev). Docs: <https://strategicprojects.github.io/dt2py/>
+> · PyPI: `pip install dt2`.
+
 DT2 is a modern `htmlwidgets` binding for
 [DataTables.net v2](https://datatables.net/) with:
 

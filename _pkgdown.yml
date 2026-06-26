@@ -31,8 +31,13 @@ template:
 navbar:
   structure:
     left:  [intro, reference, articles]
-    right: [search, github]
+    right: [python, search, github]
   components:
+    python:
+      icon: fa-python
+      href: https://strategicprojects.github.io/dt2py/
+      aria-label: Python port (dt2)
+      text: Python
     github:
       icon: fa-github
       href: https://github.com/StrategicProjects/DT2
