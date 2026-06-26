@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="103" height="116" viewBox="0 0 103 116" role="img" aria-label="DT2">
+  <path d="M51.5,8 L94.8,33 L94.8,83 L51.5,108 L8.2,83 L8.2,33 Z"
+        fill="#27AE60" stroke="#196F3D" stroke-width="3" stroke-linejoin="round"/>
+  <text x="49" y="58" text-anchor="middle" dominant-baseline="central"
+        font-family="Helvetica, Arial, sans-serif" font-weight="700" font-size="40" fill="#FFFFFF">DT<tspan font-size="25" dy="-12">2</tspan></text>
+</svg>

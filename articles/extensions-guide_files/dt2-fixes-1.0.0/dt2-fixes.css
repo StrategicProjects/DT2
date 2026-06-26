@@ -1,0 +1,337 @@
+/* DT2 — default styling
+ * Loaded LAST via dt2_deps() so it overrides DataTables + Bootstrap.
+ */
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&display=swap');
+
+/* ==========================================================================
+ * FULL-WIDTH FIX
+ *
+ * DataTables BS5 places the <table> inside a flex container:
+ *   div.d-md-flex.col-md.dt-layout-full > table
+ *
+ * Inside a flex parent, <table> loses its implicit display:table and
+ * becomes a flex item that shrinks to content.
+ *
+ * Fix: explicitly set display:table.  Combined with width:100% (set by
+ * DataTables), the table expands to fill its container naturally.
+ * No need for table-layout:fixed or wrapper overrides.
+ * ========================================================================== */
+
+.dt-container table.dataTable {
+  display: table !important;
+}
+
+
+/* ==========================================================================
+ * TYPOGRAPHY
+ * ========================================================================== */
+.dt-container {
+  font-family: 'Jost', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: inherit;
+}
+.dt-container .table {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* Form controls inherit font */
+.dt-container .form-control,
+.dt-container .form-control-sm,
+.dt-container .form-select,
+.dt-container .form-select-sm,
+.dt-container .pagination .page-link,
+.dt-container .dt-length label,
+.dt-container .dt-search label {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* Fix: entries-per-page <select> sometimes appears empty when font
+   is scaled down.  Ensure minimum sizing so it always shows its content.
+   Target both BS5 (.form-select) and core mode selects.
+   NOTE: do NOT set appearance:menulist — BS5 .form-select already draws
+   a dropdown arrow via background-image; adding the native arrow creates
+   a double-icon. */
+.dt-container .dt-length select.form-select,
+.dt-container .dt-length select.form-select-sm,
+.dt-container .dt-length select {
+  min-width: 4.5em;
+  min-height: 1.8em;
+  padding: 0.2rem 1.8rem 0.2rem 0.5rem;
+  display: inline-block;
+  width: auto;
+}
+
+/* ==========================================================================
+ * COMPACT TABLE PADDING
+ * ========================================================================== */
+.dt-container table.table-sm > :not(caption) > * > * {
+  padding: .3rem .5rem;
+}
+
+/* ==========================================================================
+ * PAGINATION
+ *
+ * Ensure BS5 pagination buttons are visually GROUPED (connected like a
+ * btn-group) regardless of Bootswatch theme overrides.
+ *
+ * Bootswatch themes (e.g. Spacelab) may set border-radius on every
+ * .page-link individually and add margins between .page-items, which
+ * breaks the native BS5 "connected" look.  We override with !important
+ * because dt2-fixes.css loads last but Bootswatch specificity can still
+ * win via CSS variable overrides.
+ * ========================================================================== */
+
+/* Remove bullet markers */
+.dt-container .pagination,
+.dt-container .pagination li {
+  list-style: none !important;
+}
+
+/* Tight flex row — zero gap between items, keep vertical spacing */
+.dt-container .pagination {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  padding-left: 0 !important;
+  gap: 0 !important;
+  margin: 2px 0 !important;
+}
+
+/* Kill all margins on page items */
+.dt-container .pagination .page-item {
+  margin: 0 !important;
+}
+
+/* Overlap borders: -1px pulls items together */
+.dt-container .pagination .page-item + .page-item .page-link {
+  margin-left: -1px !important;
+}
+
+/* Every .page-link base: no border-radius by default */
+.dt-container .pagination .page-link {
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0.25rem 0.55rem !important;
+  line-height: 1.4;
+  position: relative;
+  border-radius: 0 !important;
+}
+
+/* Rounded corners ONLY on the extremes */
+.dt-container .pagination .page-item:first-child .page-link {
+  border-top-left-radius: 0.25rem !important;
+  border-bottom-left-radius: 0.25rem !important;
+}
+.dt-container .pagination .page-item:last-child .page-link {
+  border-top-right-radius: 0.25rem !important;
+  border-bottom-right-radius: 0.25rem !important;
+}
+
+/* Active / hover rises above neighbours so full border is visible */
+.dt-container .pagination .page-item.active .page-link,
+.dt-container .pagination .page-item:hover .page-link {
+  z-index: 1;
+}
+
+/* Core-mode pagination buttons (non-Bootstrap) */
+.dt-container .dt-paging .dt-paging-button {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* ==========================================================================
+ * BUTTONS EXTENSION (copy, csv, excel, print, colvis, etc.)
+ *
+ * DataTables BS5 default is btn-secondary (large, dark grey).
+ * DT2 changes the default via JS (DataTable.Buttons.defaults) to
+ * btn-sm btn-outline-secondary.
+ *
+ * BS5 integration wraps buttons in: div.dt-buttons > div.btn-group > button.btn
+ * Bootstrap's .btn-group already handles connected grouping, but Bootswatch
+ * themes can break it.  We reinforce the grouped look with !important.
+ * ========================================================================== */
+
+/* All DT buttons: inherit font, compact sizing */
+.dt-container .dt-buttons .dt-button,
+.dt-container .dt-buttons .btn {
+  font-family: inherit;
+  font-size: 0.8125rem;
+  padding: 0.25rem 0.65rem;
+  line-height: 1.4;
+  position: relative;
+}
+
+/* Button container: tight flex row */
+.dt-container .dt-buttons {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center;
+  gap: 0 !important;
+}
+
+/* btn-group wrapper: ensure no extra spacing */
+.dt-container .dt-buttons .btn-group {
+  margin: 0 !important;
+}
+
+/* --- BS5 mode: buttons inside .btn-group --- */
+
+/* Overlap borders between adjacent buttons */
+.dt-container .dt-buttons .btn-group > .btn + .btn {
+  margin-left: -1px !important;
+}
+
+/* Default: flat corners on all buttons */
+.dt-container .dt-buttons .btn-group > .btn {
+  border-radius: 0 !important;
+}
+
+/* Rounded left on first */
+.dt-container .dt-buttons .btn-group > .btn:first-child {
+  border-top-left-radius: 0.25rem !important;
+  border-bottom-left-radius: 0.25rem !important;
+}
+
+/* Rounded right on last */
+.dt-container .dt-buttons .btn-group > .btn:last-child {
+  border-top-right-radius: 0.25rem !important;
+  border-bottom-right-radius: 0.25rem !important;
+}
+
+/* Single button gets full rounding */
+.dt-container .dt-buttons .btn-group > .btn:only-child {
+  border-radius: 0.25rem !important;
+}
+
+/* --- Core mode: buttons directly in .dt-buttons (no .btn-group) --- */
+
+.dt-container .dt-buttons > .dt-button + .dt-button {
+  margin-left: -1px !important;
+}
+
+.dt-container .dt-buttons > .dt-button {
+  border-radius: 0 !important;
+}
+
+.dt-container .dt-buttons > .dt-button:first-child {
+  border-top-left-radius: 0.25rem !important;
+  border-bottom-left-radius: 0.25rem !important;
+}
+
+.dt-container .dt-buttons > .dt-button:last-child {
+  border-top-right-radius: 0.25rem !important;
+  border-bottom-right-radius: 0.25rem !important;
+}
+
+.dt-container .dt-buttons > .dt-button:only-child {
+  border-radius: 0.25rem !important;
+}
+
+/* Hover / focus rises above neighbours */
+.dt-container .dt-buttons .dt-button:hover,
+.dt-container .dt-buttons .dt-button:focus,
+.dt-container .dt-buttons .btn:hover,
+.dt-container .dt-buttons .btn:focus {
+  z-index: 1;
+}
+
+/* Dropdown menus from collection buttons (colvis, etc.) — vertical list */
+.dt-container .dt-button-collection .dt-button {
+  font-size: 0.8125rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0 !important;
+}
+.dt-container .dt-button-collection .dt-button:first-child {
+  border-top-left-radius: 0.25rem !important;
+  border-top-right-radius: 0.25rem !important;
+}
+.dt-container .dt-button-collection .dt-button:last-child {
+  border-bottom-left-radius: 0.25rem !important;
+  border-bottom-right-radius: 0.25rem !important;
+}
+
+/* Button info popup (shown after Copy) */
+div.dt-button-info {
+  font-family: 'Jost', system-ui, sans-serif;
+  font-size: 0.875rem;
+}
+div.dt-button-info h2 {
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 1rem 1.5rem 0.5rem;
+}
+div.dt-button-info > div {
+  padding: 0.5rem 1.5rem 1rem;
+}
+
+/* ==========================================================================
+ * HEADER & ROW STYLING
+ * ========================================================================== */
+.dt-container table.table thead th {
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.dt-container table.table tbody tr {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* ==========================================================================
+ * BUTTON SPACER
+ *
+ * Use  { extend = "spacer", style = "bar" }  in the buttons list to
+ * visually separate groups of buttons (e.g. export vs. column control).
+ * ========================================================================== */
+.dt-container .dt-buttons .dt-button-spacer {
+  display: inline-block;
+  margin: 0 0.4rem !important;
+  padding: 0;
+  vertical-align: middle;
+}
+.dt-container .dt-buttons .dt-button-spacer.bar {
+  border-left: 1px solid rgba(0, 0, 0, 0.15);
+  height: 1.4em;
+}
+
+/* ==========================================================================
+ * COLUMNCONTROL EXTENSION
+ *
+ * The dropdown menu is positioned absolutely inside the table header.
+ * Its internal elements use CSS-variable–based sizing that doesn't
+ * respond to DT2's font_scale.  We override here so the dropdown
+ * inherits the container's font settings.
+ * ========================================================================== */
+div.dtcc-dropdown {
+  font-family: inherit !important;
+  font-size: inherit !important;
+}
+
+div.dtcc-dropdown button.dtcc-button {
+  font-family: inherit !important;
+  font-size: inherit !important;
+}
+
+div.dtcc-dropdown span.dtcc-button-text {
+  font-family: inherit !important;
+  font-size: inherit !important;
+}
+
+div.dtcc-dropdown div.dtcc-title {
+  font-family: inherit !important;
+  font-size: inherit !important;
+}
+
+div.dtcc-dropdown div.dtcc-search input,
+div.dtcc-dropdown div.dtcc-search select {
+  font-family: inherit !important;
+  font-size: inherit !important;
+}
+
+div.dtcc-dropdown div.dtcc-list div.dtcc-list-controls button {
+  font-size: inherit !important;
+}
+
+/* ColumnControl header icons: inherit table font scale */
+table.dataTable span.dtcc {
+  font-size: inherit !important;
+}

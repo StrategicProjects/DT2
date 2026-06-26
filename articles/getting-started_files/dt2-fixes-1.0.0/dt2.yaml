@@ -1,0 +1,3 @@
+# DT2 htmlwidget configuration
+# Dependencies are managed programmatically via dt2_deps() in R
+# (not via this YAML file — it is intentionally empty)
