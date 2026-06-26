@@ -50,3 +50,6 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 .positai
+
+# Local agent instructions (not versioned)
+CLAUDE.md
