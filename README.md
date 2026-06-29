@@ -40,7 +40,7 @@ bridge between R / htmlwidgets and the JavaScript API.
 |---|---|---|
 | [DataTables](https://datatables.net/) core + extensions | SpryMedia Ltd | MIT |
 | [Bootstrap 5](https://getbootstrap.com/) integration | DataTables / Bootstrap | MIT |
-| DT2 R package | André Leite, Marcos Wasilew, Hugo Vasconcelos, Carlos Amorin, Diogo Bezerra | MIT |
+| DT2 R package | André Leite, Marcos Wasilew, Hugo Vasconcelos, Carlos Amorim, Diogo Bezerra | MIT |
 
 This package takes inspiration from the original
 [DT](https://rstudio.github.io/DT/) package by Yihui Xie (RStudio / Posit),
