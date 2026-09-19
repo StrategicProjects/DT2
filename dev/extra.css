@@ -1,0 +1,27 @@
+/* ── DT2 pkgdown site – custom overrides ─────────────────── */
+
+/* Navbar: slightly smaller */
+.navbar {
+  font-size: 0.88rem;
+}
+
+/* Article prose */
+.col-md-9 {
+  font-size: 0.91rem;
+  line-height: 1.58;
+}
+
+/* Code blocks */
+pre, code {
+  font-size: 0.82rem;
+}
+
+/* Sidebar TOC */
+.sidebar nav {
+  font-size: 0.82rem;
+}
+
+/* Footer */
+footer {
+  font-size: 0.82rem;
+}

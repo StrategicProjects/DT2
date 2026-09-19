@@ -1,0 +1,17 @@
+lgt = .35
+
+define hex_up {
+    A:line right $1*(sqrt(3)/2) down $1/2 \
+        then down $1 \
+        then down $1/2 left $1*(sqrt(3)/2) \
+        then up $1/2 left $1*(sqrt(3)/2) \
+        then up $1 \
+        then right $1*(sqrt(3)/2) up $1/2 \
+        close color $3 fill $4
+    text $2 at last .c color $5
+}
+
+len = .3
+
+H2: [hex_up(lgt ,  "DT2" big big, 0x196F3D, 0x27AE60, white)]
+
