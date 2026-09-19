@@ -5,7 +5,7 @@
 ![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/DT2) 
 ![CRAN Downloads](https://cranlogs.r-pkg.org/badges/grand-total/DT2) 
 ![License](https://img.shields.io/badge/license-MIT-darkviolet.svg) 
-![Devel Badge](https://img.shields.io/badge/devel%20version-0.1.2-blue.svg) 
+![Devel Badge](https://img.shields.io/badge/devel%20version-0.1.3-blue.svg) 
 [![Python port: dt2](https://img.shields.io/pypi/v/dt2?label=Python%3A%20dt2&logo=python&logoColor=white)](https://github.com/StrategicProjects/dt2py)
 <!-- badges: end -->
 
@@ -279,7 +279,7 @@ dt2(iris, options = list(
 > `language` list as shown above.
 
 Browse all available languages at:
-<https://datatables.net/plug-ins/i18n/>
+<https://datatables.net/download/plug-ins/i18n/>
 
 
 ## Updating JS Libraries

@@ -597,9 +597,6 @@ library(tibble)
 library(lubridate)
 
 # ── Sample data (57 employees) ────────────────────────────────────────────────
-json_url <- "https://raw.githubusercontent.com/StrategicProjects/DT2/main/inst/examples/employees.json"
-# For offline use, the same JSON is bundled in inst/examples/employees.json
-
 json_txt <- '{
   "data": [
     {"name":"Tiger Nixon","position":"System Architect","salary":"320800","start_date":"2011-04-25","office":"Edinburgh","extn":"5421"},

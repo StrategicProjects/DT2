@@ -1,4 +1,4 @@
-# DT2 (development version)
+# DT2 0.1.3
 
 ## New features
 

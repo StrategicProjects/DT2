@@ -23,5 +23,5 @@ you need fine control over \code{columns.render}, including returning
 different outputs based on \code{type} (display/sort/filter/type).
 }
 \seealso{
-\url{https://datatables.net/reference/option/columns.render}
+\url{https://datatables.net/ref/core/option/columns.render}
 }
