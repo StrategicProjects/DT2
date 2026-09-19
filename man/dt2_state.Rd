@@ -40,5 +40,8 @@ With server-side processing the client only holds the current page, so
 \code{rows_all} / \code{rows_current} are taken from the server response: the default
 \code{\link[=dt2_ssp_handler]{dt2_ssp_handler()}} ships them unless \code{rows_all = FALSE} (see
 \code{\link[=dt2_bind_server]{dt2_bind_server()}}); a custom handler must return \code{dt2_rows_all} /
-\code{dt2_rows_current} itself, otherwise those inputs are \code{NULL}.
+\code{dt2_rows_current} itself, otherwise those inputs are \code{NULL}. In server
+mode \code{rows_selected} is mapped through \code{rows_current} (so it is also \code{NULL}
+without it), and only rows of the current page can be selected, because
+DataTables discards server-side selections on every redraw.
 }

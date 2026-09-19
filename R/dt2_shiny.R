@@ -77,7 +77,10 @@ observe_dt2_events <- function(input, id, handler) {
 #' `rows_all` / `rows_current` are taken from the server response: the default
 #' [dt2_ssp_handler()] ships them unless `rows_all = FALSE` (see
 #' [dt2_bind_server()]); a custom handler must return `dt2_rows_all` /
-#' `dt2_rows_current` itself, otherwise those inputs are `NULL`.
+#' `dt2_rows_current` itself, otherwise those inputs are `NULL`. In server
+#' mode `rows_selected` is mapped through `rows_current` (so it is also `NULL`
+#' without it), and only rows of the current page can be selected, because
+#' DataTables discards server-side selections on every redraw.
 #'
 #' @param input Shiny input object.
 #' @param id Widget ID.

@@ -115,7 +115,10 @@ summarise, download or plot exactly what the user has filtered:
 ```{r}
 server <- function(input, output, session) {
   output$tbl <- render_dt2({
-    dt2(mtcars, column_control = TRUE, options = list(pageLength = 8))
+    dt2(mtcars, options = list(
+      pageLength    = 8,
+      columnControl = list("order", "searchDropdown")
+    ))
   })
 
   filtered <- reactive({

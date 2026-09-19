@@ -415,7 +415,20 @@ try {
               rowsCurrent = toOneBased(table.rows({ search:'applied', page:'current' }).indexes().toArray());
             }
           } catch(e){}
-          var rowsSelected = toOneBased(selIdx);
+          // Selection: client-side indexes are source-data indexes. Server-side
+          // they are page-local offsets, so map them through rows_current
+          // (NULL when the handler did not ship the indices). Note DataTables
+          // drops server-side selections on every redraw, so only rows of the
+          // current page can be selected.
+          var rowsSelected;
+          if (opts.serverSide) {
+            rowsSelected = Array.isArray(rowsCurrent)
+              ? selIdx.map(function(i){ return rowsCurrent[i]; })
+                      .filter(function(v){ return v != null; })
+              : null;
+          } else {
+            rowsSelected = toOneBased(selIdx);
+          }
 
           Shiny.setInputValue(el.id + "_state", {
             reason: reason,
@@ -437,6 +450,12 @@ try {
         table.off('.dt2state');
         table.on('init.dt.dt2state draw.dt.dt2state order.dt.dt2state search.dt.dt2state page.dt.dt2state select.dt.dt2state deselect.dt.dt2state',
           function(e){ pushState(e.type.split('.')[0]); });
+        // Client-side tables run their first draw + `init` synchronously inside
+        // `new DataTable()`, i.e. before the handlers above exist. Publish the
+        // initial state now so input$<id>_rows_* are set without interaction
+        // (and refreshed when the widget re-renders). Server-side tables get
+        // theirs from the first ajax draw.
+        if (!opts.serverSide) pushState('init');
 
         // --- Shiny proxy (R -> JS)
         if (window.Shiny && !el._proxyBound) {
