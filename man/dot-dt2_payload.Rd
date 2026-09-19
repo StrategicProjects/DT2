@@ -4,9 +4,19 @@
 \alias{.dt2_payload}
 \title{Internal: build DataTables JSON payload}
 \usage{
-.dt2_payload(draw, total, filtered, data_rows)
+.dt2_payload(
+  draw,
+  total,
+  filtered,
+  data_rows,
+  rows_all = NULL,
+  rows_current = NULL
+)
 }
 \description{
-Internal: build DataTables JSON payload
+\code{rows_all} / \code{rows_current} (1-based indices into the source data) are
+optional; when supplied they are shipped as \code{dt2_rows_all} /
+\code{dt2_rows_current} and dt2.js forwards them to \verb{input$<id>_rows_all} /
+\verb{input$<id>_rows_current}.
 }
 \keyword{internal}

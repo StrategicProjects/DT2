@@ -8,7 +8,8 @@ dt2_bind_server(
   id,
   data,
   session = shiny::getDefaultReactiveDomain(),
-  handler = NULL
+  handler = NULL,
+  rows_all = TRUE
 )
 }
 \arguments{
@@ -18,7 +19,13 @@ dt2_bind_server(
 
 \item{session}{Shiny session (default: current).}
 
-\item{handler}{Optional custom handler function(data, req) -> list(...).}
+\item{handler}{Optional custom handler function(data, req) -> list(...).
+A custom handler may include \code{dt2_rows_all} / \code{dt2_rows_current}
+(1-based row indices) in its result to feed \verb{input$<id>_rows_all} and
+\verb{input$<id>_rows_current}; see \code{\link[=dt2_ssp_handler]{dt2_ssp_handler()}}.}
+
+\item{rows_all}{Passed to \code{\link[=dt2_ssp_handler]{dt2_ssp_handler()}} when \code{handler} is \code{NULL}:
+whether the default handler ships the filtered row indices to the client.}
 }
 \value{
 No return value, called for side effects. Registers a Shiny
