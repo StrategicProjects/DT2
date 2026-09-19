@@ -80,7 +80,10 @@ observe_dt2_events <- function(input, id, handler) {
 #' `dt2_rows_current` itself, otherwise those inputs are `NULL`. In server
 #' mode `rows_selected` is mapped through `rows_current` (so it is also `NULL`
 #' without it), and only rows of the current page can be selected, because
-#' DataTables discards server-side selections on every redraw.
+#' DataTables discards server-side selections on every redraw. The `order`,
+#' `search` and `page` snapshots fire before the server replies, so they carry
+#' `NULL` row vectors; the `draw` snapshot that follows has the fresh values
+#' (the standalone `input$<id>_rows_*` inputs only change on that draw).
 #'
 #' @param input Shiny input object.
 #' @param id Widget ID.

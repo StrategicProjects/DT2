@@ -43,5 +43,8 @@ With server-side processing the client only holds the current page, so
 \code{dt2_rows_current} itself, otherwise those inputs are \code{NULL}. In server
 mode \code{rows_selected} is mapped through \code{rows_current} (so it is also \code{NULL}
 without it), and only rows of the current page can be selected, because
-DataTables discards server-side selections on every redraw.
+DataTables discards server-side selections on every redraw. The \code{order},
+\code{search} and \code{page} snapshots fire before the server replies, so they carry
+\code{NULL} row vectors; the \code{draw} snapshot that follows has the fresh values
+(the standalone \verb{input$<id>_rows_*} inputs only change on that draw).
 }

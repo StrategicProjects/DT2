@@ -405,11 +405,24 @@ try {
           // dt2_rows_all / dt2_rows_current (see dt2_ssp_handler(rows_all=)).
           var toOneBased = function(a){ return (a || []).map(function(i){ return i + 1; }); };
           var rowsAll = null, rowsCurrent = null;
+          // Server-side: order/search/page fire BEFORE the ajax round-trip, so
+          // table.ajax.json() still holds the previous response. Report the
+          // row vectors as unknown (NULL) in that snapshot and leave the
+          // standalone inputs untouched; the `draw` that follows sets them.
+          var preDraw = !!opts.serverSide &&
+            (reason === 'order' || reason === 'search' || reason === 'page');
           try {
             if (opts.serverSide) {
+              // A custom handler returning a length-one R vector gets
+              // auto-unboxed by Shiny into a JSON scalar: accept it too.
+              var asArr = function(v){
+                return Array.isArray(v) ? v : (typeof v === 'number' ? [v] : null);
+              };
               var json = table.ajax && table.ajax.json ? table.ajax.json() : null;
-              if (json && Array.isArray(json.dt2_rows_all))     rowsAll     = json.dt2_rows_all;
-              if (json && Array.isArray(json.dt2_rows_current)) rowsCurrent = json.dt2_rows_current;
+              if (json && !preDraw) {
+                rowsAll     = asArr(json.dt2_rows_all);
+                rowsCurrent = asArr(json.dt2_rows_current);
+              }
             } else {
               rowsAll     = toOneBased(table.rows({ search:'applied' }).indexes().toArray());
               rowsCurrent = toOneBased(table.rows({ search:'applied', page:'current' }).indexes().toArray());
@@ -442,9 +455,11 @@ try {
             state: state
           }, {priority:"event"});
           // DT-compatible standalone inputs (non-event: only fire on change)
-          Shiny.setInputValue(el.id + "_rows_all", rowsAll);
-          Shiny.setInputValue(el.id + "_rows_current", rowsCurrent);
-          Shiny.setInputValue(el.id + "_rows_selected", rowsSelected);
+          if (!preDraw) {
+            Shiny.setInputValue(el.id + "_rows_all", rowsAll);
+            Shiny.setInputValue(el.id + "_rows_current", rowsCurrent);
+            Shiny.setInputValue(el.id + "_rows_selected", rowsSelected);
+          }
         }
 
         table.off('.dt2state');
