@@ -303,11 +303,20 @@ dt2 <- function(data,
     extensions <- .dt2_detect_extensions(options)
   }
 
+  # ---- Server-side flag -------------------------------------------------------
+  # `server_side` (or `serverSide`) is given inside `options`, but dt2.js reads
+  # it from the top level of the payload. Lift it there, and do not ship the
+  # rows: in server mode the browser fetches pages through dt2_bind_server().
+  server_side <- isTRUE(options$server_side) || isTRUE(options$serverSide)
+  options$server_side <- NULL
+  options$serverSide  <- NULL
+
   # ---- Build payload ---------------------------------------------------------
   x <- list(
-    data    = data,
+    data    = if (server_side && is.data.frame(data)) data[0, , drop = FALSE] else data,
     options = options
   )
+  if (server_side) x$server_side <- TRUE
 
   deps <- dt2_deps(
     bs         = bs,

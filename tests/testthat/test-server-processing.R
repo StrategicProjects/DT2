@@ -112,3 +112,41 @@ test_that("dt2_ssp_handler(rows_all = FALSE) omits the index vectors", {
   expect_null(out$dt2_rows_current)
   expect_equal(length(out$data), 5L)
 })
+
+test_that("dt2() lifts options$server_side to the payload and ships no rows (#22)", {
+  df <- data.frame(id = 1:50, g = rep(c("a", "b"), 25))
+  for (key in c("server_side", "serverSide")) {
+    w <- dt2(df, options = stats::setNames(list(TRUE, 10), c(key, "pageLength")))
+    expect_true(isTRUE(w$x$server_side))
+    expect_equal(nrow(w$x$data), 0L)
+    expect_equal(names(w$x$data), names(df))
+    expect_null(w$x$options$server_side)
+    expect_null(w$x$options$serverSide)
+    expect_equal(unlist(w$x$options$columns), names(df))
+  }
+  # client-side default is untouched
+  w <- dt2(df)
+  expect_null(w$x$server_side)
+  expect_equal(nrow(w$x$data), 50L)
+})
+
+test_that("parser handles the query string dt2.js really sends (#22)", {
+  # Captured shape: nested arrays of objects flattened as key[i][sub]
+  qs <- ssp_qs(
+    "draw=3",
+    paste0(enc("columns[0][data]"), "=id"),
+    paste0(enc("columns[0][search][value]"), "="),
+    paste0(enc("columns[1][data]"), "=name"),
+    paste0(enc("order[0][column]"), "=1"),
+    paste0(enc("order[0][dir]"), "=desc"),
+    paste0(enc("order[0][name]"), "="),
+    "start=0", "length=2",
+    paste0(enc("search[value]"), "="),
+    paste0(enc("search[regex]"), "=false")
+  )
+  df <- data.frame(id = 1:3, name = c("b", "c", "a"), stringsAsFactors = FALSE)
+  out <- dt2_ssp_handler(names(df))(df, list(QUERY_STRING = qs))
+  expect_equal(out$draw, 3L)
+  expect_equal(vapply(out$data, function(r) r$name, character(1)), c("c", "b"))
+  expect_equal(as.integer(out$dt2_rows_all), c(2L, 1L, 3L))
+})
