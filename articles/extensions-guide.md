@@ -94,7 +94,8 @@ dt2(iris[1:20, ], options = list(
 ))
 ```
 
-In Shiny, selected rows are available via `input$<id>_state$selected`.
+In Shiny, selected rows are available via `input$<id>_rows_selected`
+(1-based) or `input$<id>_state$selected` (0-based).
 
 ## Responsive
 

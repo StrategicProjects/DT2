@@ -277,19 +277,23 @@
               try {
                 // stash callback until server responds
                 pending = callback;
-                // encode request as queryString
-                var qs = Object.keys(request).map(function(k){
-                  var v = request[k];
-                  if (Array.isArray(v)) {
-                    return v.map(function(vi){ return encodeURIComponent(k+'[]') + '=' + encodeURIComponent(vi); }).join('&');
-                  } else if (v && typeof v === 'object') {
-                    // flatten 1-level objects
-                    return Object.keys(v).map(function(sub){
-                      return encodeURIComponent(k+'['+sub+']') + '=' + encodeURIComponent(v[sub]);
-                    }).join('&');
+                // encode request as queryString. DataTables nests arrays of
+                // objects (order[i][column], columns[i][search][value], ...),
+                // so flatten recursively with PHP-style bracketed keys.
+                var pairs = [];
+                var flatten = function(prefix, v){
+                  if (v === null || v === undefined) {
+                    pairs.push(encodeURIComponent(prefix) + '=');
+                  } else if (Array.isArray(v)) {
+                    v.forEach(function(vi, i){ flatten(prefix + '[' + i + ']', vi); });
+                  } else if (typeof v === 'object') {
+                    Object.keys(v).forEach(function(sub){ flatten(prefix + '[' + sub + ']', v[sub]); });
+                  } else {
+                    pairs.push(encodeURIComponent(prefix) + '=' + encodeURIComponent(v));
                   }
-                  return encodeURIComponent(k) + '=' + encodeURIComponent(v);
-                }).join('&');
+                };
+                Object.keys(request).forEach(function(k){ flatten(k, request[k]); });
+                var qs = pairs.join('&');
                 // trigger server request
                 Shiny.setInputValue(el.id + "_server_req", { queryString: qs }, {priority:"event"});
               } catch(e){
@@ -394,19 +398,83 @@ try {
           try { selIdx = table.rows({ selected:true }).indexes().toArray(); } catch(e){}
           var page = table.page.info();
           var state = table.state && table.state();
+
+          // Row indices (1-based, like DT's input$id_rows_*):
+          //  - rows_all:     rows surviving the current filters (global + column)
+          //  - rows_current: the rows on the current page
+          //  - rows_selected: selected rows
+          // Client-side: taken from DataTables' search-applied selector.
+          // Server-side: the client only holds the current page, so the
+          // handler may ship the indices in the JSON response as
+          // dt2_rows_all / dt2_rows_current (see dt2_ssp_handler(rows_all=)).
+          var toOneBased = function(a){ return (a || []).map(function(i){ return i + 1; }); };
+          var rowsAll = null, rowsCurrent = null;
+          // Server-side: order/search/page fire BEFORE the ajax round-trip, so
+          // table.ajax.json() still holds the previous response. Report the
+          // row vectors as unknown (NULL) in that snapshot and leave the
+          // standalone inputs untouched; the `draw` that follows sets them.
+          var preDraw = !!opts.serverSide &&
+            (reason === 'order' || reason === 'search' || reason === 'page');
+          try {
+            if (opts.serverSide) {
+              // A custom handler returning a length-one R vector gets
+              // auto-unboxed by Shiny into a JSON scalar: accept it too.
+              var asArr = function(v){
+                return Array.isArray(v) ? v : (typeof v === 'number' ? [v] : null);
+              };
+              var json = table.ajax && table.ajax.json ? table.ajax.json() : null;
+              if (json && !preDraw) {
+                rowsAll     = asArr(json.dt2_rows_all);
+                rowsCurrent = asArr(json.dt2_rows_current);
+              }
+            } else {
+              rowsAll     = toOneBased(table.rows({ search:'applied' }).indexes().toArray());
+              rowsCurrent = toOneBased(table.rows({ search:'applied', page:'current' }).indexes().toArray());
+            }
+          } catch(e){}
+          // Selection: client-side indexes are source-data indexes. Server-side
+          // they are page-local offsets, so map them through rows_current
+          // (NULL when the handler did not ship the indices). Note DataTables
+          // drops server-side selections on every redraw, so only rows of the
+          // current page can be selected.
+          var rowsSelected;
+          if (opts.serverSide) {
+            rowsSelected = Array.isArray(rowsCurrent)
+              ? selIdx.map(function(i){ return rowsCurrent[i]; })
+                      .filter(function(v){ return v != null; })
+              : null;
+          } else {
+            rowsSelected = toOneBased(selIdx);
+          }
+
           Shiny.setInputValue(el.id + "_state", {
             reason: reason,
             order: table.order(),
             search: table.search(),
             page: page,
             selected: selIdx,
+            rows_all: rowsAll,
+            rows_current: rowsCurrent,
+            rows_selected: rowsSelected,
             state: state
           }, {priority:"event"});
+          // DT-compatible standalone inputs (non-event: only fire on change)
+          if (!preDraw) {
+            Shiny.setInputValue(el.id + "_rows_all", rowsAll);
+            Shiny.setInputValue(el.id + "_rows_current", rowsCurrent);
+            Shiny.setInputValue(el.id + "_rows_selected", rowsSelected);
+          }
         }
 
         table.off('.dt2state');
         table.on('init.dt.dt2state draw.dt.dt2state order.dt.dt2state search.dt.dt2state page.dt.dt2state select.dt.dt2state deselect.dt.dt2state',
           function(e){ pushState(e.type.split('.')[0]); });
+        // Client-side tables run their first draw + `init` synchronously inside
+        // `new DataTable()`, i.e. before the handlers above exist. Publish the
+        // initial state now so input$<id>_rows_* are set without interaction
+        // (and refreshed when the widget re-renders). Server-side tables get
+        // theirs from the first ajax draw.
+        if (!opts.serverSide) pushState('init');
 
         // --- Shiny proxy (R -> JS)
         if (window.Shiny && !el._proxyBound) {

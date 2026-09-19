@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">DT2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,7 +72,7 @@
       <img src="../logo.svg" class="logo" alt=""><h1>Shiny Integration</h1>
                         <h4 data-toc-skip class="author">DT2 Team</h4>
             
-            <h4 data-toc-skip class="date">2026-06-29</h4>
+            <h4 data-toc-skip class="date">2026-09-19</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/StrategicProjects/DT2/blob/main/vignettes/shiny-integration.Rmd" class="external-link"><code>vignettes/shiny-integration.Rmd</code></a></small>
       <div class="d-none name"><code>shiny-integration.Rmd</code></div>
@@ -151,6 +151,65 @@ table inherits the page theme automatically:</p>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="which-rows-are-visible">Which rows are visible?<a class="anchor" aria-label="anchor" href="#which-rows-are-visible"></a>
+</h3>
+<p>Alongside the snapshot, DT2 sets three inputs with the same names
+(and the same 1-based semantics) as the <code>DT</code> package, so code
+written for <code>DT</code> ports directly:</p>
+<table class="table">
+<colgroup>
+<col width="30%">
+<col width="69%">
+</colgroup>
+<thead><tr class="header">
+<th>Input</th>
+<th>Contents</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>input$&lt;id&gt;_rows_all</code></td>
+<td>rows surviving the current filters (global + column search)</td>
+</tr>
+<tr class="even">
+<td><code>input$&lt;id&gt;_rows_current</code></td>
+<td>rows on the current page</td>
+</tr>
+<tr class="odd">
+<td><code>input$&lt;id&gt;_rows_selected</code></td>
+<td>selected rows (Select extension)</td>
+</tr>
+</tbody>
+</table>
+<p>They update on every draw, so filtering with the search box or with
+the ColumnControl extension is reflected immediately. A typical use is
+to summarise, download or plot exactly what the user has filtered:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">output</span><span class="op">$</span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/render_dt2.html">render_dt2</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>    <span class="fu"><a href="../reference/dt2.html">dt2</a></span><span class="op">(</span><span class="va">mtcars</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>      pageLength    <span class="op">=</span> <span class="fl">8</span>,</span>
+<span>      columnControl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"order"</span>, <span class="st">"searchDropdown"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">filtered</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>    <span class="va">idx</span> <span class="op">&lt;-</span> <span class="va">input</span><span class="op">$</span><span class="va">tbl_rows_all</span></span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">idx</span><span class="op">)</span><span class="op">)</span> <span class="va">mtcars</span> <span class="kw">else</span> <span class="va">mtcars</span><span class="op">[</span><span class="va">idx</span>, , drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">output</span><span class="op">$</span><span class="va">summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html" class="external-link">renderPrint</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="fu">filtered</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>, <span class="st">"rows after filtering; mean mpg ="</span>,</span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu">filtered</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">mpg</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>With server-side processing (<code><a href="../reference/dt2_bind_server.html">dt2_bind_server()</a></code>), the
+client only knows the current page, so the indices come from the server
+response. The default handler ships them; pass
+<code>rows_all = FALSE</code> to <code><a href="../reference/dt2_bind_server.html">dt2_bind_server()</a></code> on very
+large tables to skip sending the full index vector on every draw (the
+inputs are then <code>NULL</code>).</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="proxy-server-side-manipulation">Proxy: Server-Side Manipulation<a class="anchor" aria-label="anchor" href="#proxy-server-side-manipulation"></a>
@@ -159,7 +218,7 @@ table inherits the page theme automatically:</p>
 it. This is essential for responsive dashboards: you can replace the
 data, change the page, adjust sorting, or update the search filter — all
 without the flicker of a full re-render:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/" class="external-link">shiny</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/bslib/" class="external-link">bslib</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/StrategicProjects/DT2" class="external-link">DT2</a></span><span class="op">)</span></span>
@@ -216,7 +275,7 @@ class. The <code><a href="../reference/dt2_use_buttons.html">dt2_use_buttons()</
 <code>button_class</code> parameter that applies to all buttons in the
 group. Here, solid primary blue buttons replace the default outlined
 style:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/" class="external-link">shiny</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/bslib/" class="external-link">bslib</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/StrategicProjects/DT2" class="external-link">DT2</a></span><span class="op">)</span></span>
@@ -251,7 +310,7 @@ Scroller extension renders only the visible rows inside a fixed-height
 container; more rows load seamlessly as the user scrolls. Combined with
 <code>deferRender = TRUE</code>, this keeps memory usage low even for
 tens of thousands of rows:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/" class="external-link">shiny</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/bslib/" class="external-link">bslib</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/StrategicProjects/DT2" class="external-link">DT2</a></span><span class="op">)</span></span>
@@ -296,7 +355,7 @@ around the table. Each slot (<code>topStart</code>, <code>topEnd</code>,
 <code>bottomStart</code>, <code>bottomEnd</code>) accepts a string,
 list, or <code>NULL</code>. This example rearranges search, buttons,
 info, and pagination into non-default positions:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/" class="external-link">shiny</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/bslib/" class="external-link">bslib</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/StrategicProjects/DT2" class="external-link">DT2</a></span><span class="op">)</span></span>
@@ -337,7 +396,7 @@ option using <code>paging</code> as a named list, replacing the
 deprecated <code>pagingType</code> parameter. This example shows three
 common configurations side by side: simple navigation (prev/next only),
 full navigation with all elements, and no pagination at all.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/" class="external-link">shiny</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/bslib/" class="external-link">bslib</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/StrategicProjects/DT2" class="external-link">DT2</a></span><span class="op">)</span></span>
@@ -394,7 +453,7 @@ inside table cells. When the user clicks a checkbox or button, DT2 sends
 the event to Shiny via <code>input$&lt;id&gt;_state</code> with
 <code>reason = "input"</code>. This pattern is useful for row-level
 actions like selection, approval workflows, or delete buttons:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/" class="external-link">shiny</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/bslib/" class="external-link">bslib</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/StrategicProjects/DT2" class="external-link">DT2</a></span><span class="op">)</span></span>
@@ -453,7 +512,7 @@ actions like selection, approval workflows, or delete buttons:</p>
 Only the visible page is sent to the browser — sorting, filtering, and
 pagination happen on the R server. This avoids sending the entire
 dataset to the client, dramatically improving initial load time:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/" class="external-link">shiny</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/bslib/" class="external-link">bslib</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/StrategicProjects/DT2" class="external-link">DT2</a></span><span class="op">)</span></span>
@@ -495,7 +554,7 @@ dataset to the client, dramatically improving initial load time:</p>
 preset from the sidebar. The table re-renders reactively whenever either
 input changes. This demonstrates how DT2 integrates naturally with
 <code>bslib</code>’s <code><a href="https://rstudio.github.io/bslib/reference/page_sidebar.html" class="external-link">page_sidebar()</a></code> layout:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/" class="external-link">shiny</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/bslib/" class="external-link">bslib</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/StrategicProjects/DT2" class="external-link">DT2</a></span><span class="op">)</span></span>
@@ -537,7 +596,7 @@ input changes. This demonstrates how DT2 integrates naturally with
 all tables in your app. This ensures consistent font scaling, button
 styling, and compactness without repeating configuration. Changes
 propagate instantly to every table that uses the theme:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/" class="external-link">shiny</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/bslib/" class="external-link">bslib</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/StrategicProjects/DT2" class="external-link">DT2</a></span><span class="op">)</span></span>
@@ -586,16 +645,13 @@ dropdowns, export buttons with spacer, custom JS renderers (links,
 flags, progress bars, colored currency), and full pt-BR translation.</p>
 <p>Copy and run it directly — it is also available at
 <code>system.file("examples/app_complete.R", package = "DT2")</code>.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://jeroen.r-universe.dev/jsonlite" class="external-link">jsonlite</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># ── Sample data (57 employees) ────────────────────────────────────────────────</span></span>
-<span><span class="va">json_url</span> <span class="op">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/StrategicProjects/DT2/main/inst/examples/employees.json"</span></span>
-<span><span class="co"># For offline use, the same JSON is bundled in inst/examples/employees.json</span></span>
-<span></span>
 <span><span class="va">json_txt</span> <span class="op">&lt;-</span> <span class="st">'{</span></span>
 <span><span class="st">  "data": [</span></span>
 <span><span class="st">    {"name":"Tiger Nixon","position":"System Architect","salary":"320800","start_date":"2011-04-25","office":"Edinburgh","extn":"5421"},</span></span>

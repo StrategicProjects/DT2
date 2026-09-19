@@ -76,7 +76,7 @@ dt2(
 - options:
 
   List of DataTables options. See
-  <https://datatables.net/reference/option/>.
+  <https://datatables.net/ref/core/option/>.
 
 - extensions:
 

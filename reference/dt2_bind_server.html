@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">DT2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,7 +52,8 @@
 <span>  <span class="va">id</span>,</span>
 <span>  <span class="va">data</span>,</span>
 <span>  session <span class="op">=</span> <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/domains.html" class="external-link">getDefaultReactiveDomain</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  handler <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  handler <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  rows_all <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -73,7 +74,15 @@
 
 
 <dt id="arg-handler">handler<a class="anchor" aria-label="anchor" href="#arg-handler"></a></dt>
-<dd><p>Optional custom handler function(data, req) -&gt; list(...).</p></dd>
+<dd><p>Optional custom handler function(data, req) -&gt; list(...).
+A custom handler may include <code>dt2_rows_all</code> / <code>dt2_rows_current</code>
+(1-based row indices) in its result to feed <code>input$&lt;id&gt;_rows_all</code> and
+<code>input$&lt;id&gt;_rows_current</code>; see <code><a href="dt2_ssp_handler.html">dt2_ssp_handler()</a></code>.</p></dd>
+
+
+<dt id="arg-rows-all">rows_all<a class="anchor" aria-label="anchor" href="#arg-rows-all"></a></dt>
+<dd><p>Passed to <code><a href="dt2_ssp_handler.html">dt2_ssp_handler()</a></code> when <code>handler</code> is <code>NULL</code>:
+whether the default handler ships the filtered row indices to the client.</p></dd>
 
 </dl></div>
     <div class="section level2">

@@ -31,4 +31,4 @@ Modified `options`.
 
 ## See also
 
-<https://datatables.net/reference/option/columns.render>
+<https://datatables.net/ref/core/option/columns.render>

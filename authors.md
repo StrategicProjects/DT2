@@ -18,13 +18,13 @@ Source:
 [`DESCRIPTION`](https://github.com/StrategicProjects/DT2/blob/main/DESCRIPTION)
 
 Leite A, Wasilew M, Vasconcelos H, Amorim C, Bezerra D (2026). *DT2:
-'DataTables' 2.x for R*. R package version 0.1.2,
+'DataTables' 2.x for R*. R package version 0.1.3,
 <https://github.com/StrategicProjects/DT2>.
 
     @Manual{,
       title = {DT2: 'DataTables' 2.x for R},
       author = {Andre Leite and Marcos Wasilew and Hugo Vasconcelos and Carlos Amorim and Diogo Bezerra},
       year = {2026},
-      note = {R package version 0.1.2},
+      note = {R package version 0.1.3},
       url = {https://github.com/StrategicProjects/DT2},
     }

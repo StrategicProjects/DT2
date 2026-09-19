@@ -1,5 +1,45 @@
 # Changelog
 
+## DT2 0.1.3
+
+### New features
+
+- Shiny: the widget now exposes which rows are visible after filtering,
+  mirroring the `DT` package inputs
+  ([\#20](https://github.com/StrategicProjects/DT2/issues/20)).
+  `input$<id>_rows_all` holds the 1-based indices of the rows that
+  survive the current global and column searches (including
+  ColumnControl filters), `input$<id>_rows_current` the rows on the
+  current page, and `input$<id>_rows_selected` the selected rows. The
+  same vectors are also included in `input$<id>_state`.
+
+- Server-side processing:
+  [`dt2_ssp_handler()`](https://strategicprojects.github.io/DT2/reference/dt2_ssp_handler.md)
+  and
+  [`dt2_bind_server()`](https://strategicprojects.github.io/DT2/reference/dt2_bind_server.md)
+  gain a `rows_all` argument (default `TRUE`). The default handler now
+  returns `dt2_rows_all` / `dt2_rows_current` in its payload so the
+  inputs above also work in server mode; set `rows_all = FALSE` to skip
+  shipping the index vector on very large tables.
+
+### Bug fixes
+
+- Server-side processing: `options = list(server_side = TRUE)` (or
+  `serverSide = TRUE`) now actually enables server-side mode
+  ([\#22](https://github.com/StrategicProjects/DT2/issues/22)).
+  [`dt2()`](https://strategicprojects.github.io/DT2/reference/dt2.md)
+  put the flag where `dt2.js` did not look for it, so the table silently
+  ran client-side and shipped every row to the browser. In server mode
+  [`dt2()`](https://strategicprojects.github.io/DT2/reference/dt2.md)
+  now sends only the column structure; rows are fetched through
+  [`dt2_bind_server()`](https://strategicprojects.github.io/DT2/reference/dt2_bind_server.md).
+
+- Server-side processing: column ordering now reaches the server
+  ([\#22](https://github.com/StrategicProjects/DT2/issues/22)). The
+  request encoder in `dt2.js` flattened only one level, so DataTables’
+  `order[i][column]` / `order[i][dir]` were lost and rows always came
+  back in source order.
+
 ## DT2 0.1.2
 
 CRAN release: 2026-06-14

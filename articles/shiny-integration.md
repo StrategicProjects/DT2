@@ -78,6 +78,53 @@ server <- function(input, output, session) {
 shinyApp(ui, server)
 ```
 
+### Which rows are visible?
+
+Alongside the snapshot, DT2 sets three inputs with the same names (and
+the same 1-based semantics) as the `DT` package, so code written for
+`DT` ports directly:
+
+| Input | Contents |
+|----|----|
+| `input$<id>_rows_all` | rows surviving the current filters (global + column search) |
+| `input$<id>_rows_current` | rows on the current page |
+| `input$<id>_rows_selected` | selected rows (Select extension) |
+
+They update on every draw, so filtering with the search box or with the
+ColumnControl extension is reflected immediately. A typical use is to
+summarise, download or plot exactly what the user has filtered:
+
+``` r
+
+server <- function(input, output, session) {
+  output$tbl <- render_dt2({
+    dt2(mtcars, options = list(
+      pageLength    = 8,
+      columnControl = list("order", "searchDropdown")
+    ))
+  })
+
+  filtered <- reactive({
+    idx <- input$tbl_rows_all
+    if (is.null(idx)) mtcars else mtcars[idx, , drop = FALSE]
+  })
+
+  output$summary <- renderPrint({
+    cat(nrow(filtered()), "rows after filtering; mean mpg =",
+        round(mean(filtered()$mpg), 2), "\n")
+  })
+}
+```
+
+With server-side processing
+([`dt2_bind_server()`](https://strategicprojects.github.io/DT2/reference/dt2_bind_server.md)),
+the client only knows the current page, so the indices come from the
+server response. The default handler ships them; pass `rows_all = FALSE`
+to
+[`dt2_bind_server()`](https://strategicprojects.github.io/DT2/reference/dt2_bind_server.md)
+on very large tables to skip sending the full index vector on every draw
+(the inputs are then `NULL`).
+
 ## Proxy: Server-Side Manipulation
 
 Use
@@ -545,9 +592,6 @@ library(tibble)
 library(lubridate)
 
 # ── Sample data (57 employees) ────────────────────────────────────────────────
-json_url <- "https://raw.githubusercontent.com/StrategicProjects/DT2/main/inst/examples/employees.json"
-# For offline use, the same JSON is bundled in inst/examples/employees.json
-
 json_txt <- '{
   "data": [
     {"name":"Tiger Nixon","position":"System Architect","salary":"320800","start_date":"2011-04-25","office":"Edinburgh","extn":"5421"},

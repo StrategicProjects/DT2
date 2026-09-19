@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">DT2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,6 +41,19 @@
       <small>Source: <a href="https://github.com/StrategicProjects/DT2/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.3" id="dt2-013">DT2 0.1.3<a class="anchor" aria-label="anchor" href="#dt2-013"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-1-3">New features<a class="anchor" aria-label="anchor" href="#new-features-0-1-3"></a></h3>
+<ul><li><p>Shiny: the widget now exposes which rows are visible after filtering, mirroring the <code>DT</code> package inputs (<a href="https://github.com/StrategicProjects/DT2/issues/20" class="external-link">#20</a>). <code>input$&lt;id&gt;_rows_all</code> holds the 1-based indices of the rows that survive the current global and column searches (including ColumnControl filters), <code>input$&lt;id&gt;_rows_current</code> the rows on the current page, and <code>input$&lt;id&gt;_rows_selected</code> the selected rows. The same vectors are also included in <code>input$&lt;id&gt;_state</code>.</p></li>
+<li><p>Server-side processing: <code><a href="../reference/dt2_ssp_handler.html">dt2_ssp_handler()</a></code> and <code><a href="../reference/dt2_bind_server.html">dt2_bind_server()</a></code> gain a <code>rows_all</code> argument (default <code>TRUE</code>). The default handler now returns <code>dt2_rows_all</code> / <code>dt2_rows_current</code> in its payload so the inputs above also work in server mode; set <code>rows_all = FALSE</code> to skip shipping the index vector on very large tables.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-1-3">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-1-3"></a></h3>
+<ul><li><p>Server-side processing: <code>options = list(server_side = TRUE)</code> (or <code>serverSide = TRUE</code>) now actually enables server-side mode (<a href="https://github.com/StrategicProjects/DT2/issues/22" class="external-link">#22</a>). <code><a href="../reference/dt2.html">dt2()</a></code> put the flag where <code>dt2.js</code> did not look for it, so the table silently ran client-side and shipped every row to the browser. In server mode <code><a href="../reference/dt2.html">dt2()</a></code> now sends only the column structure; rows are fetched through <code><a href="../reference/dt2_bind_server.html">dt2_bind_server()</a></code>.</p></li>
+<li><p>Server-side processing: column ordering now reaches the server (<a href="https://github.com/StrategicProjects/DT2/issues/22" class="external-link">#22</a>). The request encoder in <code>dt2.js</code> flattened only one level, so DataTables’ <code>order[i][column]</code> / <code>order[i][dir]</code> were lost and rows always came back in source order.</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.2" id="dt2-012">DT2 0.1.2<a class="anchor" aria-label="anchor" href="#dt2-012"></a></h2><p class="text-muted">CRAN release: 2026-06-14</p>
 <div class="section level3">
