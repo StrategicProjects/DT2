@@ -15,6 +15,20 @@
   work in server mode; set `rows_all = FALSE` to skip shipping the index
   vector on very large tables.
 
+## Bug fixes
+
+* Server-side processing: `options = list(server_side = TRUE)` (or
+  `serverSide = TRUE`) now actually enables server-side mode (#22). `dt2()`
+  put the flag where `dt2.js` did not look for it, so the table silently ran
+  client-side and shipped every row to the browser. In server mode `dt2()` now
+  sends only the column structure; rows are fetched through
+  `dt2_bind_server()`.
+
+* Server-side processing: column ordering now reaches the server (#22). The
+  request encoder in `dt2.js` flattened only one level, so DataTables'
+  `order[i][column]` / `order[i][dir]` were lost and rows always came back in
+  source order.
+
 # DT2 0.1.2
 
 ## Bug fixes
