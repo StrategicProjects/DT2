@@ -15,7 +15,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/StrategicProjects/DT2/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/StrategicProjects/DT2/blob/v0.1.3/DESCRIPTION)
 
 Leite A, Wasilew M, Vasconcelos H, Amorim C, Bezerra D (2026). *DT2:
 'DataTables' 2.x for R*. R package version 0.1.3,
