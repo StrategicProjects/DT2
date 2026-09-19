@@ -279,7 +279,7 @@ dt2(iris, options = list(
 > `language` list as shown above.
 
 Browse all available languages at:
-<https://datatables.net/plug-ins/i18n/>
+<https://datatables.net/download/plug-ins/i18n/>
 
 
 ## Updating JS Libraries

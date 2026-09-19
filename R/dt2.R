@@ -149,7 +149,7 @@ print.dt2_theme <- function(x, ...) {
 #'   fills 100\% width and adapts to narrow screens by collapsing columns.
 #'   Default: `TRUE`. Set `FALSE` to disable.
 #' @param options List of DataTables options. See
-#'   \url{https://datatables.net/reference/option/}.
+#'   \url{https://datatables.net/ref/core/option/}.
 #' @param extensions Character vector of extensions to load
 #'   (e.g., `c("Buttons", "Select")`). Auto-detected from `options`
 #'   when `NULL`.

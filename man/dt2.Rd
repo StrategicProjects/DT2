@@ -48,7 +48,7 @@ fills 100\\% width and adapts to narrow screens by collapsing columns.
 Default: \code{TRUE}. Set \code{FALSE} to disable.}
 
 \item{options}{List of DataTables options. See
-\url{https://datatables.net/reference/option/}.}
+\url{https://datatables.net/ref/core/option/}.}
 
 \item{extensions}{Character vector of extensions to load
 (e.g., \code{c("Buttons", "Select")}). Auto-detected from \code{options}

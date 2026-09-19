@@ -590,7 +590,7 @@ dt2(df, options = opts)
 
 ## DataTables Options
 
-Every option from the [DataTables JS API](https://datatables.net/reference/option/)
+Every option from the [DataTables JS API](https://datatables.net/ref/core/option/)
 maps 1:1 to an R named list. If you find an example on the DataTables
 website, you can translate it directly to R without any wrapper functions.
 This means the full power of DataTables is available — including options

@@ -81,7 +81,7 @@ dt2_format_datetime <- function(options = list(), col_specs,
 #'   \code{function(data, type, row, meta) { ... }}.
 #'
 #' @return Modified \code{options}.
-#' @seealso \url{https://datatables.net/reference/option/columns.render}
+#' @seealso \url{https://datatables.net/ref/core/option/columns.render}
 #' @export
 dt2_cols_render_js <- function(options = list(), col_specs, js_render) {
   col_specs <- .dt2_name_to_idx(col_specs, options)
