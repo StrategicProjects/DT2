@@ -394,14 +394,44 @@ try {
           try { selIdx = table.rows({ selected:true }).indexes().toArray(); } catch(e){}
           var page = table.page.info();
           var state = table.state && table.state();
+
+          // Row indices (1-based, like DT's input$id_rows_*):
+          //  - rows_all:     rows surviving the current filters (global + column)
+          //  - rows_current: the rows on the current page
+          //  - rows_selected: selected rows
+          // Client-side: taken from DataTables' search-applied selector.
+          // Server-side: the client only holds the current page, so the
+          // handler may ship the indices in the JSON response as
+          // dt2_rows_all / dt2_rows_current (see dt2_ssp_handler(rows_all=)).
+          var toOneBased = function(a){ return (a || []).map(function(i){ return i + 1; }); };
+          var rowsAll = null, rowsCurrent = null;
+          try {
+            if (opts.serverSide) {
+              var json = table.ajax && table.ajax.json ? table.ajax.json() : null;
+              if (json && Array.isArray(json.dt2_rows_all))     rowsAll     = json.dt2_rows_all;
+              if (json && Array.isArray(json.dt2_rows_current)) rowsCurrent = json.dt2_rows_current;
+            } else {
+              rowsAll     = toOneBased(table.rows({ search:'applied' }).indexes().toArray());
+              rowsCurrent = toOneBased(table.rows({ search:'applied', page:'current' }).indexes().toArray());
+            }
+          } catch(e){}
+          var rowsSelected = toOneBased(selIdx);
+
           Shiny.setInputValue(el.id + "_state", {
             reason: reason,
             order: table.order(),
             search: table.search(),
             page: page,
             selected: selIdx,
+            rows_all: rowsAll,
+            rows_current: rowsCurrent,
+            rows_selected: rowsSelected,
             state: state
           }, {priority:"event"});
+          // DT-compatible standalone inputs (non-event: only fire on change)
+          Shiny.setInputValue(el.id + "_rows_all", rowsAll);
+          Shiny.setInputValue(el.id + "_rows_current", rowsCurrent);
+          Shiny.setInputValue(el.id + "_rows_selected", rowsSelected);
         }
 
         table.off('.dt2state');

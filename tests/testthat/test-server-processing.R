@@ -61,3 +61,54 @@ test_that("dt2_ssp_handler paginates", {
   expect_equal(length(out$data), 5L)
   expect_equal(out$data[[1]]$id, 21L)
 })
+
+test_that("dt2_ssp_handler ships 1-based filtered/current row indices (#20)", {
+  df <- data.frame(
+    id   = 1:6,
+    name = c("alpha", "beta", "gamma", "Alpha", "BETA", "delta"),
+    stringsAsFactors = FALSE
+  )
+  h <- dt2_ssp_handler(names(df))
+
+  # filter "e" (matches beta, BETA, delta -> ids 2, 5, 6), order id desc
+  qs <- ssp_qs(
+    "draw=1", "start=0", "length=2",
+    paste0(enc("search[value]"),    "=", enc("e")),
+    paste0(enc("order[0][column]"), "=0"),
+    paste0(enc("order[0][dir]"),    "=desc")
+  )
+  out <- h(df, list(QUERY_STRING = qs))
+
+  expect_equal(out$recordsFiltered, 3L)
+  # rows_all: original row numbers of the filtered set, in display order
+  expect_equal(as.integer(out$dt2_rows_all), c(6L, 5L, 2L))
+  # rows_current: the page slice of rows_all
+  expect_equal(as.integer(out$dt2_rows_current), c(6L, 5L))
+  # the data rows correspond to rows_current
+  expect_equal(vapply(out$data, function(r) r$id, integer(1)), c(6L, 5L))
+  # arrays survive auto-unbox (length-1 must still be an array)
+  expect_s3_class(out$dt2_rows_all, "AsIs")
+
+  # second page
+  qs2 <- sub("start=0", "start=2", qs, fixed = TRUE)
+  out2 <- h(df, list(QUERY_STRING = qs2))
+  expect_equal(as.integer(out2$dt2_rows_current), 2L)
+  expect_s3_class(out2$dt2_rows_current, "AsIs")
+
+  # empty result
+  qs3 <- ssp_qs("draw=1", "start=0", "length=10",
+                paste0(enc("search[value]"), "=zzz"))
+  out3 <- h(df, list(QUERY_STRING = qs3))
+  expect_equal(out3$recordsFiltered, 0L)
+  expect_length(out3$dt2_rows_all, 0)
+  expect_length(out3$dt2_rows_current, 0)
+})
+
+test_that("dt2_ssp_handler(rows_all = FALSE) omits the index vectors", {
+  df <- data.frame(id = 1:10)
+  h  <- dt2_ssp_handler(names(df), rows_all = FALSE)
+  out <- h(df, list(QUERY_STRING = ssp_qs("draw=1", "start=0", "length=5")))
+  expect_null(out$dt2_rows_all)
+  expect_null(out$dt2_rows_current)
+  expect_equal(length(out$data), 5L)
+})

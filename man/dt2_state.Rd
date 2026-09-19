@@ -15,6 +15,30 @@ dt2_state(input, id)
 A list with the current table state.
 }
 \description{
-Returns a list with \code{reason}, \code{order}, \code{search}, \code{page}, \code{selected}, \code{state}
-reflecting the current client-side table state.
+Returns a list with \code{reason}, \code{order}, \code{search}, \code{page}, \code{selected},
+\code{rows_all}, \code{rows_current}, \code{rows_selected} and \code{state} reflecting the
+current client-side table state.
+}
+\details{
+The widget pushes \verb{input$<id>_state} on every \code{init}, \code{draw}, \code{order},
+\code{search}, \code{page}, \code{select} and \code{deselect} event. Besides that snapshot, it
+also sets three standalone inputs with the same names as the \code{DT} package,
+all \strong{1-based} row indices into the original data:
+\itemize{
+\item \verb{input$<id>_rows_all} -- rows that survive the current filters (global
+search and per-column searches, e.g. from the ColumnControl extension),
+in display order.
+\item \verb{input$<id>_rows_current} -- the rows shown on the current page.
+\item \verb{input$<id>_rows_selected} -- the selected rows (Select extension).
+}
+
+The same vectors are available inside the snapshot as \code{rows_all},
+\code{rows_current} and \code{rows_selected}. The legacy \code{selected} element is kept
+unchanged (0-based, as DataTables reports it).
+
+With server-side processing the client only holds the current page, so
+\code{rows_all} / \code{rows_current} are taken from the server response: the default
+\code{\link[=dt2_ssp_handler]{dt2_ssp_handler()}} ships them unless \code{rows_all = FALSE} (see
+\code{\link[=dt2_bind_server]{dt2_bind_server()}}); a custom handler must return \code{dt2_rows_all} /
+\code{dt2_rows_current} itself, otherwise those inputs are \code{NULL}.
 }

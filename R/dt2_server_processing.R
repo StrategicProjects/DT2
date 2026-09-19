@@ -52,23 +52,41 @@
 }
 
 #' Internal: build DataTables JSON payload
+#'
+#' `rows_all` / `rows_current` (1-based indices into the source data) are
+#' optional; when supplied they are shipped as `dt2_rows_all` /
+#' `dt2_rows_current` and dt2.js forwards them to `input$<id>_rows_all` /
+#' `input$<id>_rows_current`.
 #' @keywords internal
-.dt2_payload <- function(draw, total, filtered, data_rows) {
-  list(
+.dt2_payload <- function(draw, total, filtered, data_rows,
+                         rows_all = NULL, rows_current = NULL) {
+  out <- list(
     draw = draw,
     recordsTotal = as.integer(total),
     recordsFiltered = as.integer(filtered),
     data = data_rows
   )
+  if (!is.null(rows_all))     out$dt2_rows_all     <- I(as.integer(rows_all))
+  if (!is.null(rows_current)) out$dt2_rows_current <- I(as.integer(rows_current))
+  out
 }
 
 #' Default server-side handler (filter/order/page)
 #'
 #' @param names character() column names in display order.
-#' @return function(data, req) -> list(draw, recordsTotal, recordsFiltered, data)
+#' @param rows_all Logical. If `TRUE` (default), the response also carries the
+#'   1-based indices (into the source data) of all rows that survive the
+#'   current filter (`dt2_rows_all`) and of the rows on the current page
+#'   (`dt2_rows_current`). dt2.js forwards them to `input$<id>_rows_all` and
+#'   `input$<id>_rows_current`, mirroring the client-side behaviour. Set to
+#'   `FALSE` for very large tables, where shipping the full index vector on
+#'   every draw is too costly; the two inputs are then `NULL`.
+#' @return function(data, req) -> list(draw, recordsTotal, recordsFiltered,
+#'   data, and optionally dt2_rows_all, dt2_rows_current)
 #' @export
-dt2_ssp_handler <- function(names) {
+dt2_ssp_handler <- function(names, rows_all = TRUE) {
   force(names)
+  rows_all <- isTRUE(rows_all)
   function(data, req) {
     stopifnot(is.data.frame(data))
     n_cols <- length(names)
@@ -79,8 +97,9 @@ dt2_ssp_handler <- function(names) {
     length <- max(0L, pars$length)
     idx_cols <- names
 
-    # base
-    df <- data
+    # base; `idx` tracks the original row numbers through filter/order/page
+    df  <- data
+    idx <- seq_len(nrow(data))
 
     # search global (case-insensitive, não regex por padrão)
     if (!is.null(pars$search$value) && nzchar(pars$search$value)) {
@@ -88,7 +107,9 @@ dt2_ssp_handler <- function(names) {
       keep <- Reduce(`|`, lapply(df[idx_cols], function(col) {
         grepl(pat, tolower(as.character(col)), fixed = TRUE)
       }))
-      df <- df[keep, , drop = FALSE]
+      keep <- !is.na(keep) & keep
+      df  <- df[keep, , drop = FALSE]
+      idx <- idx[keep]
     }
 
     # ordering (aplica em cascata)
@@ -96,22 +117,23 @@ dt2_ssp_handler <- function(names) {
       for (ord in rev(pars$order)) { # último primeiro para estabilidade
         j <- max(1L, min(n_cols, ord$column))
         nm <- idx_cols[j]
-        if (ord$dir == "desc") {
-          df <- df[order(df[[nm]], decreasing = TRUE, na.last = TRUE), , drop = FALSE]
-        } else {
-          df <- df[order(df[[nm]], decreasing = FALSE, na.last = TRUE), , drop = FALSE]
-        }
+        o  <- order(df[[nm]], decreasing = identical(ord$dir, "desc"), na.last = TRUE)
+        df  <- df[o, , drop = FALSE]
+        idx <- idx[o]
       }
     }
 
     total <- nrow(data)
     filt  <- nrow(df)
+    all_idx <- idx
 
     # paginação
     if (length >= 0) {
       i1 <- start + 1L
       i2 <- min(filt, start + length)
-      if (i1 <= i2 && filt > 0) df <- df[i1:i2, , drop = FALSE] else df <- df[0, , drop = FALSE]
+      sel <- if (i1 <= i2 && filt > 0) i1:i2 else integer(0)
+      df  <- df[sel, , drop = FALSE]
+      idx <- idx[sel]
     }
 
     # retorna como array de objetos (chaves = nomes)
@@ -119,7 +141,11 @@ dt2_ssp_handler <- function(names) {
       as.list(stats::setNames(df[i, idx_cols, drop = TRUE], idx_cols))
     })
 
-    .dt2_payload(draw, total, filt, rows)
+    if (rows_all) {
+      .dt2_payload(draw, total, filt, rows, rows_all = all_idx, rows_current = idx)
+    } else {
+      .dt2_payload(draw, total, filt, rows)
+    }
   }
 }
 
@@ -129,16 +155,22 @@ dt2_ssp_handler <- function(names) {
 #' @param data A data.frame with the source data.
 #' @param session Shiny session (default: current).
 #' @param handler Optional custom handler function(data, req) -> list(...).
+#'   A custom handler may include `dt2_rows_all` / `dt2_rows_current`
+#'   (1-based row indices) in its result to feed `input$<id>_rows_all` and
+#'   `input$<id>_rows_current`; see [dt2_ssp_handler()].
+#' @param rows_all Passed to [dt2_ssp_handler()] when `handler` is `NULL`:
+#'   whether the default handler ships the filtered row indices to the client.
 #' @return No return value, called for side effects. Registers a Shiny
 #'   observer on `session` that responds to client-side server-processing
 #'   requests for the given widget `id`.
 #' @export
-dt2_bind_server <- function(id, data, session = shiny::getDefaultReactiveDomain(), handler = NULL) {
+dt2_bind_server <- function(id, data, session = shiny::getDefaultReactiveDomain(),
+                            handler = NULL, rows_all = TRUE) {
   stopifnot(!is.null(session), is.character(id), length(id) == 1)
   stopifnot(is.data.frame(data))
   # nomes em exibição; se o JS recebeu options$columns, use-os
   col_names <- names(data)
-  handler <- handler %||% dt2_ssp_handler(col_names)
+  handler <- handler %||% dt2_ssp_handler(col_names, rows_all = rows_all)
 
   req_name  <- paste0(id, "_server_req")
   resp_name <- paste0(id, "_server_resp")

@@ -4,13 +4,22 @@
 \alias{dt2_ssp_handler}
 \title{Default server-side handler (filter/order/page)}
 \usage{
-dt2_ssp_handler(names)
+dt2_ssp_handler(names, rows_all = TRUE)
 }
 \arguments{
 \item{names}{character() column names in display order.}
+
+\item{rows_all}{Logical. If \code{TRUE} (default), the response also carries the
+1-based indices (into the source data) of all rows that survive the
+current filter (\code{dt2_rows_all}) and of the rows on the current page
+(\code{dt2_rows_current}). dt2.js forwards them to \verb{input$<id>_rows_all} and
+\verb{input$<id>_rows_current}, mirroring the client-side behaviour. Set to
+\code{FALSE} for very large tables, where shipping the full index vector on
+every draw is too costly; the two inputs are then \code{NULL}.}
 }
 \value{
-function(data, req) -> list(draw, recordsTotal, recordsFiltered, data)
+function(data, req) -> list(draw, recordsTotal, recordsFiltered,
+data, and optionally dt2_rows_all, dt2_rows_current)
 }
 \description{
 Default server-side handler (filter/order/page)

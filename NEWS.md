@@ -1,3 +1,20 @@
+# DT2 (development version)
+
+## New features
+
+* Shiny: the widget now exposes which rows are visible after filtering,
+  mirroring the `DT` package inputs (#20). `input$<id>_rows_all` holds the
+  1-based indices of the rows that survive the current global and column
+  searches (including ColumnControl filters), `input$<id>_rows_current` the
+  rows on the current page, and `input$<id>_rows_selected` the selected rows.
+  The same vectors are also included in `input$<id>_state`.
+
+* Server-side processing: `dt2_ssp_handler()` and `dt2_bind_server()` gain a
+  `rows_all` argument (default `TRUE`). The default handler now returns
+  `dt2_rows_all` / `dt2_rows_current` in its payload so the inputs above also
+  work in server mode; set `rows_all = FALSE` to skip shipping the index
+  vector on very large tables.
+
 # DT2 0.1.2
 
 ## Bug fixes
