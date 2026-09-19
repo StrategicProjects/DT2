@@ -277,19 +277,23 @@
               try {
                 // stash callback until server responds
                 pending = callback;
-                // encode request as queryString
-                var qs = Object.keys(request).map(function(k){
-                  var v = request[k];
-                  if (Array.isArray(v)) {
-                    return v.map(function(vi){ return encodeURIComponent(k+'[]') + '=' + encodeURIComponent(vi); }).join('&');
-                  } else if (v && typeof v === 'object') {
-                    // flatten 1-level objects
-                    return Object.keys(v).map(function(sub){
-                      return encodeURIComponent(k+'['+sub+']') + '=' + encodeURIComponent(v[sub]);
-                    }).join('&');
+                // encode request as queryString. DataTables nests arrays of
+                // objects (order[i][column], columns[i][search][value], ...),
+                // so flatten recursively with PHP-style bracketed keys.
+                var pairs = [];
+                var flatten = function(prefix, v){
+                  if (v === null || v === undefined) {
+                    pairs.push(encodeURIComponent(prefix) + '=');
+                  } else if (Array.isArray(v)) {
+                    v.forEach(function(vi, i){ flatten(prefix + '[' + i + ']', vi); });
+                  } else if (typeof v === 'object') {
+                    Object.keys(v).forEach(function(sub){ flatten(prefix + '[' + sub + ']', v[sub]); });
+                  } else {
+                    pairs.push(encodeURIComponent(prefix) + '=' + encodeURIComponent(v));
                   }
-                  return encodeURIComponent(k) + '=' + encodeURIComponent(v);
-                }).join('&');
+                };
+                Object.keys(request).forEach(function(k){ flatten(k, request[k]); });
+                var qs = pairs.join('&');
                 // trigger server request
                 Shiny.setInputValue(el.id + "_server_req", { queryString: qs }, {priority:"event"});
               } catch(e){
