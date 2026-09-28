@@ -5,10 +5,13 @@ Version: 0.1.3
 Date: 2026-09-19
 Authors@R: c(
     person("Andre", "Leite", email = "leite@castlab.org", role = c("aut", "cre")),
-    person("Marcos", "Wasilew", email = "marcos.wasilew@gmail.com", role = "aut"),
+    person("Marcos", "Wasiliew", email = "marcos.wasiliew@gmail.com", role = "aut",
+           comment = c(ORCID = "0009-0004-4694-3159")),
     person("Hugo", "Vasconcelos", email = "hugo.vasconcelos@ufpe.br", role = "aut"),
     person("Carlos", "Amorim", email = "carlos.agaf@ufpe.br", role = "aut"),
-    person("Diogo", "Bezerra", email = "diogo.bezerra@ufpe.br", role = "aut"))
+    person("Diogo", "Bezerra", email = "diogo.bezerra@ufpe.br", role = "aut"),
+    person("Júlia", "Nascimento Barreto", email = "juliabarreto@gd.seplag.pe.gov.br", role = "aut",
+           comment = c(ORCID = "0009-0004-2851-7770")))
 Description: A modern R binding for 'DataTables' V2 with modular
     extension loading, 'Bootstrap 5' styling, 'Shiny' integration (proxy, events,
     inline inputs), server-side processing helpers, and standalone (non-Shiny)
