@@ -2,6 +2,8 @@
 
 ## DT2 0.1.3
 
+CRAN release: 2026-09-20
+
 ### New features
 
 - Shiny: the widget now exposes which rows are visible after filtering,
