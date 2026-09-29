@@ -4,12 +4,16 @@ Title: 'DataTables' 2.x for R
 Version: 0.1.3
 Date: 2026-09-19
 Authors@R: c(
-    person("André", "Leite", email = "leite@castlab.org", role = c("aut", "cre")),
+    person("André", "Leite", email = "leite@castlab.org", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-4718-9766")),
     person("Marcos", "Wasiliew", email = "marcos.wasiliew@gmail.com", role = "aut",
            comment = c(ORCID = "0009-0004-4694-3159")),
-    person("Hugo", "Vasconcelos", email = "hugo.vasconcelos@ufpe.br", role = "aut"),
-    person("Carlos", "Amorim", email = "carlos.agaf@ufpe.br", role = "aut"),
-    person("Diogo", "Bezerra", email = "diogo.bezerra@ufpe.br", role = "aut"),
+    person("Hugo", "Vasconcelos", email = "hugo.vasconcelos@ufpe.br", role = "aut",
+           comment = c(ORCID = "0000-0001-6249-0920")),
+    person("Carlos", "Amorim", email = "carlos.agaf@ufpe.br", role = "aut",
+           comment = c(ORCID = "0000-0001-6315-8305")),
+    person("Diogo", "Bezerra", email = "diogo.bezerra@ufpe.br", role = "aut",
+           comment = c(ORCID = "0000-0002-1216-8674")),
     person("Júlia", "Nascimento Barreto", email = "juliabarreto@gd.seplag.pe.gov.br", role = "aut",
            comment = c(ORCID = "0009-0004-2851-7770")))
 Description: A modern R binding for 'DataTables' V2 with modular
