@@ -1,4 +1,4 @@
 # License
 
     YEAR: 2025
-    COPYRIGHT HOLDER: Andre Leite, Hugo Vasconcelos, Diogo Bezerra
+    COPYRIGHT HOLDER: André Leite, Hugo Vasconcelos, Diogo Bezerra
