@@ -146,7 +146,7 @@ articles:
 
 footer:
   structure:
-    left: [rmd]
+    left: [rmd, third_party]
     right: [developed_by]
   components:
       #p: "\n\n"
@@ -154,6 +154,11 @@ footer:
         **DT2** is part of an ecosystem of R packages for data analysis and
         computational document processing<br>developed at the [Secretaria Executiva
         de Monitoramento Estratégico](https://monitoramento.sepe.pe.gov.br).
+      third_party: |
+        [DataTables](https://datatables.net) is developed by SpryMedia Ltd (MIT
+        license). DT2 is an independent binding, not affiliated with or endorsed
+        by SpryMedia Ltd. Credits for all bundled libraries:
+        [COPYRIGHTS](https://github.com/StrategicProjects/DT2/blob/main/inst/COPYRIGHTS).
       developed_by: |
         Developed by André Leite, Marcos Wasiliew, Hugo Vasconcelos, Carlos
         Amorim and Diogo Bezerra
