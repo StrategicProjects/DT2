@@ -1,5 +1,17 @@
 # Changelog
 
+## DT2 (development version)
+
+- Third-party credit: the copyright holders of the bundled ‘JavaScript’
+  and ‘CSS’ libraries (‘DataTables’ and its extensions by SpryMedia Ltd,
+  ‘jQuery’, ‘Bootstrap’, ‘pdfmake’ and the ‘Roboto’ fonts, ‘JSZip’,
+  ‘Moment.js’) are now listed in `DESCRIPTION` with role `cph`, with a
+  new `Copyright` field. New `inst/COPYRIGHTS` records each bundled
+  library with its version, license, copyright holder and path, and
+  reproduces the license notices. The README table now covers every
+  bundled library and states that DT2 is not affiliated with or endorsed
+  by SpryMedia Ltd.
+
 ## DT2 0.1.3
 
 CRAN release: 2026-09-20

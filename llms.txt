@@ -33,11 +33,25 @@ rendering, sorting, searching, pagination, and extensions are powered
 entirely by the DataTables engine — DT2 simply provides the bridge
 between R / htmlwidgets and the JavaScript API.
 
-| Component | Author | License |
+| Component (bundled version) | Copyright holder | License |
 |----|----|----|
-| [DataTables](https://datatables.net/) core + extensions | SpryMedia Ltd | MIT |
-| [Bootstrap 5](https://getbootstrap.com/) integration | DataTables / Bootstrap | MIT |
+| [DataTables](https://datatables.net/) 2.3.4 and 15 extensions (Buttons, ColReorder, ColumnControl, DateTime, FixedColumns, FixedHeader, KeyTable, Responsive, RowGroup, RowReorder, Scroller, SearchBuilder, SearchPanes, Select, StateRestore), incl. the Bootstrap 5 integration files and the pt-BR translation | SpryMedia Ltd | MIT |
+| [jQuery](https://jquery.com/) 3.7.0 | OpenJS Foundation and other contributors | MIT |
+| [Bootstrap](https://getbootstrap.com/) 5.3.8 (bundle includes [Popper](https://popper.js.org/), © Federico Zivolo) | The Bootstrap Authors | MIT |
+| [pdfmake](http://pdfmake.org) 0.2.7 (PDF export) | bpampuch, liborm85 | MIT |
+| [Roboto](https://github.com/googlefonts/roboto) fonts, embedded in pdfmake’s `vfs_fonts.js` | Google Inc. | Apache-2.0 |
+| [JSZip](https://stuk.github.io/jszip/) 3.10.1 (Excel export; includes [pako](https://github.com/nodeca/pako)) | Stuart Knightley, David Duponchel, Franz Buchinger, António Afonso | MIT (dual MIT / GPL-3.0, used under MIT) |
+| [Moment.js](https://momentjs.com/) 2.29.4 | JS Foundation and other contributors | MIT |
+| [FileSaver.js](https://github.com/eligrey/FileSaver.js) 1.3.3 (inside Buttons) | Eli Grey | MIT |
+| [Lucide](https://lucide.dev/) icons (inside ColumnControl) | Lucide Contributors; Cole Bemis (Feather) | ISC / MIT |
 | DT2 R package | André Leite, Marcos Wasiliew, Hugo Vasconcelos, Carlos Amorim, Diogo Bezerra | MIT |
+
+Versions, licenses and the full notices of everything bundled are in
+[`inst/COPYRIGHTS`](https://strategicprojects.github.io/DT2/inst/COPYRIGHTS)
+(`system.file("COPYRIGHTS", package = "DT2")` in an installed package).
+
+DT2 is an independent binding: it is not affiliated with, sponsored by
+or endorsed by SpryMedia Ltd. DataTables is developed by SpryMedia Ltd.
 
 This package takes inspiration from the original
 [DT](https://rstudio.github.io/DT/) package by Yihui Xie (RStudio /
@@ -315,8 +329,13 @@ full pt-BR translation is included at
 MIT — see [LICENSE](https://strategicprojects.github.io/DT2/LICENSE)
 file.
 
-DT2 bundles DataTables and extensions which are also MIT-licensed. See
-[DataTables license](https://datatables.net/license/) for details.
+DT2 bundles DataTables and its extensions (© SpryMedia Ltd, MIT; see the
+[DataTables license](https://datatables.net/license/)), jQuery,
+Bootstrap, pdfmake, JSZip and Moment.js (MIT) and the Roboto fonts
+(Apache-2.0). Each remains the copyright of its authors; versions,
+holders and license notices are in
+[`inst/COPYRIGHTS`](https://strategicprojects.github.io/DT2/inst/COPYRIGHTS),
+and the holders are listed in `DESCRIPTION` with role `cph`.
 
 # Package index
 
