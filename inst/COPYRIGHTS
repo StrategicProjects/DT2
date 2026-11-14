@@ -66,7 +66,7 @@ Bootstrap                 5.3.8   MIT             The Bootstrap Authors
 Popper (@popperjs/core)   2.11.x  MIT             Federico Zivolo
     in: inst/htmlwidgets/lib/bootstrap/5.3.8/js/bootstrap.bundle.min.js (part of the Bootstrap bundle)
 pdfmake                   0.2.7   MIT             bpampuch; liborm85
-    in: inst/htmlwidgets/lib/pdfmake/0.2.7/pdfmake.min.js
+    in: inst/htmlwidgets/lib/pdfmake/0.2.7/pdfmake.min.js (with the embedded components listed further down)
 Roboto fonts              3.005   Apache-2.0      Google Inc.
     in: inst/htmlwidgets/lib/pdfmake/0.2.7/vfs_fonts.js (four TrueType files, base64)
 JSZip                     3.10.1  MIT OR GPL-3.0  Stuart Knightley, David Duponchel, Franz Buchinger, António Afonso
@@ -88,13 +88,125 @@ zlib license for the ported code), and the small npm modules JSZip depends
 on (lie, immediate, setimmediate, readable-stream and its helpers), which
 are MIT- or ISC-licensed.
 
-pdfmake.min.js is pdfmake's official browser build, a single minified
-file. Besides pdfmake's own code it contains the npm modules pdfmake 0.2.7
-depends on (per its package.json: @foliojs-fork/pdfkit, @foliojs-fork/linebreak,
-iconv-lite and xmldoc) and their own dependencies (core-js and pako among
-them). The build carries only pdfmake's notice; the notices of those modules
-are available from https://github.com/bpampuch/pdfmake (package.json and
-package-lock.json of release 0.2.7) and from each module's npm page.
+pdfmake.min.js is pdfmake's official browser build (byte-identical to
+build/pdfmake.min.js of the npm release 0.2.7), a single minified file made
+with webpack. Besides pdfmake's own code it embeds the npm modules pdfmake
+0.2.7 depends on (per its package.json: @foliojs-fork/pdfkit,
+@foliojs-fork/linebreak, iconv-lite and xmldoc), their dependencies, a
+vendored copy of svg-to-pdfkit, FileSaver.js, the core-js polyfills and the
+browser replacements of the Node.js core modules chosen by pdfmake's webpack
+configuration (buffer, util, assert, stream, zlib, events, process). The
+minified file carries only pdfmake's own notice; the embedded modules are
+listed in the table "Embedded in pdfmake 0.2.7" below and their notices are
+reproduced under "Components embedded in pdfmake 0.2.7".
+
+The list was established from the build itself: every webpack module of the
+unminified build of the same release (build/pdfmake.js, same sources and
+same module ids as the minified file) was matched against the source files
+of pdfmake 0.2.7 and of its dependency tree. pdfmake does not publish a
+lockfile, so the versions are those its dependency ranges resolved to on the
+release date (2022-12-17); core-js 3.19.0 is pinned by pdfmake and is also
+the version string found in the build. License and copyright were read from
+the license file shipped in each npm package at that version.
+
+vfs_fonts.js is build/vfs_fonts.js of the same release with LF instead of
+CRLF line endings.
+
+Embedded in pdfmake 0.2.7
+.........................
+
+package                         version  license               copyright holder(s)
+-------                         -------  -------               -------------------
+@foliojs-fork/pdfkit            0.13.0   MIT                   Devon Govett
+@foliojs-fork/fontkit           1.9.1    MIT                   Devon Govett (no license file; see note 1)
+@foliojs-fork/restructure       2.0.2    MIT                   Devon Govett
+@foliojs-fork/linebreak         1.1.1    MIT                   Devon Govett; Unicode, Inc. (data, note 3)
+unicode-properties              1.4.1    MIT                   Devon Govett (LICENSE names no holder); Unicode, Inc. (data, note 3)
+unicode-trie                    2.0.0    MIT                   Devon Govett (LICENSE names no holder)
+dfa                             1.2.0    MIT                   Devon Govett (no license file; see note 1)
+tiny-inflate                    1.0.3    MIT                   Devon Govett
+brotli (brotli.js)              1.3.3    MIT AND Apache-2.0    Devon Govett (no license file; note 1); Google Inc. (decoder, note 2)
+png-js                          1.0.0    MIT                   Devon Govett
+crypto-js                       4.1.1    MIT AND BSD-2-Clause  Jeff Mott; Evan Vosberg; Cédric Mesnil (RIPEMD-160, note 4)
+clone                           1.0.4    MIT                   Paul Vorbach
+deep-equal                      1.1.1    MIT                   James Halliday; Thomas Robinson
+base64-js                       1.3.1    MIT                   Jameson Little
+iconv-lite                      0.6.3    MIT                   Alexander Shtuchkin
+safer-buffer                    2.1.2    MIT                   Nikita Skovoroda
+xmldoc                          1.2.0    MIT                   Nick Farina
+sax                             1.2.4    ISC AND MIT           Isaac Z. Schlueter and Contributors; Mathias Bynens
+svg-to-pdfkit                   0.1.8    MIT                   SVG-to-PDFKit contributors
+file-saver (FileSaver.js)       2.0.5    MIT                   Eli Grey
+core-js                         3.19.0   MIT                   Denis Pushkarev
+buffer                          6.0.3    MIT                   Feross Aboukhadijeh, and other contributors
+ieee754                         1.2.1    BSD-3-Clause          Fair Oaks Labs, Inc.
+util                            0.12.5   MIT                   Joyent, Inc. and other Node contributors
+assert                          2.0.0    MIT                   Joyent, Inc. and other Node contributors
+events                          3.3.0    MIT                   Joyent, Inc. and other Node contributors
+process                         0.11.10  MIT                   Roman Shtylman
+stream-browserify               3.0.0    MIT                   James Halliday
+readable-stream                 3.6.0    MIT                   Node.js contributors; Joyent, Inc. and other Node contributors
+string_decoder                  1.1.1    MIT                   Node.js contributors; Joyent, Inc. and other Node contributors
+safe-buffer                     5.1.2    MIT                   Feross Aboukhadijeh
+util-deprecate                  1.0.2    MIT                   Nathan Rajlich
+inherits                        2.0.4    ISC                   Isaac Z. Schlueter
+browserify-zlib                 0.2.0    MIT                   Devon Govett; Node.js contributors; Joyent, Inc. and other Node contributors
+pako                            1.0.11   MIT AND Zlib          Vitaly Puzrin and Andrei Tuputcyn; Jean-loup Gailly and Mark Adler (zlib)
+es6-object-assign               1.1.0    MIT                   Rubén Norte
+for-each                        0.3.3    MIT                   Raynos
+function-bind                   1.1.1    MIT                   Raynos
+has                             1.0.3    MIT                   Thiago de Arruda
+object-keys                     1.1.1    MIT                   Jordan Harband
+is-callable                     1.2.7    MIT                   Jordan Harband
+regexp.prototype.flags          1.4.3    MIT                   Jordan Harband
+is-typed-array                  1.1.10   MIT                   Jordan Harband
+which-typed-array               1.1.9    MIT                   Jordan Harband
+call-bind                       1.0.2    MIT                   Jordan Harband
+get-intrinsic                   1.1.3    MIT                   Jordan Harband
+has-symbols                     1.0.3    MIT                   Jordan Harband
+is-regex                        1.1.4    MIT                   Jordan Harband
+define-properties               1.1.4    MIT                   Jordan Harband
+is-generator-function           1.0.10   MIT                   Jordan Harband
+is-arguments                    1.1.1    MIT                   Jordan Harband
+object-is                       1.1.5    MIT                   Jordan Harband
+is-nan                          1.3.2    MIT                   Jordan Harband
+functions-have-names            1.2.3    MIT                   Jordan Harband
+is-date-object                  1.0.5    MIT                   Jordan Harband
+gopd                            1.0.1    MIT                   Jordan Harband
+has-property-descriptors        1.0.0    MIT                   Inspect JS
+available-typed-arrays          1.0.5    MIT                   Inspect JS
+has-tostringtag                 1.0.0    MIT                   Inspect JS
+regenerator (Babel helper)      -        MIT                   Facebook, Inc.
+Babel helpers                   -        MIT                   Sebastian McKenzie and other contributors
+webpack runtime, expose-loader  -        MIT                   JS Foundation and other contributors
+
+Notes to the table:
+
+ 1. @foliojs-fork/fontkit, dfa and brotli declare "MIT" in package.json and
+    in their README but ship no license file, so there is no copyright line
+    to reproduce; their author (package.json) is Devon Govett. Upstream
+    fontkit (https://github.com/foliojs/fontkit) now carries an MIT LICENSE
+    with "Copyright (c) 2014-present Devon Govett".
+ 2. brotli.js is a JavaScript port of the decoder of Google's Brotli; the
+    ported files (dec/*.js) keep Google's Apache-2.0 header, reproduced
+    below. Neither brotli.js nor those files come with a NOTICE file.
+ 3. @foliojs-fork/linebreak, unicode-properties and @foliojs-fork/fontkit
+    embed compiled tables derived from the Unicode Character Database
+    (LineBreak.txt and the character property files), which is copyright of
+    Unicode, Inc. and distributed under the Unicode license for data files
+    and software, reproduced below. The npm packages themselves do not ship
+    that license.
+ 4. crypto-js is MIT; its RIPEMD-160 module carries a separate two-clause
+    BSD notice by Cédric Mesnil, kept in the build and reproduced below.
+
+All of these licenses (MIT, ISC, BSD-2-Clause, BSD-3-Clause, Zlib,
+Apache-2.0 and the Unicode data license) are permissive and allow
+redistribution inside an MIT-licensed package provided the notices are kept,
+which is the purpose of this file. None of them is copyleft. The points
+that deserve attention are the three packages without a license file
+(note 1) and the Apache-2.0 files inside brotli.js (note 2), since
+Apache-2.0 has conditions MIT does not have (license copy, notice of
+changes, patent clause); they apply to those files only.
 
 The Roboto fonts embedded in vfs_fonts.js declare, in their name tables,
 "Copyright 2011 Google Inc. All Rights Reserved." and "Licensed under the
@@ -355,6 +467,393 @@ License of pdfmake 0.2.7 (LICENSE):
     COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
     IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Components embedded in pdfmake 0.2.7 (inside pdfmake.min.js)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+MIT-licensed components. Their license files all contain the MIT license
+text below (the wording is identical; only titles and line breaks differ),
+preceded by the copyright lines listed after it, which are copied verbatim
+from the license file of each package (name, version, file):
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+
+    @foliojs-fork/pdfkit 0.13.0 (LICENSE):
+        Copyright (c) 2014 Devon Govett
+    @foliojs-fork/restructure 2.0.2 (LICENSE):
+        Copyright (c) 2015-present Devon Govett
+    @foliojs-fork/linebreak 1.1.1 (LICENSE):
+        Copyright (c) 2014-present Devon Govett
+    unicode-properties 1.4.1 (LICENSE):
+        Copyright 2018
+    unicode-trie 2.0.0 (LICENSE):
+        Copyright 2018
+    tiny-inflate 1.0.3 (LICENSE):
+        Copyright (c) 2015-present Devon Govett
+    png-js 1.0.0 (LICENSE):
+        Copyright (c) 2017 Devon Govett
+    crypto-js 4.1.1 (LICENSE):
+        Copyright (c) 2009-2013 Jeff Mott
+        Copyright (c) 2013-2016 Evan Vosberg
+    deep-equal 1.1.1 (LICENSE):
+        Copyright (c) 2012, 2013, 2014 James Halliday <mail@substack.net>, 2009 Thomas Robinson <280north.com>
+    base64-js 1.3.1 (LICENSE):
+        Copyright (c) 2014 Jameson Little
+    iconv-lite 0.6.3 (LICENSE):
+        Copyright (c) 2011 Alexander Shtuchkin
+    safer-buffer 2.1.2 (LICENSE):
+        Copyright (c) 2018 Nikita Skovoroda <chalkerx@gmail.com>
+    xmldoc 1.2.0 (LICENSE):
+        Copyright 2012 Nick Farina.
+        All rights reserved.
+    svg-to-pdfkit 0.1.8 (LICENSE):
+        Copyright (c) 2019 SVG-to-PDFKit contributors
+    file-saver (FileSaver.js) 2.0.5 (LICENSE.md):
+        Copyright © 2016 [Eli Grey][1].
+    core-js 3.19.0 (LICENSE):
+        Copyright (c) 2014-2021 Denis Pushkarev
+    buffer 6.0.3 (LICENSE):
+        Copyright (c) Feross Aboukhadijeh, and other contributors.
+    util 0.12.5 (LICENSE):
+        Copyright Joyent, Inc. and other Node contributors. All rights reserved.
+    assert 2.0.0 (LICENSE):
+        Copyright Joyent, Inc. and other Node contributors. All rights reserved.
+    events 3.3.0 (LICENSE):
+        Copyright Joyent, Inc. and other Node contributors.
+    process 0.11.10 (LICENSE):
+        Copyright (c) 2013 Roman Shtylman <shtylman@gmail.com>
+    stream-browserify 3.0.0 (LICENSE):
+        Copyright (c) James Halliday
+    readable-stream 3.6.0 (LICENSE):
+        Copyright Node.js contributors. All rights reserved.
+        Copyright Joyent, Inc. and other Node contributors. All rights reserved.
+    string_decoder 1.1.1 (LICENSE):
+        Copyright Node.js contributors. All rights reserved.
+        Copyright Joyent, Inc. and other Node contributors. All rights reserved.
+    safe-buffer 5.1.2 (LICENSE):
+        Copyright (c) Feross Aboukhadijeh
+    util-deprecate 1.0.2 (LICENSE):
+        Copyright (c) 2014 Nathan Rajlich <nathan@tootallnate.net>
+    browserify-zlib 0.2.0 (LICENSE):
+        Copyright (c) 2014-2015 Devon Govett <devongovett@gmail.com>
+        Copyright Node.js contributors. All rights reserved.
+        Copyright Joyent, Inc. and other Node contributors. All rights reserved.
+    pako 1.0.11 (LICENSE):
+        Copyright (C) 2014-2017 by Vitaly Puzrin and Andrei Tuputcyn
+    es6-object-assign 1.1.0 (LICENSE):
+        Copyright (c) 2015-2017 Rubén Norte <rubennorte@gmail.com>
+    for-each 0.3.3 (LICENSE):
+        Copyright (c) 2012 Raynos.
+    function-bind 1.1.1 (LICENSE):
+        Copyright (c) 2013 Raynos.
+    has 1.0.3 (LICENSE-MIT):
+        Copyright (c) 2013 Thiago de Arruda
+    object-keys 1.1.1 (LICENSE):
+        Copyright (C) 2013 Jordan Harband
+    is-callable 1.2.7 (LICENSE):
+        Copyright (c) 2015 Jordan Harband
+    regexp.prototype.flags 1.4.3 (LICENSE):
+        Copyright (C) 2014 Jordan Harband
+    is-typed-array 1.1.10 (LICENSE):
+        Copyright (c) 2015 Jordan Harband
+    which-typed-array 1.1.9 (LICENSE):
+        Copyright (c) 2015 Jordan Harband
+    call-bind 1.0.2 (LICENSE):
+        Copyright (c) 2020 Jordan Harband
+    get-intrinsic 1.1.3 (LICENSE):
+        Copyright (c) 2020 Jordan Harband
+    has-symbols 1.0.3 (LICENSE):
+        Copyright (c) 2016 Jordan Harband
+    is-regex 1.1.4 (LICENSE):
+        Copyright (c) 2014 Jordan Harband
+    define-properties 1.1.4 (LICENSE):
+        Copyright (C) 2015 Jordan Harband
+    is-generator-function 1.0.10 (LICENSE):
+        Copyright (c) 2014 Jordan Harband
+    is-arguments 1.1.1 (LICENSE):
+        Copyright (c) 2014 Jordan Harband
+    object-is 1.1.5 (LICENSE):
+        Copyright (c) 2014 Jordan Harband
+    is-nan 1.3.2 (LICENSE):
+        Copyright (c) 2014 Jordan Harband
+    functions-have-names 1.2.3 (LICENSE):
+        Copyright (c) 2019 Jordan Harband
+    is-date-object 1.0.5 (LICENSE):
+        Copyright (c) 2015 Jordan Harband
+    gopd 1.0.1 (LICENSE):
+        Copyright (c) 2022 Jordan Harband
+    has-property-descriptors 1.0.0 (LICENSE):
+        Copyright (c) 2022 Inspect JS
+    available-typed-arrays 1.0.5 (LICENSE):
+        Copyright (c) 2020 Inspect JS
+    has-tostringtag 1.0.0 (LICENSE):
+        Copyright (c) 2021 Inspect JS
+    regenerator-runtime (source of the regenerator helper inlined by Babel) 0.13.x (LICENSE):
+        Copyright (c) 2014-present, Facebook, Inc.
+    Babel helpers (@babel/runtime, @babel/helpers) 7.x (LICENSE):
+        Copyright (c) 2014-present Sebastian McKenzie and other contributors
+    webpack 5 runtime and expose-loader 3 runtime (LICENSE):
+        Copyright JS Foundation and other contributors
+
+    @foliojs-fork/fontkit 1.9.1, dfa 1.2.0, brotli 1.3.3: no license file
+        and no copyright line; "license": "MIT" and
+        "author": "Devon Govett <devongovett@gmail.com>" in package.json.
+
+The license files of readable-stream, string_decoder and browserify-zlib
+introduce the two Node.js copyright lines with "Node.js is licensed for use
+as follows" and "This license applies to parts of Node.js originating from
+the https://github.com/joyent/node repository", each followed by the MIT
+text above. The unminified build also keeps, in the assert module, the line
+"Copyright (c) 2009 Thomas Robinson <280north.com>" (MIT).
+
+clone 1.0.4 (LICENSE; MIT, in a wording that differs slightly from the text
+above, so it is given in full):
+
+    Copyright © 2011-2015 Paul Vorbach <paul@vorba.ch>
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy of
+    this software and associated documentation files (the “Software”), to deal in
+    the Software without restriction, including without limitation the rights to
+    use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+    the Software, and to permit persons to whom the Software is furnished to do so,
+    subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+    FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+    COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+    IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, OUT OF OR IN CONNECTION WITH THE
+    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+sax 1.2.4 (LICENSE; ISC, with an MIT-licensed part):
+
+    The ISC License
+
+    Copyright (c) Isaac Z. Schlueter and Contributors
+
+    Permission to use, copy, modify, and/or distribute this software for any
+    purpose with or without fee is hereby granted, provided that the above
+    copyright notice and this permission notice appear in all copies.
+
+    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+    WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+    MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+    ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+    WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+    ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
+    IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+    ====
+
+    `String.fromCodePoint` by Mathias Bynens used according to terms of MIT
+    License, as follows:
+
+        Copyright Mathias Bynens <https://mathiasbynens.be/>
+
+        Permission is hereby granted, free of charge, to any person obtaining
+        a copy of this software and associated documentation files (the
+        "Software"), to deal in the Software without restriction, including
+        without limitation the rights to use, copy, modify, merge, publish,
+        distribute, sublicense, and/or sell copies of the Software, and to
+        permit persons to whom the Software is furnished to do so, subject to
+        the following conditions:
+
+        The above copyright notice and this permission notice shall be
+        included in all copies or substantial portions of the Software.
+
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+        EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+        MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+        NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+        LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+        OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+        WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+inherits 2.0.4 (LICENSE; ISC):
+
+    The ISC License
+
+    Copyright (c) Isaac Z. Schlueter
+
+    Permission to use, copy, modify, and/or distribute this software for any
+    purpose with or without fee is hereby granted, provided that the above
+    copyright notice and this permission notice appear in all copies.
+
+    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+    REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+    FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+    INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+    LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+    OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+    PERFORMANCE OF THIS SOFTWARE.
+
+ieee754 1.2.1 (LICENSE; BSD-3-Clause; long lines wrapped here):
+
+    Copyright 2008 Fair Oaks Labs, Inc.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+
+    1. Redistributions of source code must retain the above copyright notice,
+    this list of conditions and the following disclaimer.
+
+    2. Redistributions in binary form must reproduce the above copyright notice,
+    this list of conditions and the following disclaimer in the documentation
+    and/or other materials provided with the distribution.
+
+    3. Neither the name of the copyright holder nor the names of its
+    contributors may be used to endorse or promote products derived from this
+    software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+
+crypto-js 4.1.1, RIPEMD-160 module (notice in ripemd160.js, kept in the
+build; BSD-2-Clause; long lines wrapped here):
+
+    (c) 2012 by Cédric Mesnil. All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+
+    - Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+
+    - Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+
+crypto-js 4.1.1, CTRGladman mode (notice in mode-ctr-gladman.js, kept in
+the build; covered by the crypto-js MIT license):
+
+    Counter block mode compatible with  Dr Brian Gladman fileenc.c
+    derived from CryptoJS.mode.CTR
+    Jan Hruby jhruby.web@gmail.com
+
+brotli 1.3.3, decoder files ported from Google's Brotli (header of
+dec/bit_reader.js, dec/context.js, dec/decode.js, dec/dictionary.js,
+dec/prefix.js and dec/transform.js, kept in the unminified build;
+Apache-2.0, full text at the end of this file; no NOTICE file upstream):
+
+    Copyright 2013 Google Inc. All Rights Reserved.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+pako 1.0.11 (MIT, with the zlib license for the code ported from zlib) is
+the same library that JSZip embeds; its license and the zlib notice of its
+source files are reproduced under "pako (inside JSZip)" below.
+
+Unicode Character Database, from which the tables embedded by
+@foliojs-fork/linebreak, unicode-properties and @foliojs-fork/fontkit are
+derived (Unicode license agreement for data files and software, SPDX
+Unicode-DFS-2016, the license of the Unicode data releases those packages
+were generated from; long lines wrapped here):
+
+    UNICODE, INC. LICENSE AGREEMENT - DATA FILES AND SOFTWARE
+
+    Unicode Data Files include all data files under the directories
+    http://www.unicode.org/Public/, http://www.unicode.org/reports/,
+    http://www.unicode.org/cldr/data/, http://source.icu-project.org/repos/icu/,
+    and http://www.unicode.org/utility/trac/browser/.
+
+    Unicode Data Files do not include PDF online code charts under the directory
+    http://www.unicode.org/Public/.
+
+    Software includes any source code published in the Unicode Standard or under
+    the directories http://www.unicode.org/Public/,
+    http://www.unicode.org/reports/, http://www.unicode.org/cldr/data/,
+    http://source.icu-project.org/repos/icu/, and
+    http://www.unicode.org/utility/trac/browser/.
+
+    NOTICE TO USER: Carefully read the following legal agreement. BY
+    DOWNLOADING, INSTALLING, COPYING OR OTHERWISE USING UNICODE INC.'S DATA
+    FILES ("DATA FILES"), AND/OR SOFTWARE ("SOFTWARE"), YOU UNEQUIVOCALLY
+    ACCEPT, AND AGREE TO BE BOUND BY, ALL OF THE TERMS AND CONDITIONS OF THIS
+    AGREEMENT. IF YOU DO NOT AGREE, DO NOT DOWNLOAD, INSTALL, COPY, DISTRIBUTE
+    OR USE THE DATA FILES OR SOFTWARE.
+
+    COPYRIGHT AND PERMISSION NOTICE
+
+    Copyright © 1991-2016 Unicode, Inc. All rights reserved. Distributed under
+    the Terms of Use in http://www.unicode.org/copyright.html.
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of the Unicode data files and any associated documentation (the "Data
+    Files") or Unicode software and any associated documentation (the
+    "Software") to deal in the Data Files or Software without restriction,
+    including without limitation the rights to use, copy, modify, merge,
+    publish, distribute, and/or sell copies of the Data Files or Software, and
+    to permit persons to whom the Data Files or Software are furnished to do so,
+    provided that either
+
+         (a) this copyright and permission notice appear with all copies of the
+    Data Files or Software, or      (b) this copyright and permission notice
+    appear in associated Documentation.
+
+    THE DATA FILES AND SOFTWARE ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
+    KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT OF
+    THIRD PARTY RIGHTS. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR HOLDERS
+    INCLUDED IN THIS NOTICE BE LIABLE FOR ANY CLAIM, OR ANY SPECIAL INDIRECT OR
+    CONSEQUENTIAL DAMAGES, OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE,
+    DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+    TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
+    OF THE DATA FILES OR SOFTWARE.
+
+    Except as contained in this notice, the name of a copyright holder shall not
+    be used in advertising or otherwise to promote the sale, use or other
+    dealings in these Data Files or Software without prior written authorization
+    of the copyright holder.
 
 JSZip 3.10.1
 ~~~~~~~~~~~~

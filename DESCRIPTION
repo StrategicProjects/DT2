@@ -25,9 +25,9 @@ Authors@R: c(
     person("Federico", "Zivolo", role = "cph",
            comment = "'Popper', included in the bundled 'Bootstrap' 5.3.8"),
     person("bpampuch", role = "cph",
-           comment = "Bundled 'pdfmake' 0.2.7"),
+           comment = "Bundled 'pdfmake' 0.2.7, whose build embeds third-party components listed in inst/COPYRIGHTS"),
     person("liborm85", role = "cph",
-           comment = "Bundled 'pdfmake' 0.2.7"),
+           comment = "Bundled 'pdfmake' 0.2.7, whose build embeds third-party components listed in inst/COPYRIGHTS"),
     person("Google Inc.", role = "cph",
            comment = "'Roboto' fonts embedded in the bundled 'pdfmake' 0.2.7 (Apache-2.0)"),
     person("Stuart", "Knightley", role = "cph",
@@ -62,7 +62,10 @@ Copyright: The R code and the 'htmlwidgets' binding are copyright of the
     inst/htmlwidgets/lib ('DataTables' and its extensions, 'jQuery',
     'Bootstrap', 'pdfmake' with the 'Roboto' fonts, 'JSZip' and 'Moment.js')
     are copyright of their respective authors, listed with role 'cph' in
-    Authors@R; see inst/COPYRIGHTS for versions, licenses and notices.
+    Authors@R; see inst/COPYRIGHTS for versions, licenses and notices. The
+    bundled 'pdfmake' build in turn embeds third-party components (among them
+    'pdfkit', 'fontkit', 'core-js', 'crypto-js', 'iconv-lite' and 'pako'),
+    whose copyright holders and licenses are listed in inst/COPYRIGHTS.
 License: MIT + file LICENSE
 URL: https://github.com/StrategicProjects/DT2, https://strategicprojects.github.io/DT2/
 Encoding: UTF-8

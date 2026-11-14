@@ -9,6 +9,12 @@
   table now covers every bundled library and states that DT2 is not
   affiliated with or endorsed by SpryMedia Ltd.
 
+* `inst/COPYRIGHTS` now also lists the third-party components embedded in the
+  bundled 'pdfmake' 0.2.7 build ('pdfkit', 'fontkit', 'core-js', 'crypto-js',
+  'iconv-lite', 'pako' and the other modules it is built from), with version,
+  license and copyright holder, and reproduces their notices. The `Copyright`
+  field and the 'pdfmake' entries of `DESCRIPTION` point to it.
+
 # DT2 0.1.3
 
 ## New features
