@@ -34,10 +34,12 @@
   'Popper', included in the bundled 'Bootstrap' 5.3.8
 
 - **bpampuch**. Copyright holder.  
-  Bundled 'pdfmake' 0.2.7
+  Bundled 'pdfmake' 0.2.7, whose build embeds third-party components
+  listed in inst/COPYRIGHTS
 
 - **liborm85**. Copyright holder.  
-  Bundled 'pdfmake' 0.2.7
+  Bundled 'pdfmake' 0.2.7, whose build embeds third-party components
+  listed in inst/COPYRIGHTS
 
 - **Google Inc.**. Copyright holder.  
   'Roboto' fonts embedded in the bundled 'pdfmake' 0.2.7 (Apache-2.0)
